@@ -1,0 +1,65 @@
+/**
+ * Royal Furniture Pro — Luxury furniture ecommerce design tokens
+ * Import in globals.css; do not build UI here.
+ */
+
+:root {
+  /* Brand palette — warm neutrals & gold accent */
+  --royal-gold: oklch(0.72 0.12 85);
+  --royal-gold-muted: oklch(0.82 0.06 85);
+  --royal-walnut: oklch(0.35 0.04 55);
+  --royal-walnut-light: oklch(0.45 0.04 55);
+  --royal-ivory: oklch(0.98 0.01 90);
+  --royal-charcoal: oklch(0.22 0.02 260);
+  --royal-cream: oklch(0.96 0.02 90);
+
+  /* Typography scale */
+  --royal-font-size-xs: 0.75rem;
+  --royal-font-size-sm: 0.875rem;
+  --royal-font-size-base: 1rem;
+  --royal-font-size-lg: 1.125rem;
+  --royal-font-size-xl: 1.25rem;
+  --royal-font-size-2xl: 1.5rem;
+  --royal-font-size-3xl: 1.875rem;
+  --royal-font-size-4xl: 2.25rem;
+  --royal-font-size-5xl: 3rem;
+
+  --royal-line-height-tight: 1.2;
+  --royal-line-height-normal: 1.5;
+  --royal-line-height-relaxed: 1.75;
+
+  /* Spacing scale (4px base) */
+  --royal-space-1: 0.25rem;
+  --royal-space-2: 0.5rem;
+  --royal-space-3: 0.75rem;
+  --royal-space-4: 1rem;
+  --royal-space-6: 1.5rem;
+  --royal-space-8: 2rem;
+  --royal-space-10: 2.5rem;
+  --royal-space-12: 3rem;
+  --royal-space-16: 4rem;
+  --royal-space-20: 5rem;
+  --royal-space-24: 6rem;
+
+  /* Breakpoints (reference — Tailwind defaults) */
+  --royal-screen-sm: 640px;
+  --royal-screen-md: 768px;
+  --royal-screen-lg: 1024px;
+  --royal-screen-xl: 1280px;
+  --royal-screen-2xl: 1536px;
+
+  /* Elevation */
+  --royal-shadow-sm: 0 1px 2px oklch(0 0 0 / 0.05);
+  --royal-shadow-md: 0 4px 12px oklch(0 0 0 / 0.08);
+  --royal-shadow-lg: 0 12px 32px oklch(0 0 0 / 0.12);
+
+  /* Motion */
+  --royal-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --royal-transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --royal-transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  --royal-ivory: oklch(0.18 0.02 90);
+  --royal-cream: oklch(0.22 0.02 90);
+}

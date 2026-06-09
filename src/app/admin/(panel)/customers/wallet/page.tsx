@@ -1,0 +1,8 @@
+import { AdminPageShell } from "@/components/admin/pages/admin-page-shell";
+import { getAdminPageByKey } from "@/lib/admin/navigation";
+
+export default function WalletPage() {
+  const page = getAdminPageByKey("wallet");
+  if (!page) return null;
+  return <AdminPageShell page={page} />;
+}

@@ -1,0 +1,507 @@
+/* ——— Royal Oak–style CMS pages (about, contact, privacy, policies) ——— */
+
+.royal-cms-page {
+  background: #f5f5f5;
+  padding: 16px 0 56px;
+}
+
+.royal-cms-page__inner {
+  max-width: var(--royal-header-max, 1200px);
+}
+
+.royal-cms-page__title {
+  margin: 0 0 28px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1f1f1f;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .royal-cms-page__title {
+    margin-bottom: 32px;
+    font-size: 28px;
+  }
+}
+
+.royal-cms-h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a2744;
+}
+
+.royal-cms-h2--center {
+  text-align: center;
+}
+
+.royal-cms-h2--left {
+  text-align: left;
+}
+
+.royal-cms-h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.royal-cms-h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a2744;
+}
+
+.royal-cms-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+}
+
+.royal-cms-section--center {
+  text-align: center;
+}
+
+.royal-cms-lead {
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #444444;
+}
+
+.royal-cms-body {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #555555;
+}
+
+.royal-cms-muted {
+  color: #888888;
+  font-size: 13px;
+}
+
+.royal-cms-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.royal-cms-list li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #555555;
+}
+
+.royal-cms-inline-link {
+  font-weight: 600;
+  color: #c45c26;
+  text-decoration: underline;
+}
+
+/* About — stats grid */
+.royal-cms-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 540px) {
+  .royal-cms-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .royal-cms-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.royal-cms-stat {
+  padding: 20px 16px;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  text-align: center;
+  transition: box-shadow 0.2s ease;
+}
+
+.royal-cms-stat:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.royal-cms-stat__value {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #c45c26;
+}
+
+.royal-cms-stat__label {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #666666;
+}
+
+/* Our story */
+.royal-cms-story {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .royal-cms-story {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.royal-cms-story__era {
+  padding: 20px;
+  background: #ffffff;
+  border-left: 4px solid #f7941d;
+  border: 1px solid #eeeeee;
+  border-left: 4px solid #f7941d;
+}
+
+.royal-cms-story__year {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a2744;
+}
+
+/* Contact — Royal Oak /contactus layout */
+.royal-contact-page {
+  background: #f5f5f5;
+  padding: 12px 0 48px;
+}
+
+.royal-contact-page__inner {
+  max-width: var(--royal-header-max, 1200px);
+}
+
+.royal-contact-page__title {
+  margin: 8px 0 24px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1f1f1f;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .royal-contact-page__title {
+    margin-bottom: 28px;
+    font-size: 28px;
+  }
+}
+
+.royal-contact-panel {
+  padding: 24px 20px 32px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+}
+
+@media (min-width: 768px) {
+  .royal-contact-panel {
+    padding: 28px 32px 40px;
+  }
+}
+
+.royal-contact-panel__heading {
+  margin: 0 0 24px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1f1f1f;
+}
+
+@media (min-width: 768px) {
+  .royal-contact-panel__heading {
+    margin-bottom: 28px;
+    font-size: 20px;
+  }
+}
+
+.royal-contact-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 992px) {
+  .royal-contact-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 40px 48px;
+    align-items: start;
+  }
+}
+
+.royal-contact-form-col__title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.royal-contact-form-col__subtitle {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666666;
+}
+
+.royal-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.royal-contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.royal-contact-field label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+}
+
+.royal-contact-field input,
+.royal-contact-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #222222;
+  font-family: inherit;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.royal-contact-field input {
+  height: 42px;
+}
+
+.royal-contact-field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.royal-contact-field input:focus,
+.royal-contact-field textarea:focus {
+  outline: none;
+  border-color: #888888;
+}
+
+.royal-contact-form__submit {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 11px 40px;
+  border: none;
+  border-radius: 2px;
+  background: #c45c26;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.royal-contact-form__submit:hover {
+  background: #a84d1f;
+}
+
+.royal-contact-form__submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (min-width: 992px) {
+  .royal-contact-info-col {
+    padding-left: 24px;
+    border-left: 1px solid #eeeeee;
+  }
+}
+
+.royal-contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.royal-contact-info-item__icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  color: #1a2744;
+}
+
+.royal-contact-info-item__link {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1f1f1f;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+@media (min-width: 768px) {
+  .royal-contact-info-item__link {
+    font-size: 17px;
+  }
+}
+
+.royal-contact-info-item__link:hover {
+  color: #c45c26;
+  text-decoration: underline;
+}
+
+.royal-contact-address {
+  margin-bottom: 28px;
+}
+
+.royal-contact-address__title,
+.royal-contact-social__title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.royal-contact-address__company {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #444444;
+}
+
+.royal-contact-address p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #555555;
+}
+
+.royal-contact-social__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.royal-contact-social__list a {
+  display: flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.royal-contact-social__list a:hover {
+  opacity: 0.88;
+}
+
+.royal-contact-social__fb {
+  background: #3b5998;
+}
+
+.royal-contact-social__ig {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.royal-contact-social__yt {
+  background: #ff0000;
+}
+
+/* Prose / privacy / policies */
+.royal-cms-prose {
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #eeeeee;
+}
+
+.royal-cms-prose__block {
+  margin-bottom: 24px;
+}
+
+.royal-cms-prose__block:last-child {
+  margin-bottom: 0;
+}
+
+.royal-cms-prose--nested {
+  margin-top: 0;
+  padding: 16px 20px 20px;
+  border: none;
+  background: #fafafa;
+}
+
+.royal-cms-policy-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.royal-cms-policy-nav__link {
+  padding: 8px 14px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a2744;
+  text-decoration: none;
+}
+
+.royal-cms-policy-nav__link:hover {
+  border-color: #c45c26;
+  color: #c45c26;
+}
+
+.royal-cms-policy-block {
+  margin-bottom: 12px;
+  border: 1px solid #eeeeee;
+  background: #ffffff;
+}
+
+.royal-cms-policy-block__head {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border: none;
+  background: #f8f8f8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.royal-cms-policy-block__head:hover {
+  background: #f0f0f0;
+}
+
+.royal-cms-policy-block__toggle {
+  font-size: 20px;
+  font-weight: 300;
+  color: #c45c26;
+}

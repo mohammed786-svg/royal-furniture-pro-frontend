@@ -1,0 +1,142 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+import {
+  AdminDataTable,
+  type AdminTableColumn,
+} from "@/components/admin/data-table/admin-data-table";
+import {
+  AdminDataToolbar,
+  type ViewMode,
+} from "@/components/admin/data-table/admin-data-toolbar";
+import { AdminPagination } from "@/components/admin/data-table/admin-pagination";
+import { formatDate } from "@/lib/admin/format-currency";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { royalToast } from "@/lib/toast/royal-toast";
+import { fetchTracking } from "@/services/orders-api";
+import type { PaginationMeta } from "@/types/catalog";
+import type { OrderTracking } from "@/types/orders";
+
+const NEW_PATH = "/admin/orders/tracking/new";
+
+function parseSort(value: string) {
+  const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
+  return { sortBy, sortDir: sortDir ?? "desc" };
+}
+
+export function OrderTrackingManager() {
+  const [rows, setRows] = useState<OrderTracking[]>([]);
+  const [pagination, setPagination] = useState<PaginationMeta>({
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    totalPages: 1,
+  });
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [sortBy, setSortBy] = useState("tracked_at-desc");
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { sortBy: sf, sortDir } = parseSort(sortBy);
+      const data = await fetchTracking({
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        search: debouncedSearch,
+        sortBy: sf,
+        sortDir,
+      });
+      setRows(data.items);
+      setPagination(data.pagination);
+    } catch (err) {
+      royalToast.error(getApiErrorMessage(err, "Failed to load tracking"));
+    } finally {
+      setLoading(false);
+    }
+  }, [pagination.page, pagination.pageSize, debouncedSearch, sortBy]);
+
+  useEffect(() => {
+    void loadData();
+  }, [loadData]);
+  useEffect(() => {
+    setPagination((p) => ({ ...p, page: 1 }));
+  }, [debouncedSearch, sortBy]);
+
+  const columns = useMemo(
+    (): AdminTableColumn<OrderTracking>[] => [
+      { key: "orderNumber", label: "Order #", render: (r) => r.orderNumber ?? "—" },
+      { key: "customerName", label: "Customer", render: (r) => r.customerName ?? "—" },
+      { key: "statusCode", label: "Status" },
+      { key: "statusMessage", label: "Message" },
+      { key: "location", label: "Location", render: (r) => r.location ?? "—" },
+      { key: "trackedAt", label: "Tracked At", render: (r) => formatDate(r.trackedAt) },
+      {
+        key: "isCustomerVisible",
+        label: "Visible",
+        render: (r) => (
+          <span
+            className={`admin-status-badge ${r.isCustomerVisible ? "active" : "inactive"}`}
+          >
+            {r.isCustomerVisible ? "Yes" : "No"}
+          </span>
+        ),
+      },
+    ],
+    [],
+  );
+
+  return (
+    <>
+      <div className="admin-data-tabs">
+        <h3 className="admin-data-tabs-title">Order Tracking</h3>
+        <Link
+          href={NEW_PATH}
+          className="admin-btn admin-btn-primary admin-data-add-btn"
+        >
+          <Plus size={16} /> Add Tracking Event
+        </Link>
+      </div>
+      <div className="admin-data-card">
+        <AdminDataToolbar
+          title="Tracking Events"
+          search={search}
+          viewMode={viewMode}
+          sortBy={sortBy}
+          onSearchChange={setSearch}
+          onViewModeChange={setViewMode}
+          onSortChange={setSortBy}
+          onRefresh={() => void loadData()}
+        />
+        <AdminDataTable
+          columns={columns}
+          rows={rows}
+          loading={loading}
+          selectedIds={new Set()}
+          onToggleSelect={() => {}}
+          onToggleSelectAll={() => {}}
+          onEdit={() => {}}
+        />
+        <AdminPagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          pageSize={pagination.pageSize}
+          total={pagination.total}
+          onPageChange={(page) => setPagination((p) => ({ ...p, page }))}
+          onPageSizeChange={(ps) =>
+            setPagination((p) => ({ ...p, pageSize: ps, page: 1 }))
+          }
+        />
+      </div>
+    </>
+  );
+}

@@ -1,0 +1,305 @@
+/* Royal Furniture Pro — branded loading overlay */
+
+.royal-loader--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.royal-loader__backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(26, 39, 68, 0.97) 0%,
+    rgba(15, 22, 38, 0.99) 100%
+  );
+  animation: royal-loader-fade-in 0.4s ease-out;
+}
+
+.royal-loader__card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 56px 40px;
+  animation: royal-loader-card-in 0.6s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+.royal-loader__rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  transform: translate(-50%, -58%);
+  pointer-events: none;
+}
+
+.royal-loader__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.royal-loader__ring--outer {
+  border-top-color: var(--royal-gold-brand, #c5a059);
+  border-right-color: rgba(197, 160, 89, 0.2);
+  animation: royal-loader-spin 1.8s linear infinite;
+}
+
+.royal-loader__ring--mid {
+  inset: 14px;
+  border-bottom-color: #f7941d;
+  border-left-color: rgba(247, 148, 29, 0.15);
+  animation: royal-loader-spin 1.2s linear infinite reverse;
+}
+
+.royal-loader__ring--inner {
+  inset: 28px;
+  border-top-color: rgba(255, 255, 255, 0.35);
+  animation: royal-loader-spin 2.4s linear infinite;
+}
+
+.royal-loader__logo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: royal-loader-pulse 2s ease-in-out infinite;
+}
+
+.royal-loader__crown {
+  font-size: 36px;
+  line-height: 1;
+  color: var(--royal-gold-brand, #c5a059);
+  filter: drop-shadow(0 0 12px rgba(197, 160, 89, 0.6));
+  animation: royal-loader-crown-float 2.5s ease-in-out infinite;
+}
+
+.royal-loader__royal {
+  margin-top: 8px;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: #ffffff;
+  text-indent: 0.35em;
+}
+
+.royal-loader__sub {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--royal-gold-brand, #c5a059);
+}
+
+.royal-loader__shimmer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -55%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(247, 148, 29, 0.15) 0%, transparent 70%);
+  animation: royal-loader-glow 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.royal-loader__label {
+  margin: 28px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.royal-loader__dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.royal-loader__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--royal-gold-brand, #c5a059);
+  animation: royal-loader-dot 1.2s ease-in-out infinite;
+}
+
+.royal-loader__dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.royal-loader__dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.storefront-content-shell--hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes royal-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes royal-loader-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes royal-loader-card-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes royal-loader-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes royal-loader-crown-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes royal-loader-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -55%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -55%) scale(1.08);
+  }
+}
+
+@keyframes royal-loader-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Delivery pincode bar (header) */
+.delivery-pincode-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.delivery-pincode-bar__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--royal-gold-brand, #c5a059);
+}
+
+.delivery-pincode-bar__label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.delivery-pincode-bar__value {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.delivery-pincode-bar__pencil {
+  display: inline-flex;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delivery-pincode-bar__pencil:hover {
+  color: var(--royal-gold-brand, #c5a059);
+}
+
+.delivery-pincode-bar__edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.delivery-pincode-bar__input {
+  width: 72px;
+  padding: 2px 8px;
+  border: 1px solid rgba(197, 160, 89, 0.5);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.25);
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  outline: none;
+}
+
+.delivery-pincode-bar__input:focus {
+  border-color: var(--royal-gold-brand, #c5a059);
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.25);
+}
+
+.delivery-pincode-bar__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.delivery-pincode-bar__action--save {
+  background: var(--royal-gold-brand, #c5a059);
+  color: #1a2744;
+}
+
+.delivery-pincode-bar__action--save:hover {
+  filter: brightness(1.08);
+}
