@@ -1,0 +1,213 @@
+/* Reusable media image + placeholder layouts (no image / load error) */
+
+.media-image {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.media-image--fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.media-image--rounded-md {
+  border-radius: 0.5rem;
+}
+
+.media-image--rounded-full {
+  border-radius: 9999px;
+}
+
+.media-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.media-image__img--visible {
+  opacity: 1;
+}
+
+.media-image__img--cover {
+  object-fit: cover;
+}
+
+.media-image__img--contain {
+  object-fit: contain;
+}
+
+.media-image__placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.media-image-placeholder {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  box-sizing: border-box;
+  padding: 0.35rem;
+  text-align: center;
+  background: linear-gradient(145deg, #f8f9fb 0%, #eceff4 100%);
+  color: #94a3b8;
+  border: 1px dashed #d5dbe5;
+}
+
+.media-image-placeholder--fill {
+  width: 100%;
+  height: 100%;
+}
+
+.media-image-placeholder--rounded-md {
+  border-radius: 0.5rem;
+}
+
+.media-image-placeholder--rounded-full {
+  border-radius: 9999px;
+}
+
+.media-image-placeholder--empty {
+  background: linear-gradient(145deg, #f8f9fb 0%, #eceff4 100%);
+  color: #94a3b8;
+  border-color: #d5dbe5;
+}
+
+.media-image-placeholder--error {
+  background: linear-gradient(145deg, #fff5f5 0%, #fee8e8 100%);
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.media-image-placeholder--xs {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.media-image-placeholder--sm {
+  min-width: 72px;
+  min-height: 72px;
+}
+
+.media-image-placeholder--md {
+  min-width: 96px;
+  min-height: 96px;
+}
+
+.media-image-placeholder--lg {
+  min-width: 120px;
+  min-height: 120px;
+}
+
+.media-image-placeholder__icon {
+  flex-shrink: 0;
+}
+
+.media-image-placeholder--xs .media-image-placeholder__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.media-image-placeholder--sm .media-image-placeholder__icon {
+  width: 22px;
+  height: 22px;
+}
+
+.media-image-placeholder--md .media-image-placeholder__icon {
+  width: 28px;
+  height: 28px;
+}
+
+.media-image-placeholder--lg .media-image-placeholder__icon {
+  width: 36px;
+  height: 36px;
+}
+
+.media-image-placeholder__label {
+  max-width: 100%;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.media-image-placeholder--md .media-image-placeholder__label,
+.media-image-placeholder--lg .media-image-placeholder__label {
+  font-size: 11px;
+}
+
+/* Existing thumb wrappers — ensure fill placeholders size correctly */
+.popular-cat-thumb,
+.category-subcategory-thumb,
+.cart-line-item__thumb,
+.product-gallery__thumb,
+.product-gallery__stage,
+.admin-data-grid-avatar {
+  position: relative;
+}
+
+.popular-cat-thumb .media-image,
+.category-subcategory-thumb .media-image,
+.cart-line-item__thumb .media-image,
+.product-gallery__thumb .media-image,
+.product-gallery__thumb .media-image-placeholder {
+  width: 100%;
+  height: 76px;
+}
+
+@media (min-width: 768px) {
+  .product-gallery__thumb .media-image,
+  .product-gallery__thumb .media-image-placeholder {
+    height: 88px;
+  }
+}
+
+.product-gallery__stage .media-image__img.product-gallery__main-image {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.mobile-nav-row__icon .media-image,
+.mobile-nav-row__icon .media-image-placeholder {
+  width: 40px;
+  height: 40px;
+}
+
+.admin-data-grid-avatar .media-image,
+.admin-data-grid-avatar .media-image-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+.admin-table-thumb .media-image,
+.admin-table-thumb .media-image-placeholder {
+  width: 44px;
+  height: 44px;
+}
+
+.hero-banner-slide .media-image,
+.hero-banner-slide .media-image-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+}
+
+@media (min-width: 768px) {
+  .hero-banner-slide .media-image,
+  .hero-banner-slide .media-image-placeholder {
+    min-height: 320px;
+  }
+}

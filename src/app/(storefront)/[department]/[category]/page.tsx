@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { CategoryListingPage } from "@/components/category/category-listing-page";
-import {
-  getAllCategoryPageParams,
-  getCategoryPage,
-} from "@/lib/constants/category-pages";
+import { CategoryListingPageContent } from "@/components/category/category-listing-page-content";
+import { getCategoryPage } from "@/lib/constants/category-pages";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return getAllCategoryPageParams();
-}
+export const dynamicParams = true;
 
 type PageProps = {
   params: Promise<{ department: string; category: string }>;
@@ -19,21 +11,24 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { department, category } = await params;
   const data = getCategoryPage(department, category);
-  if (!data) return { title: "Category | Royal Furniture Pro" };
+
+  const title =
+    data?.title ??
+    category
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
   return {
-    title: `${data.title} | Royal Furniture Pro`,
-    description: `Shop ${data.category.toLowerCase()} from ${data.department} at Royal Furniture Pro.`,
+    title: `${title} | Royal Furniture Pro`,
+    description: `Shop ${title.toLowerCase()} furniture at Royal Furniture Pro.`,
   };
 }
 
 export default async function CategoryPage({ params }: PageProps) {
   const { department, category } = await params;
-  const data = getCategoryPage(department, category);
 
-  if (!data) {
-    notFound();
-  }
-
-  return <CategoryListingPage data={data} />;
+  return (
+    <CategoryListingPageContent categorySlug={department} subCategorySlug={category} />
+  );
 }

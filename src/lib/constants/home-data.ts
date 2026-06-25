@@ -15,6 +15,9 @@ export type ProductItem = {
   badge?: string;
   discount?: string;
   rating?: string;
+  slug?: string;
+  href?: string;
+  isEmpty?: boolean;
 };
 
 export function p(

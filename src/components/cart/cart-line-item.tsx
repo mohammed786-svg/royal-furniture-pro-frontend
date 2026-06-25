@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Minus, Percent, Plus, Trash2, Truck } from "lucide-react";
+import { MediaImage } from "@/components/ui/media-image";
 import {
   formatPrice,
   lineItemSavings,
@@ -29,13 +29,13 @@ export function CartLineItemRow({
   return (
     <article className="cart-line-item">
       <Link href={item.href} className="cart-line-item__thumb">
-        <Image
+        <MediaImage
           src={item.image}
           alt={item.name}
-          width={120}
-          height={90}
-          className="cart-line-item__thumb-img"
-          unoptimized
+          fill
+          fit="cover"
+          resolveUrl={false}
+          imgClassName="cart-line-item__thumb-img"
         />
       </Link>
 
@@ -46,11 +46,14 @@ export function CartLineItemRow({
 
         {item.collectionLogo && (
           <div className="cart-line-item__brand">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <MediaImage
               src={item.collectionLogo}
               alt={item.collection ?? "Brand"}
               height={18}
+              width={72}
+              fit="contain"
+              placeholderSize="xs"
+              resolveUrl={false}
             />
           </div>
         )}

@@ -4,15 +4,20 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MapPin, Pencil, Plus, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 import { CheckoutStepper } from "@/components/cart/checkout-stepper";
 import { CategoryBreadcrumbs } from "@/components/category/category-breadcrumbs";
 import { AddressForm } from "@/components/checkout/address-form";
 import { CheckoutOrderSummary } from "@/components/checkout/checkout-order-summary";
+import { getApiErrorMessage } from "@/lib/api/api-error";
 import { useAddressStore } from "@/lib/store/address-store";
+import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
 
 export function AddressPageContent() {
   const router = useRouter();
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const hydrateAddresses = useAddressStore((s) => s.hydrate);
   const cartItems = useCartStore((s) => s.cartItems);
   const addresses = useAddressStore((s) => s.addresses);
   const selectedAddressId = useAddressStore((s) => s.selectedAddressId);
@@ -26,10 +31,32 @@ export function AddressPageContent() {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (accessToken) {
+      void hydrateAddresses();
+    }
+  }, [accessToken, hydrateAddresses]);
+
+  useEffect(() => {
     if (addresses.length > 0 && !selectedAddressId) {
       setSelectedAddressId(addresses[0].id);
     }
   }, [addresses, selectedAddressId, setSelectedAddressId]);
+
+  if (!accessToken) {
+    return (
+      <main className="cart-page">
+        <div className="cart-page__inner royal-section-inner">
+          <p className="cart-page__empty">
+            Please{" "}
+            <Link href="/login" className="cart-page__empty-link">
+              sign in
+            </Link>{" "}
+            to manage delivery addresses.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -115,7 +142,15 @@ export function AddressPageContent() {
                           type="button"
                           className="address-card__icon-btn address-card__icon-btn--danger"
                           aria-label="Remove address"
-                          onClick={() => removeAddress(addr.id)}
+                          onClick={async () => {
+                            try {
+                              await removeAddress(addr.id);
+                            } catch (error) {
+                              toast.error(
+                                getApiErrorMessage(error, "Could not remove address"),
+                              );
+                            }
+                          }}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -158,15 +193,19 @@ export function AddressPageContent() {
                         }
                       : undefined
                   }
-                  onSubmit={(input) => {
-                    if (editingId) {
-                      updateAddress(editingId, input);
-                    } else {
-                      const id = addAddress(input);
-                      setSelectedAddressId(id);
+                  onSubmit={async (input) => {
+                    try {
+                      if (editingId) {
+                        await updateAddress(editingId, input);
+                      } else {
+                        const id = await addAddress(input);
+                        setSelectedAddressId(id);
+                      }
+                      setShowForm(false);
+                      setEditingId(null);
+                    } catch (error) {
+                      toast.error(getApiErrorMessage(error, "Could not save address"));
                     }
-                    setShowForm(false);
-                    setEditingId(null);
                   }}
                 />
               </div>

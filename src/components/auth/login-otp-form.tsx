@@ -5,20 +5,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { OtpInput } from "@/components/auth/otp-input";
-import { isDemoMobile, isDemoOtp } from "@/lib/constants/demo-auth";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { useAddressStore } from "@/lib/store/address-store";
 import { useAuthStore } from "@/lib/store/auth-store";
+import { useCartStore } from "@/lib/store/cart-store";
 import {
   formatIndianMobileDisplay,
   indianMobileError,
   isValidIndianMobile,
   normalizeIndianMobile,
 } from "@/lib/validators/indian-mobile";
+import { sendStorefrontOtp, verifyStorefrontOtp } from "@/services/storefront-commerce";
 
 type Step = "mobile" | "otp";
 
 export function LoginOtpForm() {
   const router = useRouter();
-  const setUser = useAuthStore((s) => s.setUser);
+  const setSession = useAuthStore((s) => s.setSession);
+  const hydrateCart = useCartStore((s) => s.hydrate);
+  const hydrateAddresses = useAddressStore((s) => s.hydrate);
   const [step, setStep] = useState<Step>("mobile");
   const [mobile, setMobile] = useState("");
   const [mobileError, setMobileError] = useState<string | null>(null);
@@ -40,7 +45,7 @@ export function LoginOtpForm() {
     if (mobileError) setMobileError(null);
   };
 
-  const handleSendOtp = (e: React.FormEvent) => {
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     const err = indianMobileError(mobile);
     if (err) {
@@ -48,43 +53,52 @@ export function LoginOtpForm() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const digits = normalizeIndianMobile(mobile);
+      await sendStorefrontOtp(digits, "login");
       setStep("otp");
       setOtp(Array(6).fill(""));
       setOtpError(null);
-      if (isDemoMobile(mobile)) {
-        toast("Demo OTP: 123456", { icon: "ℹ️" });
-      }
-    }, 600);
+      toast.success("OTP sent to your mobile");
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Could not send OTP");
+      setMobileError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join("");
     if (code.length !== 6) {
       setOtpError("Enter the 6-digit OTP");
       return;
     }
-    if (!isDemoMobile(mobile) || !isDemoOtp(code)) {
-      setOtpError("Invalid OTP. Use demo mobile 8296565587 and OTP 123456");
-      return;
-    }
+
     setLoading(true);
-    setTimeout(() => {
-      setUser({
-        name: "Guest",
-        mobile: normalizeIndianMobile(mobile),
-      });
-      setLoading(false);
+    try {
+      const digits = normalizeIndianMobile(mobile);
+      const result = await verifyStorefrontOtp(digits, code, { purpose: "login" });
+      setSession(result.user, result.accessToken);
+      useCartStore.setState({ hydrated: false });
+      useAddressStore.setState({ hydrated: false });
+      await hydrateCart();
+      await hydrateAddresses();
       toast.success("Logged in");
       router.push("/account");
-    }, 500);
+    } catch (error) {
+      setOtpError(getApiErrorMessage(error, "Invalid OTP"));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleResend = () => {
     setOtp(Array(6).fill(""));
     setOtpError(null);
+    void handleSendOtp({ preventDefault: () => {} } as React.FormEvent);
   };
 
   const handleChangeMobile = () => {
@@ -134,10 +148,6 @@ export function LoginOtpForm() {
             </p>
           )}
 
-          <p className="login-form__hint login-form__hint--demo">
-            Demo: mobile <strong>8296565587</strong>, OTP <strong>123456</strong>
-          </p>
-
           <button
             type="submit"
             className="login-form__submit"
@@ -181,6 +191,7 @@ export function LoginOtpForm() {
               type="button"
               className="login-form__link-btn"
               onClick={handleResend}
+              disabled={loading}
             >
               Resend OTP
             </button>

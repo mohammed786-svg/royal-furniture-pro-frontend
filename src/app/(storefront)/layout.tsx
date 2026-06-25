@@ -1,3 +1,4 @@
+import { CommerceHydrator } from "@/components/commerce/commerce-hydrator";
 import { FloatingActions } from "@/components/home/floating-actions";
 import { StorefrontFooter } from "@/components/layout/storefront-footer";
 import { StorefrontHeader } from "@/components/layout/storefront-header";
@@ -10,6 +11,7 @@ export default function StorefrontLayout({
 }>) {
   return (
     <div className="min-h-screen bg-white">
+      <CommerceHydrator />
       <StorefrontHeader />
       <StorefrontLoadingShell>{children}</StorefrontLoadingShell>
       <StorefrontFooter />

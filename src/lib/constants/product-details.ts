@@ -205,6 +205,8 @@ export function getProductBySlug(slug: string): ProductDetail | null {
 }
 
 export function getProductHref(product: ProductItem): string {
+  if (product.href && product.href !== "#") return product.href;
+  if (product.slug) return `/product/${product.slug}`;
   const slug = productSlugFromName(product.name);
   const novaIds = new Set(["rec1", "na1", "oe1"]);
   if (

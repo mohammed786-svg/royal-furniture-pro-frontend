@@ -89,6 +89,13 @@ export function BannerFormPage({ mode, bannerId }: Props) {
     void loadMeta();
   }, [loadMeta]);
   useEffect(() => {
+    if (mode !== "create" || form.bannerPositionId || positions.length === 0) return;
+    const hero = positions.find((pos) => pos.positionCode === "HOME_HERO");
+    if (hero) {
+      setForm((prev) => ({ ...prev, bannerPositionId: hero.id }));
+    }
+  }, [mode, form.bannerPositionId, positions]);
+  useEffect(() => {
     void load();
   }, [load]);
 

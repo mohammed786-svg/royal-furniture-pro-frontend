@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { siteConfig } from "@/config/seo/metadata.config";
 import { footerColumns, paymentIcons } from "@/lib/constants/home-data";
 import { primaryNavCategoryHref } from "@/lib/routes/category";
 import { siteHref } from "@/lib/routes/site-pages";
@@ -11,14 +12,14 @@ export function StorefrontFooter() {
   const [email, setEmail] = useState("");
 
   return (
-    <footer className="bg-[var(--royal-navy-deep)] text-white/80">
+    <footer className="storefront-footer bg-white text-gray-600">
       {/* Newsletter */}
-      <div className="border-b border-white/10 bg-[var(--royal-navy)] py-10">
+      <div className="border-b border-gray-200 bg-gray-50 py-10">
         <div className="mx-auto max-w-[1400px] px-4 text-center lg:px-6">
-          <h3 className="mb-2 font-[family-name:var(--font-playfair)] text-xl text-[var(--royal-gold-brand)] md:text-2xl">
+          <h3 className="mb-2 font-[family-name:var(--font-playfair)] text-xl text-[var(--royal-navy)] md:text-2xl">
             Subscribe to our newsletter
           </h3>
-          <p className="mb-4 text-sm text-white/70">
+          <p className="mb-4 text-sm text-gray-500">
             Be the first to know about new arrivals, sales & promos
           </p>
           <form
@@ -30,7 +31,7 @@ export function StorefrontFooter() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 rounded-sm border border-white/20 bg-[var(--royal-navy-deep)] px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-[var(--royal-gold-brand)] focus:outline-none"
+              className="flex-1 rounded-sm border border-gray-200 bg-white px-4 py-2.5 text-sm text-[var(--royal-navy)] placeholder:text-gray-400 focus:border-[var(--royal-gold-brand)] focus:outline-none"
             />
             <button
               type="submit"
@@ -43,11 +44,19 @@ export function StorefrontFooter() {
       </div>
 
       <div className="mx-auto max-w-[1400px] px-4 py-10 lg:px-6">
-        <div className="mb-10 text-center">
-          <p className="font-[family-name:var(--font-playfair)] text-2xl text-[var(--royal-gold-brand)]">
-            ROYAL FURNITURE PRO
-          </p>
-          <p className="mt-2 text-sm text-white/60">
+        <div className="mb-10 flex flex-col items-center text-center">
+          <Link href="/" className="storefront-footer-logo-link">
+            <img
+              src={siteConfig.logoSrc}
+              alt={siteConfig.name}
+              className="storefront-footer-logo__image"
+              width={540}
+              height={462}
+              loading="lazy"
+              decoding="async"
+            />
+          </Link>
+          <p className="mt-3 text-sm text-gray-500">
             International Furniture, Unbeatable Price
           </p>
         </div>
@@ -62,12 +71,15 @@ export function StorefrontFooter() {
             categoryLinks
           />
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <h3 className="mb-3 text-xs font-bold tracking-wider text-[var(--royal-gold-brand)] uppercase">
+            <h3 className="mb-3 text-xs font-bold tracking-wider text-[var(--royal-navy)] uppercase">
               Payment Methods
             </h3>
             <div className="flex flex-wrap gap-2">
               {paymentIcons.map((p) => (
-                <div key={p.name} className="relative h-8 w-12 rounded bg-white p-1">
+                <div
+                  key={p.name}
+                  className="relative h-8 w-12 rounded border border-gray-200 bg-white p-1"
+                >
                   <Image
                     src={p.src}
                     alt={p.name}
@@ -81,7 +93,7 @@ export function StorefrontFooter() {
           </div>
         </div>
 
-        <p className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/50">
+        <p className="mt-10 border-t border-gray-200 pt-6 text-center text-xs text-gray-400">
           © {new Date().getFullYear()} Royal Furniture Pro. All rights reserved.
         </p>
       </div>
@@ -100,7 +112,7 @@ function FooterCol({
 }) {
   return (
     <div>
-      <h3 className="mb-3 text-xs font-bold tracking-wider text-[var(--royal-gold-brand)] uppercase">
+      <h3 className="mb-3 text-xs font-bold tracking-wider text-[var(--royal-navy)] uppercase">
         {title}
       </h3>
       <ul className="space-y-2">
@@ -110,7 +122,7 @@ function FooterCol({
             <li key={l}>
               <Link
                 href={href}
-                className="transition-colors hover:text-[var(--royal-gold-brand)]"
+                className="text-gray-600 transition-colors hover:text-[var(--royal-gold-brand)]"
               >
                 {l}
               </Link>

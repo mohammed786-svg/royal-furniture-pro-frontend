@@ -7,11 +7,16 @@ import { getApiErrorMessage, isApiEnvelope } from "@/lib/api/api-error";
 import type { EncryptedApiEnvelope } from "@/lib/api/types";
 import { getAdminAuthToken } from "@/lib/axios/admin-auth-token";
 import {
+  getCustomerAuthToken,
+  hydrateCustomerAuthToken,
+} from "@/lib/axios/customer-auth-token";
+import {
   decryptPayload,
   encryptPayload,
   isCryptoEnabled,
 } from "@/lib/crypto/payload-crypto";
 import { env } from "@/lib/env";
+import { getGuestSessionId, GUEST_SESSION_HEADER } from "@/lib/guest-session";
 import { royalToast } from "@/lib/toast/royal-toast";
 
 export type TokenRefreshHandler = () => Promise<string | null>;
@@ -22,8 +27,14 @@ let refreshQueue: Array<(token: string | null) => void> = [];
 
 const MUTATING_METHODS = new Set(["post", "put", "patch", "delete"]);
 
+function isStorefrontCommerceRequest(url: string | undefined): boolean {
+  return Boolean(url?.includes("/storefront/"));
+}
+
 function isAuthLoginRequest(url: string | undefined): boolean {
-  return Boolean(url?.includes("/auth/admin/login/"));
+  return Boolean(
+    url?.includes("/auth/admin/login/") || url?.includes("/storefront/auth/"),
+  );
 }
 
 function isAuthRefreshRequest(url: string | undefined): boolean {
@@ -114,9 +125,23 @@ export function createAxiosInstance(): AxiosInstance {
 
   instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-      const token = getAdminAuthToken();
+      hydrateCustomerAuthToken();
+      const url = config.url;
+      const customerToken = getCustomerAuthToken();
+      const adminToken = getAdminAuthToken();
+      const token =
+        isStorefrontCommerceRequest(url) && customerToken
+          ? customerToken
+          : (adminToken ?? customerToken);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      if (isStorefrontCommerceRequest(url)) {
+        const guestSession = getGuestSessionId();
+        if (guestSession) {
+          config.headers[GUEST_SESSION_HEADER] = guestSession;
+        }
       }
 
       const method = (config.method ?? "get").toLowerCase();

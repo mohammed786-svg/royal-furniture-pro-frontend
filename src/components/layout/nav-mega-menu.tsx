@@ -2,8 +2,7 @@
 
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import type { NavMegaMenu } from "@/lib/constants/nav-mega-menu";
-import { resolveMegaMenuHref } from "@/lib/routes/mega-menu-hrefs";
+import type { NavMegaMenu } from "@/types/navbar";
 
 type NavMegaMenuPanelProps = {
   menu: NavMegaMenu;
@@ -32,7 +31,7 @@ export function NavMegaMenuPanel({ menu, onNavigate }: NavMegaMenuPanelProps) {
             {menu.columns.map((column) => (
               <div key={column.title} className="nav-mega-menu-column">
                 <Link
-                  href={resolveMegaMenuHref(menu.label, column.title)}
+                  href={column.href}
                   className="nav-mega-menu-column__title"
                   onClick={onNavigate}
                 >
@@ -43,7 +42,7 @@ export function NavMegaMenuPanel({ menu, onNavigate }: NavMegaMenuPanelProps) {
                     {column.items.map((item) => (
                       <li key={item.label}>
                         <Link
-                          href={resolveMegaMenuHref(menu.label, column.title)}
+                          href={item.href}
                           className="nav-mega-menu-column__link"
                           onClick={onNavigate}
                         >

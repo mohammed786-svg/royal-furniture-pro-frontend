@@ -27,14 +27,18 @@ export function BuyNowButton({
   const addToCart = useCartStore((s) => s.addToCart);
   const addDetailToCart = useCartStore((s) => s.addDetailToCart);
 
-  const handleClick = () => {
-    if (isProductDetail(product)) {
-      addDetailToCart(product, quantity);
-    } else {
-      addToCart(product, quantity);
+  const handleClick = async () => {
+    try {
+      if (isProductDetail(product)) {
+        await addDetailToCart(product, quantity);
+      } else {
+        await addToCart(product, quantity);
+      }
+      toast.success("Added to cart");
+      router.push("/cart");
+    } catch {
+      toast.error("Could not add to cart");
     }
-    toast.success("Added to cart");
-    router.push("/cart");
   };
 
   return (

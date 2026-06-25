@@ -5,20 +5,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { OtpInput } from "@/components/auth/otp-input";
-import { isDemoMobile, isDemoOtp } from "@/lib/constants/demo-auth";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { useAddressStore } from "@/lib/store/address-store";
 import { useAuthStore } from "@/lib/store/auth-store";
+import { useCartStore } from "@/lib/store/cart-store";
 import {
   formatIndianMobileDisplay,
   indianMobileError,
   isValidIndianMobile,
   normalizeIndianMobile,
 } from "@/lib/validators/indian-mobile";
+import { sendStorefrontOtp, verifyStorefrontOtp } from "@/services/storefront-commerce";
 
 type Step = "details" | "otp";
 
 export function RegisterOtpForm() {
   const router = useRouter();
-  const setUser = useAuthStore((s) => s.setUser);
+  const setSession = useAuthStore((s) => s.setSession);
+  const hydrateCart = useCartStore((s) => s.hydrate);
+  const hydrateAddresses = useAddressStore((s) => s.hydrate);
 
   const [step, setStep] = useState<Step>("details");
   const [name, setName] = useState("");
@@ -44,7 +49,7 @@ export function RegisterOtpForm() {
     if (mobileError) setMobileError(null);
   };
 
-  const handleSendOtp = (e: React.FormEvent) => {
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
       setFormError("Enter your name");
@@ -61,38 +66,50 @@ export function RegisterOtpForm() {
     }
     setFormError(null);
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const digits = normalizeIndianMobile(mobile);
+      await sendStorefrontOtp(digits, "register");
       setStep("otp");
       setOtp(Array(6).fill(""));
-      if (isDemoMobile(mobile)) {
-        toast("Demo OTP: 123456", { icon: "ℹ️" });
-      }
-    }, 600);
+      setOtpError(null);
+      toast.success("OTP sent to your mobile");
+    } catch (error) {
+      const message = getApiErrorMessage(error, "Could not send OTP");
+      setMobileError(message);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerify = (e: React.FormEvent) => {
+  const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = otp.join("");
     if (code.length !== 6) {
       setOtpError("Enter the 6-digit OTP");
       return;
     }
-    if (!isDemoMobile(mobile) || !isDemoOtp(code)) {
-      setOtpError("Invalid OTP. Use demo mobile 8296565587 and OTP 123456");
-      return;
-    }
+
     setLoading(true);
-    setTimeout(() => {
-      setUser({
-        name: name.trim(),
-        mobile: normalizeIndianMobile(mobile),
+    try {
+      const digits = normalizeIndianMobile(mobile);
+      const result = await verifyStorefrontOtp(digits, code, {
+        purpose: "register",
+        fullName: name.trim(),
         email: email.trim() || undefined,
       });
-      setLoading(false);
+      setSession(result.user, result.accessToken);
+      useCartStore.setState({ hydrated: false });
+      useAddressStore.setState({ hydrated: false });
+      await hydrateCart();
+      await hydrateAddresses();
       toast.success("Account created");
       router.push("/account");
-    }, 500);
+    } catch (error) {
+      setOtpError(getApiErrorMessage(error, "Could not complete registration"));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const maskedMobile = formatIndianMobileDisplay(normalizeIndianMobile(mobile));
@@ -133,7 +150,7 @@ export function RegisterOtpForm() {
               id="reg-mobile"
               type="tel"
               inputMode="numeric"
-              placeholder="82965 65587"
+              placeholder="98989 89898"
               value={mobile}
               onChange={(e) => handleMobileChange(e.target.value)}
               className="login-form__mobile-input"
@@ -166,10 +183,6 @@ export function RegisterOtpForm() {
               {formError}
             </p>
           )}
-
-          <p className="login-form__hint login-form__hint--demo">
-            Demo: mobile <strong>8296565587</strong>, OTP <strong>123456</strong>
-          </p>
 
           <button
             type="submit"

@@ -5,29 +5,60 @@ import toast from "react-hot-toast";
 import { CartLineItemRow } from "@/components/cart/cart-line-item";
 import { WishlistSummary } from "@/components/cart/wishlist-summary";
 import { CategoryBreadcrumbs } from "@/components/category/category-breadcrumbs";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
 
 export function WishlistPageContent() {
+  const accessToken = useAuthStore((s) => s.accessToken);
   const wishlistItems = useCartStore((s) => s.wishlistItems);
   const removeFromWishlist = useCartStore((s) => s.removeFromWishlist);
   const addWishlistItemToCart = useCartStore((s) => s.addWishlistItemToCart);
   const addAllWishlistToCart = useCartStore((s) => s.addAllWishlistToCart);
 
-  const handleRemove = (id: string) => {
-    removeFromWishlist(id);
-    toast.success("Removed from wishlist");
+  const handleRemove = async (id: string) => {
+    try {
+      await removeFromWishlist(id);
+      toast.success("Removed from wishlist");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not remove item"));
+    }
   };
 
-  const handleAddToCart = (id: string) => {
-    addWishlistItemToCart(id);
-    toast.success("Added to cart");
+  const handleAddToCart = async (id: string) => {
+    try {
+      await addWishlistItemToCart(id);
+      toast.success("Added to cart");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not add to cart"));
+    }
   };
 
-  const handleAddAll = () => {
+  const handleAddAll = async () => {
     if (wishlistItems.length === 0) return;
-    addAllWishlistToCart();
-    toast.success(`${wishlistItems.length} item(s) added to cart`);
+    try {
+      await addAllWishlistToCart();
+      toast.success(`${wishlistItems.length} item(s) added to cart`);
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not add items to cart"));
+    }
   };
+
+  if (!accessToken) {
+    return (
+      <main className="cart-page cart-page--wishlist">
+        <div className="cart-page__inner royal-section-inner">
+          <p className="cart-page__empty">
+            Please{" "}
+            <Link href="/login" className="cart-page__empty-link">
+              sign in
+            </Link>{" "}
+            to view your wishlist.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="cart-page cart-page--wishlist">

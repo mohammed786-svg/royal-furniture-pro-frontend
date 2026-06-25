@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Moon, Sun, X } from "lucide-react";
 import { AdminIcon } from "@/components/admin/layout/admin-icon";
+import { siteConfig } from "@/config/seo/metadata.config";
 import { useAdminAuthStore } from "@/lib/admin/auth-store";
 import { getVisibleMenuGroups } from "@/lib/admin/permissions";
 
@@ -31,18 +32,19 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
       )}
       <aside className={`admin-sidebar ${open ? "open" : ""}`}>
         <div className="admin-sidebar-header">
-          <div className="admin-sidebar-brand">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden>
-              <rect width="32" height="32" rx="8" fill="#3D5EE1" />
-              <path
-                d="M8 22V12l8-4 8 4v10"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            Royal Pro
-          </div>
+          <Link
+            href="/admin/dashboard"
+            className="admin-sidebar-brand"
+            onClick={onClose}
+          >
+            <img
+              src={siteConfig.logoSrc}
+              alt={siteConfig.name}
+              className="admin-sidebar-logo__image"
+              width={540}
+              height={462}
+            />
+          </Link>
           <button
             type="button"
             className="admin-sidebar-close-btn"

@@ -1,21 +1,30 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { testimonials } from "@/lib/constants/home-data";
+import { useHomepage } from "@/providers/homepage-provider";
 
 export function TestimonialsSection() {
+  const { data } = useHomepage();
+  const testimonials = data.testimonials;
   const [index, setIndex] = useState(0);
 
+  useEffect(() => {
+    setIndex(0);
+  }, [testimonials.length]);
+
   const next = useCallback(() => {
+    if (!testimonials.length) return;
     setIndex((i) => (i + 1) % testimonials.length);
-  }, []);
+  }, [testimonials.length]);
 
   const prev = useCallback(() => {
+    if (!testimonials.length) return;
     setIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
-  }, []);
+  }, [testimonials.length]);
 
   const t = testimonials[index];
+  if (!t) return null;
 
   return (
     <section className="bg-[#1a2744] py-10 md:py-14">
@@ -38,35 +47,41 @@ export function TestimonialsSection() {
             </h3>
             <p className="text-base text-white/70">{t.city}</p>
           </div>
-          <button
-            type="button"
-            onClick={prev}
-            aria-label="Previous testimonial"
-            className="absolute top-1/2 -left-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#1a2744] shadow md:-left-12"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Next testimonial"
-            className="absolute top-1/2 -right-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#1a2744] shadow md:-right-12"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-          <div className="mt-6 flex justify-center gap-2">
-            {testimonials.map((_, i) => (
+          {testimonials.length > 1 && (
+            <>
               <button
-                key={i}
                 type="button"
-                aria-label={`Testimonial ${i + 1}`}
-                onClick={() => setIndex(i)}
-                className={`h-2 rounded-full transition ${
-                  i === index ? "w-6 bg-[var(--royal-gold-brand)]" : "w-2 bg-white/40"
-                }`}
-              />
-            ))}
-          </div>
+                onClick={prev}
+                aria-label="Previous testimonial"
+                className="absolute top-1/2 -left-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#1a2744] shadow md:-left-12"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                aria-label="Next testimonial"
+                className="absolute top-1/2 -right-2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#1a2744] shadow md:-right-12"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              <div className="mt-6 flex justify-center gap-2">
+                {testimonials.map((item, i) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-label={`Testimonial ${i + 1}`}
+                    onClick={() => setIndex(i)}
+                    className={`h-2 rounded-full transition ${
+                      i === index
+                        ? "w-6 bg-[var(--royal-gold-brand)]"
+                        : "w-2 bg-white/40"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>

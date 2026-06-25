@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import { popularCategories } from "@/lib/constants/home";
-import { categoryPageHref, popularCategoryHrefs } from "@/lib/routes/category";
+import { MediaImage } from "@/components/ui/media-image";
+import { categoryPageHref } from "@/lib/routes/category";
+import { useHomepage } from "@/providers/homepage-provider";
 
 export function PopularCategories() {
+  const { data } = useHomepage();
+
   return (
     <section
       className="popular-categories-section"
@@ -14,20 +19,21 @@ export function PopularCategories() {
         </h2>
 
         <ul className="popular-categories-grid">
-          {popularCategories.map((cat) => (
-            <li key={cat.name} className="popular-categories-grid__item">
+          {data.popularCategories.map((cat) => (
+            <li key={cat.id} className="popular-categories-grid__item">
               <Link
-                href={popularCategoryHrefs[cat.name] ?? categoryPageHref(cat.name)}
+                href={cat.href !== "#" ? cat.href : categoryPageHref(cat.name)}
                 className="popular-cat-link"
               >
                 <div className="popular-cat-thumb">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={cat.image}
+                  <MediaImage
+                    src={cat.imageUrl}
                     alt={cat.name}
-                    width={190}
-                    height={190}
-                    loading="lazy"
+                    fill
+                    rounded="full"
+                    fit="cover"
+                    placeholderSize="md"
+                    showLabel
                   />
                 </div>
                 <h5 className="popular-cat-label">{cat.name}</h5>

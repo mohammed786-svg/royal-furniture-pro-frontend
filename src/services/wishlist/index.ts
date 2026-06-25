@@ -1,2 +1,18 @@
-/** Wishlist service — implement when wishlist API is ready. */
-export const wishlistService = {};
+export {
+  addStorefrontCartItem,
+  addStorefrontWishlistItem,
+  clearStorefrontCart,
+  createStorefrontAddress,
+  deleteStorefrontAddress,
+  fetchStorefrontAddresses,
+  fetchStorefrontCart,
+  fetchStorefrontMe,
+  fetchStorefrontWishlist,
+  placeStorefrontOrder,
+  removeStorefrontCartItem,
+  removeStorefrontWishlistItem,
+  sendStorefrontOtp,
+  updateStorefrontAddress,
+  updateStorefrontCartItem,
+  verifyStorefrontOtp,
+} from "@/services/storefront-commerce";

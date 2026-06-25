@@ -7,6 +7,7 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   locale: "en_IN",
   twitterHandle: "@royalfurniture",
+  logoSrc: "/logos/royal_furniture_pro_logo.png",
 } as const;
 
 export const defaultMetadata: Metadata = {

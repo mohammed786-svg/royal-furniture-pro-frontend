@@ -8,10 +8,20 @@ export const queryKeys = {
     session: () => [...queryKeys.auth.all(), "session"] as const,
   },
   navbar: () => [...queryKeys.all, "navbar"] as const,
+  heroBanners: (position = "HOME_HERO") =>
+    [...queryKeys.all, "hero-banners", position] as const,
+  storefrontHome: () => [...queryKeys.all, "storefront-home"] as const,
   categories: {
     all: () => [...queryKeys.all, "categories"] as const,
     tree: () => [...queryKeys.categories.all(), "tree"] as const,
     detail: (slug: string) => [...queryKeys.categories.all(), "detail", slug] as const,
+    listing: (categorySlug: string, subCategorySlug: string) =>
+      [
+        ...queryKeys.categories.all(),
+        "listing",
+        categorySlug,
+        subCategorySlug,
+      ] as const,
   },
   products: {
     all: () => [...queryKeys.all, "products"] as const,

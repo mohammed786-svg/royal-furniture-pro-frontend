@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MediaImage } from "@/components/ui/media-image";
 import type { CategorySubcategory } from "@/lib/constants/category-pages";
 
 type CategorySubcategoryGridProps = {
@@ -12,13 +13,12 @@ export function CategorySubcategoryGrid({ items }: CategorySubcategoryGridProps)
         <li key={item.label} className="category-subcategory-grid__item">
           <Link href={item.href} className="category-subcategory-link">
             <div className="category-subcategory-thumb">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <MediaImage
                 src={item.image}
                 alt={item.label}
-                width={96}
-                height={96}
-                loading="lazy"
+                fill
+                fit="cover"
+                resolveUrl={false}
               />
             </div>
             <span className="category-subcategory-label">{item.label}</span>

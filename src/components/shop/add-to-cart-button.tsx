@@ -25,16 +25,20 @@ export function AddToCartButton({
   const addToCart = useCartStore((s) => s.addToCart);
   const addDetailToCart = useCartStore((s) => s.addDetailToCart);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (isProductDetail(product)) {
-      addDetailToCart(product, quantity);
-    } else {
-      addToCart(product, quantity);
+    try {
+      if (isProductDetail(product)) {
+        await addDetailToCart(product, quantity);
+      } else {
+        await addToCart(product, quantity);
+      }
+      toast.success("Added to cart");
+    } catch {
+      toast.error("Could not add to cart");
     }
-    toast.success("Added to cart");
   };
 
   return (

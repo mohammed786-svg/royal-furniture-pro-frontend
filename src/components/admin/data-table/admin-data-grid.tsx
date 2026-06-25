@@ -1,7 +1,7 @@
 "use client";
 
 import { MoreVertical } from "lucide-react";
-import { resolveMediaUrl } from "@/lib/media/resolve-url";
+import { MediaImage } from "@/components/ui/media-image";
 
 export type AdminGridField = {
   label: string;
@@ -42,7 +42,7 @@ export function AdminDataGrid<T extends { id: string; name: string }>({
   return (
     <div className="admin-data-grid">
       {rows.map((row) => {
-        const image = imageKey ? resolveMediaUrl(row[imageKey] as string | null) : null;
+        const imageSrc = imageKey ? (row[imageKey] as string | null) : null;
         const badge = status?.(row);
         return (
           <div key={row.id} className="admin-data-grid-card">
@@ -77,12 +77,13 @@ export function AdminDataGrid<T extends { id: string; name: string }>({
             </div>
             <div className="admin-data-grid-card-body">
               <div className="admin-data-grid-avatar">
-                {image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={image} alt={row.name} />
-                ) : (
-                  <span>{row.name.charAt(0).toUpperCase()}</span>
-                )}
+                <MediaImage
+                  src={imageSrc}
+                  alt={row.name}
+                  fill
+                  fit="cover"
+                  placeholderSize="sm"
+                />
               </div>
               <div>
                 <h4>{row.name}</h4>

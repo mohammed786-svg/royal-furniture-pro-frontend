@@ -29,6 +29,21 @@ type ListParams = {
 
 type ListResponse<T> = { items: T[]; pagination: PaginationMeta };
 
+function normalizeBanner(item: BannerItem & { positionId?: string }): BannerItem {
+  return {
+    ...item,
+    bannerPositionId: item.bannerPositionId || item.positionId || "",
+  };
+}
+
+function toBannerPayload(payload: Partial<BannerFormValues>) {
+  const { bannerPositionId, ...rest } = payload;
+  return {
+    ...rest,
+    positionId: bannerPositionId,
+  };
+}
+
 function buildQuery(params: Record<string, unknown> = {}) {
   const q = new URLSearchParams();
   Object.entries(params).forEach(([k, v]) => {
@@ -78,33 +93,35 @@ export async function deleteCoupon(id: string) {
 
 // Banners
 export async function fetchBanners(params?: ListParams) {
-  const { data } = await apiClient.get<ApiEnvelope<ListResponse<BannerItem>>>(
-    `/marketing/banners/${buildQuery(params ?? {})}`,
-  );
-  return assertApiSuccess(data);
+  const { data } = await apiClient.get<
+    ApiEnvelope<ListResponse<BannerItem & { positionId?: string }>>
+  >(`/marketing/banners/${buildQuery(params ?? {})}`);
+  const result = assertApiSuccess(data);
+  return {
+    ...result,
+    items: result.items.map(normalizeBanner),
+  };
 }
 
 export async function fetchBanner(id: string) {
-  const { data } = await apiClient.get<ApiEnvelope<{ item: BannerItem }>>(
-    `/marketing/banners/${id}/`,
-  );
-  return assertApiSuccess(data).item;
+  const { data } = await apiClient.get<
+    ApiEnvelope<{ item: BannerItem & { positionId?: string } }>
+  >(`/marketing/banners/${id}/`);
+  return normalizeBanner(assertApiSuccess(data).item);
 }
 
 export async function createBanner(payload: Partial<BannerFormValues>) {
-  const { data } = await apiClient.post<ApiEnvelope<{ item: BannerItem }>>(
-    "/marketing/banners/",
-    payload,
-  );
-  return assertApiSuccess(data).item;
+  const { data } = await apiClient.post<
+    ApiEnvelope<{ item: BannerItem & { positionId?: string } }>
+  >("/marketing/banners/", toBannerPayload(payload));
+  return normalizeBanner(assertApiSuccess(data).item);
 }
 
 export async function updateBanner(id: string, payload: Partial<BannerFormValues>) {
-  const { data } = await apiClient.patch<ApiEnvelope<{ item: BannerItem }>>(
-    `/marketing/banners/${id}/`,
-    payload,
-  );
-  return assertApiSuccess(data).item;
+  const { data } = await apiClient.patch<
+    ApiEnvelope<{ item: BannerItem & { positionId?: string } }>
+  >(`/marketing/banners/${id}/`, toBannerPayload(payload));
+  return normalizeBanner(assertApiSuccess(data).item);
 }
 
 export async function deleteBanner(id: string) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { Printer } from "lucide-react";
+import { siteConfig } from "@/config/seo/metadata.config";
 import { formatCurrency, formatDate } from "@/lib/admin/format-currency";
 import type { OrderAddress, OrderInvoice } from "@/types/orders";
 
@@ -44,11 +45,13 @@ export function OrderInvoiceView({ invoice }: OrderInvoiceViewProps) {
       <div className="admin-invoice-print">
         <header className="admin-invoice-header">
           <div className="admin-invoice-brand">
-            <span className="admin-invoice-crown">♛</span>
-            <div>
-              <span className="admin-invoice-royal">ROYAL</span>
-              <span className="admin-invoice-sub">FURNITURE PRO</span>
-            </div>
+            <img
+              src={siteConfig.logoSrc}
+              alt={siteConfig.name}
+              className="admin-invoice-logo__image"
+              width={540}
+              height={462}
+            />
           </div>
           <div className="admin-invoice-meta">
             <h2>Tax Invoice</h2>

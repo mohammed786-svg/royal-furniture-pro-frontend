@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { CheckoutStepper } from "@/components/cart/checkout-stepper";
 import { CategoryBreadcrumbs } from "@/components/category/category-breadcrumbs";
 import { CheckoutOrderSummary } from "@/components/checkout/checkout-order-summary";
+import { getApiErrorMessage } from "@/lib/api/api-error";
 import { cartOrderTotal } from "@/lib/constants/cart-data";
 import {
   BANK_DETAILS,
@@ -16,19 +17,22 @@ import {
   type PaymentMethod,
 } from "@/lib/constants/payment-config";
 import { useAddressStore } from "@/lib/store/address-store";
+import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
-import { orderTotalFromItems, useOrderStore } from "@/lib/store/order-store";
+import { placeStorefrontOrder } from "@/services/storefront-commerce";
 
 export function PaymentPageContent() {
   const router = useRouter();
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const cartItems = useCartStore((s) => s.cartItems);
   const clearCart = useCartStore((s) => s.clearCart);
   const getSelectedAddress = useAddressStore((s) => s.getSelectedAddress);
+  const selectedAddressId = useAddressStore((s) => s.selectedAddressId);
   const addressLabel = useAddressStore((s) => s.addressLabel);
-  const placeOrder = useOrderStore((s) => s.placeOrder);
 
   const [method, setMethod] = useState<PaymentMethod>("upi_qr");
   const [reference, setReference] = useState("");
+  const [screenshotData, setScreenshotData] = useState<string | undefined>();
   const [screenshotName, setScreenshotName] = useState<string | undefined>();
   const [submitting, setSubmitting] = useState(false);
 
@@ -38,6 +42,22 @@ export function PaymentPageContent() {
     [method],
   );
   const total = cartOrderTotal(cartItems);
+
+  if (!isLoggedIn()) {
+    return (
+      <main className="cart-page">
+        <div className="cart-page__inner royal-section-inner">
+          <p className="cart-page__empty">
+            Please{" "}
+            <Link href="/login" className="cart-page__empty-link">
+              sign in
+            </Link>{" "}
+            to complete checkout.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -54,7 +74,7 @@ export function PaymentPageContent() {
     );
   }
 
-  if (!address) {
+  if (!address || !selectedAddressId) {
     return (
       <main className="cart-page">
         <div className="cart-page__inner royal-section-inner">
@@ -76,35 +96,47 @@ export function PaymentPageContent() {
       toast.error("Image must be under 4 MB");
       return;
     }
-    setScreenshotName(file.name);
-    toast.success("Payment screenshot attached");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        setScreenshotData(result);
+        setScreenshotName(file.name);
+        toast.success("Payment screenshot attached");
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const ref = reference.trim();
     if (ref.length < 4) {
       toast.error("Enter payment reference / UTR number");
       return;
     }
-    if (!screenshotName) {
+    if (!screenshotData) {
       toast.error("Upload payment screenshot");
       return;
     }
 
     setSubmitting(true);
-    const orderId = placeOrder({
-      items: [...cartItems],
-      total: orderTotalFromItems(cartItems),
-      address,
-      paymentMethod: method,
-      paymentReference: ref,
-      paymentScreenshotName: screenshotName,
-    });
-
-    clearCart();
-    setSubmitting(false);
-    router.push(`/checkout/success?orderId=${encodeURIComponent(orderId)}`);
+    try {
+      const result = await placeStorefrontOrder({
+        shippingAddressId: selectedAddressId,
+        paymentMethod: method,
+        transactionRef: ref,
+        screenshot: screenshotData,
+      });
+      await clearCart();
+      router.push(
+        `/checkout/success?orderId=${encodeURIComponent(result.orderNumber || result.orderId)}`,
+      );
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not place order"));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

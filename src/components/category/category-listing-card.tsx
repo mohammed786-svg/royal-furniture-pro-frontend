@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 import { ProductWishlistButton } from "@/components/shop/product-wishlist-button";
+import { MediaImage } from "@/components/ui/media-image";
 import type { ProductItem } from "@/lib/constants/home-data";
 import { getProductHref } from "@/lib/constants/product-details";
 
@@ -15,19 +15,19 @@ export function CategoryListingCard({ product }: CategoryListingCardProps) {
   const isOnlineExclusive = product.badge === "Online Exclusive";
   const isNewArrival = product.badge === "New Arrival";
 
-  const href = getProductHref(product);
+  const href =
+    product.href && product.href !== "#" ? product.href : getProductHref(product);
 
   return (
     <article className="category-listing-card">
       <div className="category-listing-card__media">
         <Link href={href} className="category-listing-card__image-link">
-          <Image
+          <MediaImage
             src={product.image}
             alt={product.name}
             fill
             className="category-listing-card__image"
             sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-            unoptimized
           />
         </Link>
 

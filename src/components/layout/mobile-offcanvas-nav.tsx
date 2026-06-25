@@ -3,22 +3,29 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { navCategories, navCategoryIcons } from "@/lib/constants/home";
-import { navMegaMenus } from "@/lib/constants/nav-mega-menu";
-import { primaryNavCategoryHref } from "@/lib/routes/category";
-import { resolveMegaMenuHref } from "@/lib/routes/mega-menu-hrefs";
+import { MediaImage } from "@/components/ui/media-image";
+import {
+  hasMegaMenuColumns,
+  primaryNavHref,
+  resolveNavCategoryIcon,
+} from "@/lib/navbar/navbar-utils";
+import type { NavbarCategoryItem, NavMegaMenu } from "@/types/navbar";
 
 type MobileOffcanvasNavProps = {
   open: boolean;
   onClose: () => void;
+  items: NavbarCategoryItem[];
+  menusByLabel: Record<string, NavMegaMenu>;
+  isLoading?: boolean;
 };
 
-function hasMegaMenu(category: string): boolean {
-  const menu = navMegaMenus[category];
-  return Boolean(menu?.columns?.length);
-}
-
-export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
+export function MobileOffcanvasNav({
+  open,
+  onClose,
+  items,
+  menusByLabel,
+  isLoading = false,
+}: MobileOffcanvasNavProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
@@ -43,24 +50,27 @@ export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
       aria-label="Shop menu"
     >
       <nav className="mobile-nav-sheet__inner">
+        {isLoading && items.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-white/70">Loading menu…</p>
+        ) : null}
         <ul className="mobile-nav-list">
-          {navCategories.map((cat) => {
-            const menu = navMegaMenus[cat];
-            const mega = hasMegaMenu(cat);
-            const isExpanded = expanded === cat;
+          {items.map((item) => {
+            const menu = menusByLabel[item.name];
+            const mega = hasMegaMenuColumns(item);
+            const isExpanded = expanded === item.name;
 
             return (
-              <li key={cat} className="mobile-nav-item">
+              <li key={item.id} className="mobile-nav-item">
                 {mega && menu ? (
                   <>
                     <button
                       type="button"
                       className="mobile-nav-row"
                       aria-expanded={isExpanded}
-                      onClick={() => setExpanded(isExpanded ? null : cat)}
+                      onClick={() => setExpanded(isExpanded ? null : item.name)}
                     >
-                      <CategoryIcon category={cat} />
-                      <span className="mobile-nav-row__label">{cat}</span>
+                      <CategoryIcon item={item} />
+                      <span className="mobile-nav-row__label">{item.name}</span>
                       <ChevronDown
                         className={`mobile-nav-row__chevron${isExpanded ? " mobile-nav-row__chevron--open" : ""}`}
                         strokeWidth={2}
@@ -71,7 +81,7 @@ export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
                         {menu.columns.map((column) => (
                           <div key={column.title} className="mobile-nav-submenu__group">
                             <Link
-                              href={resolveMegaMenuHref(cat, column.title)}
+                              href={column.href}
                               className="mobile-nav-submenu__heading"
                               onClick={onClose}
                             >
@@ -79,14 +89,14 @@ export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
                             </Link>
                             {column.items.length > 0 && (
                               <ul className="mobile-nav-submenu__links">
-                                {column.items.map((item) => (
-                                  <li key={item.label}>
+                                {column.items.map((sub) => (
+                                  <li key={sub.label}>
                                     <Link
-                                      href={resolveMegaMenuHref(cat, column.title)}
+                                      href={sub.href}
                                       className="mobile-nav-submenu__link"
                                       onClick={onClose}
                                     >
-                                      {item.label}
+                                      {sub.label}
                                     </Link>
                                   </li>
                                 ))}
@@ -99,12 +109,12 @@ export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
                   </>
                 ) : (
                   <Link
-                    href={primaryNavCategoryHref(cat)}
+                    href={primaryNavHref(item)}
                     className="mobile-nav-row"
                     onClick={onClose}
                   >
-                    <CategoryIcon category={cat} />
-                    <span className="mobile-nav-row__label">{cat}</span>
+                    <CategoryIcon item={item} />
+                    <span className="mobile-nav-row__label">{item.name}</span>
                   </Link>
                 )}
               </li>
@@ -116,12 +126,19 @@ export function MobileOffcanvasNav({ open, onClose }: MobileOffcanvasNavProps) {
   );
 }
 
-function CategoryIcon({ category }: { category: (typeof navCategories)[number] }) {
-  const src = navCategoryIcons[category];
+function CategoryIcon({ item }: { item: NavbarCategoryItem }) {
+  const icon = resolveNavCategoryIcon(item);
   return (
     <span className="mobile-nav-row__icon">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" width={40} height={40} loading="lazy" />
+      <MediaImage
+        src={icon}
+        alt=""
+        width={40}
+        height={40}
+        fit="contain"
+        placeholderSize="xs"
+        resolveUrl
+      />
     </span>
   );
 }

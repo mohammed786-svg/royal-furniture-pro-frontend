@@ -1,9 +1,11 @@
-import Link from "next/link";
+import Image from "next/image";
+import { siteConfig } from "@/config/seo/metadata.config";
 
-/** Left panel — promo + lifestyle image (Royal Furniture Pro assets) */
+/** Left panel — brand logo (promo layout commented out for now) */
 export function LoginPromoPanel() {
   return (
     <div className="login-promo">
+      {/* Promo + USE CODE layout — kept for later
       <div className="login-promo__top">
         <div className="login-promo__copy">
           <p className="login-promo__headline">
@@ -28,13 +30,24 @@ export function LoginPromoPanel() {
       </div>
 
       <div className="login-promo__image-wrap">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/home/categories/recliner.webp"
           alt="Premium recliner collection"
           className="login-promo__image"
           width={520}
           height={320}
+        />
+      </div>
+      */}
+
+      <div className="login-promo__logo-wrap">
+        <Image
+          src={siteConfig.logoSrc}
+          alt={siteConfig.name}
+          width={320}
+          height={120}
+          className="login-promo__logo"
+          priority
         />
       </div>
     </div>

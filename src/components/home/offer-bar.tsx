@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MediaImage } from "@/components/ui/media-image";
 import { bankLogos } from "@/lib/constants/home";
 
 function pad(n: number) {
@@ -69,11 +70,14 @@ export function OfferBar() {
                 key={bank.name}
                 className="flex h-8 w-14 items-center justify-center rounded bg-white px-1 shadow-sm sm:h-9 sm:w-16"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <MediaImage
                   src={bank.src}
                   alt={bank.name}
-                  className="h-5 w-auto max-w-full object-contain sm:h-6"
+                  width={64}
+                  height={24}
+                  fit="contain"
+                  placeholderSize="xs"
+                  resolveUrl={false}
                 />
               </div>
             ))}
