@@ -31,7 +31,7 @@ async function importKey(hexKey: string): Promise<CryptoKey> {
   if (cachedKey) {
     return cachedKey;
   }
-  const keyData = hexToBytes(hexKey);
+  const keyData = new Uint8Array(hexToBytes(hexKey));
   cachedKey = await crypto.subtle.importKey(
     "raw",
     keyData,
@@ -56,7 +56,11 @@ export async function encryptPayload(data: unknown): Promise<{ payload: string }
   const key = await importKey(hexKey);
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const encoded = new TextEncoder().encode(JSON.stringify(data));
-  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoded);
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv: new Uint8Array(iv) },
+    key,
+    encoded,
+  );
 
   const combined = new Uint8Array(iv.length + ciphertext.byteLength);
   combined.set(iv);
@@ -77,9 +81,9 @@ export async function decryptPayload(payload: string): Promise<unknown> {
   const ciphertext = raw.slice(12);
 
   const decrypted = await crypto.subtle.decrypt(
-    { name: "AES-GCM", iv },
+    { name: "AES-GCM", iv: new Uint8Array(iv) },
     key,
-    ciphertext,
+    new Uint8Array(ciphertext),
   );
 
   return JSON.parse(new TextDecoder().decode(decrypted));

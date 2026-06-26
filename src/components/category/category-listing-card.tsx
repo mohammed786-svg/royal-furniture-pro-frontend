@@ -27,7 +27,6 @@ export function CategoryListingCard({ product }: CategoryListingCardProps) {
             alt={product.name}
             fill
             className="category-listing-card__image"
-            sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
           />
         </Link>
 

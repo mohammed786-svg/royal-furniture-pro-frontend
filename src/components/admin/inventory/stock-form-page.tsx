@@ -97,12 +97,17 @@ export function StockFormPage({ mode, stockId }: Props) {
     if (!validate()) return;
     setSaving(true);
     try {
-      const payload = { ...form, productVariantId: form.productVariantId || undefined };
       if (mode === "edit" && stockId) {
-        await updateStock(stockId, payload);
+        await updateStock(stockId, {
+          ...form,
+          productVariantId: form.productVariantId || undefined,
+        });
         royalToast.success("Stock updated");
       } else {
-        await createStock(payload);
+        await createStock({
+          ...form,
+          productVariantId: form.productVariantId || "",
+        });
         royalToast.success("Stock record created");
       }
       router.push(LIST_PATH);

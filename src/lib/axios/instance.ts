@@ -58,7 +58,7 @@ function processRefreshQueue(token: string | null) {
 
 function isEncryptedEnvelope(data: unknown): data is EncryptedApiEnvelope {
   return (
-    Boolean(data) &&
+    data !== null &&
     typeof data === "object" &&
     "payload" in data &&
     typeof (data as EncryptedApiEnvelope).payload === "string"
