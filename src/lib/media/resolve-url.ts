@@ -1,4 +1,4 @@
-import { env } from "@/lib/env";
+import { buildMediaUrl } from "@/config/media.config";
 
 const INVALID_MEDIA_VALUES = new Set(["", "na", "n/a", "null", "undefined", "none"]);
 
@@ -10,16 +10,8 @@ export function isValidMediaSrc(url?: string | null): boolean {
   return !INVALID_MEDIA_VALUES.has(trimmed.toLowerCase());
 }
 
+/** Resolve DB or API media path to a browser-loadable URL. */
 export function resolveMediaUrl(url?: string | null): string | null {
   if (!isValidMediaSrc(url)) return null;
-  const trimmed = String(url).trim();
-  if (
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("https://") ||
-    trimmed.startsWith("data:")
-  ) {
-    return trimmed;
-  }
-  const base = env.cdnUrl || env.apiUrl.replace("/api/v1", "");
-  return `${base.replace(/\/$/, "")}${trimmed.startsWith("/") ? trimmed : `/${trimmed}`}`;
+  return buildMediaUrl(url);
 }
