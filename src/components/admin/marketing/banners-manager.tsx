@@ -22,8 +22,8 @@ import { deleteBanner, fetchBanners } from "@/services/marketing-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { BannerItem } from "@/types/marketing";
 
-const NEW_PATH = "/admin/marketing/banners/new";
-const BASE_PATH = "/admin/marketing/banners";
+const NEW_PATH = "/my-admin/marketing/banners/new";
+const BASE_PATH = "/my-admin/marketing/banners";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

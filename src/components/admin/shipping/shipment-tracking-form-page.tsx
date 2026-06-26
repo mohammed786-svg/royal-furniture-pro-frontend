@@ -17,7 +17,7 @@ import type {
   ShipmentTrackingItem,
 } from "@/types/shipping";
 
-const LIST_PATH = "/admin/shipping/tracking";
+const LIST_PATH = "/my-admin/shipping/tracking";
 
 const emptyForm: ShipmentTrackingFormValues = {
   shipmentId: "",

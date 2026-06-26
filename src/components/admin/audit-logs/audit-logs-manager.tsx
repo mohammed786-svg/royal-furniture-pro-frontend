@@ -15,7 +15,7 @@ import { fetchAuditLogs } from "@/services/audit-logs-api";
 import type { AuditLogItem } from "@/types/audit-logs";
 import type { PaginationMeta } from "@/types/catalog";
 
-const BASE_PATH = "/admin/settings/audit-logs";
+const BASE_PATH = "/my-admin/settings/audit-logs";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

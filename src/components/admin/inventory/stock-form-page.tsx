@@ -14,7 +14,7 @@ import {
 } from "@/services/inventory-api";
 import type { InventoryOptions, StockFormValues, StockItem } from "@/types/inventory";
 
-const LIST_PATH = "/admin/inventory/stock";
+const LIST_PATH = "/my-admin/inventory/stock";
 
 const emptyForm: StockFormValues = {
   productId: "",

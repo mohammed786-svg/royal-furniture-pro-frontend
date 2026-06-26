@@ -21,8 +21,8 @@ import { deleteNotification, fetchNotifications } from "@/services/notifications
 import type { PaginationMeta } from "@/types/catalog";
 import type { NotificationItem } from "@/types/notifications";
 
-const NEW_PATH = "/admin/notifications/new";
-const BASE_PATH = "/admin/notifications";
+const NEW_PATH = "/my-admin/notifications/new";
+const BASE_PATH = "/my-admin/notifications";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

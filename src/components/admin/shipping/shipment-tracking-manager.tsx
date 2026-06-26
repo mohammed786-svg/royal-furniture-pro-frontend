@@ -21,8 +21,8 @@ import { deleteShipmentTracking, fetchShipmentTracking } from "@/services/shippi
 import type { PaginationMeta } from "@/types/catalog";
 import type { ShipmentTrackingItem } from "@/types/shipping";
 
-const NEW_PATH = "/admin/shipping/tracking/new";
-const BASE_PATH = "/admin/shipping/tracking";
+const NEW_PATH = "/my-admin/shipping/tracking/new";
+const BASE_PATH = "/my-admin/shipping/tracking";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

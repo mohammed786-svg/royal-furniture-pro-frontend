@@ -18,7 +18,7 @@ import type {
   TransferItem,
 } from "@/types/inventory";
 
-const LIST_PATH = "/admin/inventory/transfers";
+const LIST_PATH = "/my-admin/inventory/transfers";
 
 const emptyForm: TransferFormValues = {
   productId: "",

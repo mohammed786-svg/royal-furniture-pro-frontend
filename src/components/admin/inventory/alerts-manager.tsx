@@ -91,13 +91,13 @@ export function AlertsManager() {
         render: (r) => (
           <div className="admin-inline-actions">
             <Link
-              href={`/admin/inventory/stock/${r.id}/edit`}
+              href={`/my-admin/inventory/stock/${r.id}/edit`}
               className="admin-btn admin-btn-outline admin-btn-sm"
             >
               Update Stock
             </Link>
             <Link
-              href="/admin/inventory/adjustments/new"
+              href="/my-admin/inventory/adjustments/new"
               className="admin-btn admin-btn-primary admin-btn-sm"
             >
               Adjust
@@ -135,7 +135,7 @@ export function AlertsManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(r) => router.push(`/admin/inventory/stock/${r.id}/edit`)}
+          onEdit={(r) => router.push(`/my-admin/inventory/stock/${r.id}/edit`)}
         />
         <AdminPagination
           page={pagination.page}

@@ -13,7 +13,7 @@ import {
 } from "@/services/orders-api";
 import type { OrderStatusFormValues, OrderStatusItem } from "@/types/orders";
 
-const LIST_PATH = "/admin/orders/status";
+const LIST_PATH = "/my-admin/orders/status";
 
 const emptyForm: OrderStatusFormValues = {
   statusCode: "",

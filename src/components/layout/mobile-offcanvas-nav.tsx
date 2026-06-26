@@ -17,6 +17,8 @@ type MobileOffcanvasNavProps = {
   items: NavbarCategoryItem[];
   menusByLabel: Record<string, NavMegaMenu>;
   isLoading?: boolean;
+  isEmpty?: boolean;
+  emptyMessage?: string;
 };
 
 export function MobileOffcanvasNav({
@@ -25,6 +27,8 @@ export function MobileOffcanvasNav({
   items,
   menusByLabel,
   isLoading = false,
+  isEmpty = false,
+  emptyMessage = "No categories available",
 }: MobileOffcanvasNavProps) {
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -52,6 +56,8 @@ export function MobileOffcanvasNav({
       <nav className="mobile-nav-sheet__inner">
         {isLoading && items.length === 0 ? (
           <p className="px-4 py-3 text-sm text-white/70">Loading menu…</p>
+        ) : isEmpty ? (
+          <p className="px-4 py-3 text-sm text-white/70">{emptyMessage}</p>
         ) : null}
         <ul className="mobile-nav-list">
           {items.map((item) => {

@@ -11,7 +11,7 @@ import { createBrand, fetchBrand, updateBrand } from "@/services/catalog-brands"
 import { fileToDataUrl } from "@/services/catalog-categories";
 import type { BrandFormValues, BrandItem } from "@/types/brands";
 
-const LIST_PATH = "/admin/catalog/brands";
+const LIST_PATH = "/my-admin/catalog/brands";
 
 const emptyForm: BrandFormValues = {
   name: "",

@@ -19,7 +19,7 @@ import { fetchTracking } from "@/services/orders-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { OrderTracking } from "@/types/orders";
 
-const NEW_PATH = "/admin/orders/tracking/new";
+const NEW_PATH = "/my-admin/orders/tracking/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

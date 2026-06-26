@@ -13,7 +13,7 @@ import {
 } from "@/services/inventory-api";
 import type { WarehouseFormValues, WarehouseItem } from "@/types/inventory";
 
-const LIST_PATH = "/admin/inventory/warehouses";
+const LIST_PATH = "/my-admin/inventory/warehouses";
 
 const emptyForm: WarehouseFormValues = {
   warehouseCode: "",

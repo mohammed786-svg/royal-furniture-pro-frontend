@@ -10,7 +10,6 @@ import {
   writeProductDetailCache,
 } from "@/lib/cache/product-detail-local-cache";
 import { mapProductDetailResponse } from "@/lib/catalog/catalog-utils";
-import { getProductBySlug } from "@/lib/constants/product-details";
 import { fetchStorefrontProduct } from "@/services/storefront-catalog";
 import type {
   ProductDetailDataSource,
@@ -22,7 +21,6 @@ function pickProduct(
   apiData: StorefrontProductDetailResponse | undefined,
   local: StorefrontProductDetailResponse | null,
   stale: StorefrontProductDetailResponse | null,
-  staticFallback: ReturnType<typeof getProductBySlug>,
 ): { product: ProductDetailState["product"]; source: ProductDetailDataSource } {
   if (apiData?.slug) {
     return { product: mapProductDetailResponse(apiData), source: "api" };
@@ -32,9 +30,6 @@ function pickProduct(
   }
   if (stale?.slug) {
     return { product: mapProductDetailResponse(stale), source: "cache" };
-  }
-  if (staticFallback) {
-    return { product: staticFallback, source: "static" };
   }
   return { product: null, source: "empty" };
 }
@@ -46,7 +41,6 @@ export function useProductDetail(slug: string): ProductDetailState {
   const [staleLocal, setStaleLocal] = useState<StorefrontProductDetailResponse | null>(
     null,
   );
-  const staticFallback = getProductBySlug(slug);
 
   useEffect(() => {
     setLocalCache(readProductDetailCache(slug));
@@ -72,15 +66,15 @@ export function useProductDetail(slug: string): ProductDetailState {
   }, [query.data, slug]);
 
   const { product, source } = useMemo(
-    () => pickProduct(query.data, localCache, staleLocal, staticFallback),
-    [query.data, localCache, staleLocal, staticFallback],
+    () => pickProduct(query.data, localCache, staleLocal),
+    [query.data, localCache, staleLocal],
   );
 
   return {
     product,
     source: query.isFetching && source === "cache" ? "cache" : source,
-    isLoading: query.isLoading && !localCache && !staleLocal && !staticFallback,
+    isLoading: query.isLoading && !localCache && !staleLocal,
     isFetching: query.isFetching,
-    isError: query.isError && !product && !staticFallback,
+    isError: query.isError && !product,
   };
 }

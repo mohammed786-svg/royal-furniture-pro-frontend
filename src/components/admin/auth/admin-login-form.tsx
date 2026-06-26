@@ -28,7 +28,7 @@ export function AdminLoginForm() {
     const result = await login(email.trim(), password, remember);
     setLoading(false);
     if (result.ok) {
-      router.replace("/admin/dashboard");
+      router.replace("/my-admin/dashboard");
     } else {
       setError(result.error);
     }

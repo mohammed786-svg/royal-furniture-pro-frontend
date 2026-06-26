@@ -11,7 +11,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchTestimonial } from "@/services/marketing-api";
 import type { TestimonialItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/testimonials";
+const LIST_PATH = "/my-admin/marketing/testimonials";
 
 type Props = { testimonialId: string };
 

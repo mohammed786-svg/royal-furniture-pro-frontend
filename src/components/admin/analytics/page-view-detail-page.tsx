@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchPageView } from "@/services/analytics-api";
 import type { PageViewItem } from "@/types/analytics";
 
-const LIST_PATH = "/admin/analytics/page-views";
+const LIST_PATH = "/my-admin/analytics/page-views";
 
 type Props = { pageViewId: string };
 

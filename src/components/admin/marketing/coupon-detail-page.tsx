@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchCoupon } from "@/services/marketing-api";
 import type { CouponItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/coupons";
+const LIST_PATH = "/my-admin/marketing/coupons";
 
 type Props = { couponId: string };
 

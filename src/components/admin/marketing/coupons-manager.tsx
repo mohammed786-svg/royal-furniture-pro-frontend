@@ -21,8 +21,8 @@ import { deleteCoupon, fetchCoupons } from "@/services/marketing-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { CouponItem } from "@/types/marketing";
 
-const NEW_PATH = "/admin/marketing/coupons/new";
-const BASE_PATH = "/admin/marketing/coupons";
+const NEW_PATH = "/my-admin/marketing/coupons/new";
+const BASE_PATH = "/my-admin/marketing/coupons";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

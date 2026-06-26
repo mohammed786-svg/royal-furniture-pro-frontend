@@ -20,7 +20,7 @@ import { deleteAddress, fetchAddresses } from "@/services/customers-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { AddressItem } from "@/types/customers";
 
-const NEW_PATH = "/admin/customers/addresses/new";
+const NEW_PATH = "/my-admin/customers/addresses/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -139,7 +139,7 @@ export function AddressesManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(row) => router.push(`/admin/customers/addresses/${row.id}/edit`)}
+          onEdit={(row) => router.push(`/my-admin/customers/addresses/${row.id}/edit`)}
           onDelete={handleDelete}
         />
         <AdminPagination

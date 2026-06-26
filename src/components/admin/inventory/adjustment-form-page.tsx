@@ -20,7 +20,7 @@ import type {
   StockItem,
 } from "@/types/inventory";
 
-const LIST_PATH = "/admin/inventory/adjustments";
+const LIST_PATH = "/my-admin/inventory/adjustments";
 
 const emptyForm: AdjustmentFormValues = {
   inventoryId: "",

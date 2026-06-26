@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchAuditLog } from "@/services/audit-logs-api";
 import type { AuditLogItem } from "@/types/audit-logs";
 
-const LIST_PATH = "/admin/settings/audit-logs";
+const LIST_PATH = "/my-admin/settings/audit-logs";
 
 type Props = { auditLogId: string };
 

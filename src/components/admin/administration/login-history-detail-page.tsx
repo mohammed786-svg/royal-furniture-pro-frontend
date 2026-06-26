@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchLoginHistoryRecord } from "@/services/administration-api";
 import type { LoginHistoryItem } from "@/types/admin-users";
 
-const LIST_PATH = "/admin/administration/login-history";
+const LIST_PATH = "/my-admin/administration/login-history";
 
 type Props = { loginHistoryId: string };
 

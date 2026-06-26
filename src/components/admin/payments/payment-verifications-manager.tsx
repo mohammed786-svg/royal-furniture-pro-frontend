@@ -24,8 +24,8 @@ import {
 import type { PaginationMeta } from "@/types/catalog";
 import type { PaymentVerificationItem } from "@/types/payments";
 
-const NEW_PATH = "/admin/payments/verification/new";
-const BASE_PATH = "/admin/payments/verification";
+const NEW_PATH = "/my-admin/payments/verification/new";
+const BASE_PATH = "/my-admin/payments/verification";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

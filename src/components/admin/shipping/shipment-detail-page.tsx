@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchShipment } from "@/services/shipping-api";
 import type { ShipmentItem } from "@/types/shipping";
 
-const LIST_PATH = "/admin/shipping";
+const LIST_PATH = "/my-admin/shipping";
 
 type Props = { shipmentId: string };
 

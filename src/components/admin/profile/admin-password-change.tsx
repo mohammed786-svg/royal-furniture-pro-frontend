@@ -34,7 +34,7 @@ export function AdminPasswordChange() {
     }
 
     setSuccess(true);
-    setTimeout(() => router.replace("/admin/login"), 1500);
+    setTimeout(() => router.replace("/my-admin/login"), 1500);
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");

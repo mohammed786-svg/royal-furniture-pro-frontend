@@ -62,7 +62,7 @@ export function AdminProfileDropdown({
       </div>
       <div className="admin-profile-dropdown-menu">
         <Link
-          href="/admin/profile"
+          href="/my-admin/profile"
           className="admin-profile-menu-item"
           onClick={onClose}
           role="menuitem"
@@ -71,7 +71,7 @@ export function AdminProfileDropdown({
           Profile Settings
         </Link>
         <Link
-          href="/admin/profile/password"
+          href="/my-admin/profile/password"
           className="admin-profile-menu-item"
           onClick={onClose}
           role="menuitem"
@@ -80,7 +80,7 @@ export function AdminProfileDropdown({
           Change Password
         </Link>
         <Link
-          href="/admin/settings"
+          href="/my-admin/settings"
           className="admin-profile-menu-item"
           onClick={onClose}
           role="menuitem"
@@ -96,7 +96,7 @@ export function AdminProfileDropdown({
           onClick={async () => {
             await logout();
             onClose();
-            router.replace("/admin/login");
+            router.replace("/my-admin/login");
           }}
           role="menuitem"
         >

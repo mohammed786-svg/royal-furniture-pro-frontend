@@ -21,7 +21,7 @@ import { fetchOrders } from "@/services/orders-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { OrderListItem } from "@/types/orders";
 
-const NEW_PATH = "/admin/orders/new";
+const NEW_PATH = "/my-admin/orders/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -138,7 +138,7 @@ export function OrdersManager() {
             selectedIds={new Set()}
             onToggleSelect={() => {}}
             onToggleSelectAll={() => {}}
-            onEdit={(row) => router.push(`/admin/orders/${row.id}`)}
+            onEdit={(row) => router.push(`/my-admin/orders/${row.id}`)}
           />
         ) : (
           <AdminDataGrid
@@ -151,7 +151,7 @@ export function OrdersManager() {
               { label: "Payment", value: r.paymentMethod },
               { label: "Date", value: formatDate(r.createdAt) },
             ]}
-            onEdit={(row) => router.push(`/admin/orders/${row.id}`)}
+            onEdit={(row) => router.push(`/my-admin/orders/${row.id}`)}
             onDelete={() => {}}
           />
         )}

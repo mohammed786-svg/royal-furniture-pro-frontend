@@ -33,7 +33,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
       if (cancelled) return;
 
       if (!restored) {
-        router.replace("/admin/login");
+        router.replace("/my-admin/login");
         return;
       }
 
@@ -50,7 +50,7 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!ready || !pathname || !user) return;
     if (!canAccessHref(user, pathname)) {
-      router.replace("/admin/dashboard");
+      router.replace("/my-admin/dashboard");
     }
   }, [ready, pathname, user, router]);
 

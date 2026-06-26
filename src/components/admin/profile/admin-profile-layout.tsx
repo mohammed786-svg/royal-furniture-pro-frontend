@@ -8,8 +8,8 @@ type AdminProfileLayoutProps = {
 };
 
 const TABS = [
-  { href: "/admin/profile", label: "Profile Settings", exact: true },
-  { href: "/admin/profile/password", label: "Change Password", exact: false },
+  { href: "/my-admin/profile", label: "Profile Settings", exact: true },
+  { href: "/my-admin/profile/password", label: "Change Password", exact: false },
 ];
 
 export function AdminProfileLayout({ children }: AdminProfileLayoutProps) {
@@ -21,7 +21,7 @@ export function AdminProfileLayout({ children }: AdminProfileLayoutProps) {
         <div>
           <h1>My Profile</h1>
           <div className="admin-breadcrumb">
-            <Link href="/admin/dashboard">Dashboard</Link>
+            <Link href="/my-admin/dashboard">Dashboard</Link>
             <span>/</span>
             <span>Profile</span>
           </div>

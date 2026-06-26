@@ -26,7 +26,15 @@ const DESKTOP_NAV_MQ = "(min-width: 1024px)";
 
 export function StorefrontHeader() {
   const pathname = usePathname();
-  const { items, menusByLabel, categoryLabels, labelBySlug, isLoading } = useNavbar();
+  const {
+    items,
+    menusByLabel,
+    categoryLabels,
+    labelBySlug,
+    isLoading,
+    isEmpty,
+    emptyMessage,
+  } = useNavbar();
   const routeActiveNav = activeNavLabelFromItems(pathname, labelBySlug);
   const cartCount = useCartStore((s) => s.cartItemCount());
   const wishlistCount = useCartStore((s) => s.wishlistItems.length);
@@ -215,6 +223,8 @@ export function StorefrontHeader() {
             items={items}
             menusByLabel={menusByLabel}
             isLoading={isLoading}
+            isEmpty={isEmpty}
+            emptyMessage={emptyMessage}
           />
         </div>
       </div>
@@ -225,38 +235,48 @@ export function StorefrontHeader() {
         onMouseLeave={scheduleCloseMegaMenu}
       >
         <div className="royal-header-inner">
-          <ul className="nav-category-list">
-            {navLabels.map((cat) => {
-              const item = items.find((entry) => entry.name === cat);
-              const mega = item ? hasMegaMenuColumns(item) : false;
-              const isHoverActive = activeMegaMenu === cat;
-              const isRouteActive = routeActiveNav === cat;
+          {isLoading ? (
+            <p className="nav-category-empty" aria-live="polite">
+              Loading menu…
+            </p>
+          ) : isEmpty ? (
+            <p className="nav-category-empty" aria-live="polite">
+              {emptyMessage}
+            </p>
+          ) : (
+            <ul className="nav-category-list">
+              {navLabels.map((cat) => {
+                const item = items.find((entry) => entry.name === cat);
+                const mega = item ? hasMegaMenuColumns(item) : false;
+                const isHoverActive = activeMegaMenu === cat;
+                const isRouteActive = routeActiveNav === cat;
 
-              return (
-                <li
-                  key={cat}
-                  className={`nav-category-item${isHoverActive ? " nav-category-item--active" : ""}${isRouteActive ? " nav-category-item--route-active" : ""}`}
-                  onMouseEnter={() => {
-                    if (mega) openMegaMenu(cat);
-                    else setActiveMegaMenu(null);
-                  }}
-                >
-                  <Link
-                    href={item ? primaryNavHref(item) : "/"}
-                    className="nav-category-trigger"
+                return (
+                  <li
+                    key={cat}
+                    className={`nav-category-item${isHoverActive ? " nav-category-item--active" : ""}${isRouteActive ? " nav-category-item--route-active" : ""}`}
+                    onMouseEnter={() => {
+                      if (mega) openMegaMenu(cat);
+                      else setActiveMegaMenu(null);
+                    }}
                   >
-                    {cat}
-                    {mega && (
-                      <ChevronDown
-                        className="nav-category-trigger__chevron"
-                        strokeWidth={2.5}
-                      />
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                    <Link
+                      href={item ? primaryNavHref(item) : "/"}
+                      className="nav-category-trigger"
+                    >
+                      {cat}
+                      {mega && (
+                        <ChevronDown
+                          className="nav-category-trigger__chevron"
+                          strokeWidth={2.5}
+                        />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
 
         {activeMenu && activeMenu.columns.length > 0 && (

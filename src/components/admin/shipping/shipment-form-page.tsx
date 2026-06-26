@@ -14,7 +14,7 @@ import {
 } from "@/services/shipping-api";
 import type { ShipmentFormValues, ShipmentItem } from "@/types/shipping";
 
-const LIST_PATH = "/admin/shipping";
+const LIST_PATH = "/my-admin/shipping";
 
 const emptyForm: ShipmentFormValues = {
   orderId: "",

@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchPayment } from "@/services/payments-api";
 import type { PaymentItem } from "@/types/payments";
 
-const LIST_PATH = "/admin/payments";
+const LIST_PATH = "/my-admin/payments";
 
 type Props = { paymentId: string };
 

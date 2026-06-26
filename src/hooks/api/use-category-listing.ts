@@ -13,7 +13,6 @@ import {
   emptyCategoryListing,
   mapCategoryListingResponse,
 } from "@/lib/catalog/catalog-utils";
-import { getCategoryPage } from "@/lib/constants/category-pages";
 import { fetchCategoryListing } from "@/services/storefront-catalog";
 import type {
   CatalogListingDataSource,
@@ -25,7 +24,6 @@ function pickListing(
   apiData: StorefrontCategoryListingResponse | undefined,
   local: StorefrontCategoryListingResponse | null,
   stale: StorefrontCategoryListingResponse | null,
-  staticFallback: ReturnType<typeof getCategoryPage>,
 ): { data: CategoryListingState["data"]; source: CatalogListingDataSource } {
   if (apiData) {
     return { data: mapCategoryListingResponse(apiData), source: "api" };
@@ -36,10 +34,7 @@ function pickListing(
   if (stale?.products) {
     return { data: mapCategoryListingResponse(stale), source: "cache" };
   }
-  if (staticFallback) {
-    return { data: staticFallback, source: "static" };
-  }
-  return { data: null, source: "empty" };
+  return { data: emptyCategoryListing(), source: "empty" };
 }
 
 export function useCategoryListing(
@@ -50,7 +45,6 @@ export function useCategoryListing(
     useState<StorefrontCategoryListingResponse | null>(null);
   const [staleLocal, setStaleLocal] =
     useState<StorefrontCategoryListingResponse | null>(null);
-  const staticFallback = getCategoryPage(categorySlug, subCategorySlug);
 
   useEffect(() => {
     setLocalCache(readCategoryListingCache(categorySlug, subCategorySlug));
@@ -75,8 +69,8 @@ export function useCategoryListing(
   }, [query.data, categorySlug, subCategorySlug]);
 
   const { data, source } = useMemo(
-    () => pickListing(query.data, localCache, staleLocal, staticFallback),
-    [query.data, localCache, staleLocal, staticFallback],
+    () => pickListing(query.data, localCache, staleLocal),
+    [query.data, localCache, staleLocal],
   );
 
   const resolvedData = data ?? emptyCategoryListing(categorySlug, subCategorySlug);
@@ -84,8 +78,8 @@ export function useCategoryListing(
   return {
     data: resolvedData,
     source: query.isFetching && source === "cache" ? "cache" : source,
-    isLoading: query.isLoading && !localCache && !staleLocal && !staticFallback,
+    isLoading: query.isLoading && !localCache && !staleLocal,
     isFetching: query.isFetching,
-    isError: query.isError && !data && !staticFallback,
+    isError: query.isError && !data,
   };
 }

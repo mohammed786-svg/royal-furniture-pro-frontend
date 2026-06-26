@@ -21,7 +21,7 @@ import { deleteProduct, fetchProducts } from "@/services/catalog-products";
 import type { PaginationMeta } from "@/types/catalog";
 import type { ProductListItem } from "@/types/product";
 
-const PRODUCTS_NEW_PATH = "/admin/catalog/products/new";
+const PRODUCTS_NEW_PATH = "/my-admin/catalog/products/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -136,7 +136,7 @@ export function ProductsManager() {
   );
 
   function openEdit(row: ProductListItem) {
-    router.push(`/admin/catalog/products/${row.id}/edit`);
+    router.push(`/my-admin/catalog/products/${row.id}/edit`);
   }
 
   async function handleDelete(row: ProductListItem) {

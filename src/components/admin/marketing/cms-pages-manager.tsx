@@ -21,8 +21,8 @@ import { deleteCmsPage, fetchCmsPages } from "@/services/marketing-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { CmsPageItem } from "@/types/marketing";
 
-const NEW_PATH = "/admin/marketing/cms/new";
-const BASE_PATH = "/admin/marketing/cms";
+const NEW_PATH = "/my-admin/marketing/cms/new";
+const BASE_PATH = "/my-admin/marketing/cms";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

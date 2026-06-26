@@ -18,7 +18,7 @@ import type {
   CustomerOptions,
 } from "@/types/customers";
 
-const LIST_PATH = "/admin/customers";
+const LIST_PATH = "/my-admin/customers";
 
 const emptyForm: CustomerFormValues = {
   email: "",
@@ -97,11 +97,11 @@ export function CustomerFormPage({ mode, customerId }: Props) {
       if (mode === "edit" && customerId) {
         await updateCustomer(customerId, form);
         royalToast.success("Customer updated");
-        router.push(`/admin/customers/${customerId}`);
+        router.push(`/my-admin/customers/${customerId}`);
       } else {
         const item = await createCustomer(form);
         royalToast.success("Customer created");
-        router.push(`/admin/customers/${item.id}`);
+        router.push(`/my-admin/customers/${item.id}`);
       }
     } catch (err) {
       royalToast.error(getApiErrorMessage(err, "Save failed"));

@@ -32,8 +32,8 @@ import type {
 } from "@/types/analytics";
 import type { PaginationMeta } from "@/types/catalog";
 
-const NEW_PATH = "/admin/analytics/page-views/new";
-const BASE_PATH = "/admin/analytics/page-views";
+const NEW_PATH = "/my-admin/analytics/page-views/new";
+const BASE_PATH = "/my-admin/analytics/page-views";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

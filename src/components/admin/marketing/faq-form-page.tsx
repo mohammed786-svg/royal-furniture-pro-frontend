@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { createFaq, fetchFaq, updateFaq } from "@/services/marketing-api";
 import type { FaqFormValues, FaqItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/faqs";
+const LIST_PATH = "/my-admin/marketing/faqs";
 
 const emptyForm: FaqFormValues = {
   category: "",

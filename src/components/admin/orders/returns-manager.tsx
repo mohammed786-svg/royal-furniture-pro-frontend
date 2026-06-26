@@ -20,7 +20,7 @@ import { fetchReturns } from "@/services/orders-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { OrderListItem } from "@/types/orders";
 
-const NEW_PATH = "/admin/orders/returns/new";
+const NEW_PATH = "/my-admin/orders/returns/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -128,7 +128,7 @@ export function ReturnsManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(row) => router.push(`/admin/orders/${row.id}`)}
+          onEdit={(row) => router.push(`/my-admin/orders/${row.id}`)}
         />
         <AdminPagination
           page={pagination.page}

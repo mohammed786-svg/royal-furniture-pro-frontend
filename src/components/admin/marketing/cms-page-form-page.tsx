@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { createCmsPage, fetchCmsPage, updateCmsPage } from "@/services/marketing-api";
 import type { CmsPageFormValues, CmsPageItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/cms";
+const LIST_PATH = "/my-admin/marketing/cms";
 
 const emptyForm: CmsPageFormValues = {
   pageCode: "",

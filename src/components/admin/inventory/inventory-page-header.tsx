@@ -32,7 +32,7 @@ export function InventoryPageHeader({
         </button>
         <h1>{title}</h1>
         <div className="admin-breadcrumb">
-          <Link href="/admin/dashboard">Dashboard</Link>
+          <Link href="/my-admin/dashboard">Dashboard</Link>
           <span>/</span>
           <span>{sectionLabel}</span>
           <span>/</span>

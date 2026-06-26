@@ -14,7 +14,7 @@ import {
 } from "@/services/payments-api";
 import type { PaymentFormValues, PaymentItem } from "@/types/payments";
 
-const LIST_PATH = "/admin/payments";
+const LIST_PATH = "/my-admin/payments";
 
 const emptyForm: PaymentFormValues = {
   orderId: "",

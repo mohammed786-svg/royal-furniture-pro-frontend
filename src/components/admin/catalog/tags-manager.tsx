@@ -20,8 +20,8 @@ import { deleteTag, fetchTags } from "@/services/catalog-tags";
 import type { PaginationMeta } from "@/types/catalog";
 import type { TagItem } from "@/types/tags";
 
-const NEW_PATH = "/admin/catalog/tags/new";
-const BASE_PATH = "/admin/catalog/tags";
+const NEW_PATH = "/my-admin/catalog/tags/new";
+const BASE_PATH = "/my-admin/catalog/tags";
 
 type GridRow = TagItem & { name: string };
 

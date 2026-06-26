@@ -19,7 +19,7 @@ import { deleteStock, fetchStock } from "@/services/inventory-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { StockItem } from "@/types/inventory";
 
-const NEW_PATH = "/admin/inventory/stock/new";
+const NEW_PATH = "/my-admin/inventory/stock/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -130,7 +130,7 @@ export function StockManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(r) => router.push(`/admin/inventory/stock/${r.id}/edit`)}
+          onEdit={(r) => router.push(`/my-admin/inventory/stock/${r.id}/edit`)}
           onDelete={async (r) => {
             if (window.confirm(`Delete stock record for ${r.productName}?`)) {
               try {

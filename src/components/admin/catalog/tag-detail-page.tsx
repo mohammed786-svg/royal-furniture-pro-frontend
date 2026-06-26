@@ -12,7 +12,7 @@ import { fetchTag } from "@/services/catalog-tags";
 import type { CatalogProductOption } from "@/types/catalog-meta";
 import type { TagItem } from "@/types/tags";
 
-const LIST_PATH = "/admin/catalog/tags";
+const LIST_PATH = "/my-admin/catalog/tags";
 
 type Props = { tagId: string };
 
@@ -93,7 +93,9 @@ export function TagDetailPage({ tagId }: Props) {
               <ul className="admin-tag-mapped-list">
                 {mappedProducts.map((p) => (
                   <li key={p.id}>
-                    <Link href={`/admin/catalog/products/${p.id}/edit`}>{p.name}</Link>
+                    <Link href={`/my-admin/catalog/products/${p.id}/edit`}>
+                      {p.name}
+                    </Link>
                     <span> ({p.sku})</span>
                   </li>
                 ))}

@@ -44,6 +44,15 @@ export function readNavbarLocalCacheStale(): NavbarTreeResponse | null {
   }
 }
 
+export function clearNavbarLocalCache(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(storageKey());
+  } catch {
+    // Ignore private mode errors.
+  }
+}
+
 export function writeNavbarLocalCache(tree: NavbarTreeResponse): void {
   if (typeof window === "undefined") return;
   try {

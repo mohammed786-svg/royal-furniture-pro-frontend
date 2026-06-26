@@ -530,7 +530,7 @@ export default function AdminDynamicPage({ params }: PageProps) {
     return <NotificationDetailPage notificationId={notificationsRoute.id} />;
   }
 
-  const href = `/admin/${slug.join("/")}`;
+  const href = `/my-admin/${slug.join("/")}`;
   const page = getAdminPageByHref(href);
 
   if (!page || page.key === "dashboard") {

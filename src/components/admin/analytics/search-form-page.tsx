@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { createSearch, fetchSearch, updateSearch } from "@/services/analytics-api";
 import type { SearchHistoryFormValues, SearchHistoryItem } from "@/types/analytics";
 
-const LIST_PATH = "/admin/analytics/search";
+const LIST_PATH = "/my-admin/analytics/search";
 
 const emptyForm: SearchHistoryFormValues = {
   searchQuery: "",

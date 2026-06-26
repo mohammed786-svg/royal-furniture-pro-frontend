@@ -18,7 +18,7 @@ import type {
   WalletTransactionFormValues,
 } from "@/types/customers";
 
-const LIST_PATH = "/admin/customers/wallet";
+const LIST_PATH = "/my-admin/customers/wallet";
 
 const emptyTxn: WalletTransactionFormValues = {
   transactionType: "CREDIT",

@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchAdminUser } from "@/services/administration-api";
 import type { AdminUserItem } from "@/types/admin-users";
 
-const LIST_PATH = "/admin/administration/users";
+const LIST_PATH = "/my-admin/administration/users";
 
 type Props = { userId: string };
 

@@ -11,7 +11,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchBanner } from "@/services/marketing-api";
 import type { BannerItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/banners";
+const LIST_PATH = "/my-admin/marketing/banners";
 
 type Props = { bannerId: string };
 

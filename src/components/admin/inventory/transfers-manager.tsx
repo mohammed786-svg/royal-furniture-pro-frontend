@@ -19,7 +19,7 @@ import { fetchTransfers, updateTransferStatus } from "@/services/inventory-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { TransferItem } from "@/types/inventory";
 
-const NEW_PATH = "/admin/inventory/transfers/new";
+const NEW_PATH = "/my-admin/inventory/transfers/new";
 
 function statusTone(status: string): "active" | "inactive" | "warning" {
   if (status === "COMPLETED") return "active";
@@ -136,7 +136,7 @@ export function TransfersManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(r) => router.push(`/admin/inventory/transfers/${r.id}`)}
+          onEdit={(r) => router.push(`/my-admin/inventory/transfers/${r.id}`)}
           renderRowActions={(row) =>
             row.status === "PENDING" || row.status === "IN_TRANSIT" ? (
               <button type="button" onClick={() => void completeTransfer(row)}>

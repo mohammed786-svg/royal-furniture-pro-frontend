@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchOrderOptions, fetchOrders, initiateReturn } from "@/services/orders-api";
 import type { OrderListItem, OrderOptions, ReturnFormValues } from "@/types/orders";
 
-const LIST_PATH = "/admin/orders/returns";
+const LIST_PATH = "/my-admin/orders/returns";
 
 const emptyForm: ReturnFormValues = {
   orderId: "",
@@ -56,7 +56,7 @@ export function ReturnFormPage() {
     try {
       const order = await initiateReturn(form);
       royalToast.success("Return initiated");
-      router.push(`/admin/orders/${order.id}`);
+      router.push(`/my-admin/orders/${order.id}`);
     } catch (err) {
       royalToast.error(getApiErrorMessage(err, "Failed to initiate return"));
     } finally {

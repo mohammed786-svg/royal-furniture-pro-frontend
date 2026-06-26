@@ -13,7 +13,8 @@ export const RESERVED_TOP_LEVEL_SLUGS = new Set([
   "checkout",
   "track-order",
   "coming-soon",
-  "api",
+  "my-admin",
+  "admin",
   "_next",
   "favicon.ico",
 ]);

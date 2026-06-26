@@ -206,7 +206,6 @@ export function resolveHomepageData(
 ): StorefrontHomeResponse {
   if (!response || isError) {
     return {
-      ...staticHomeFallback(),
       promoBanners: createEmptyPromoBanners(HOME_EMPTY_COUNTS.promoBanners),
       features: createEmptyFeatures(HOME_EMPTY_COUNTS.features),
       popularCategories: createEmptyCategoryTiles(HOME_EMPTY_COUNTS.popularCategories),

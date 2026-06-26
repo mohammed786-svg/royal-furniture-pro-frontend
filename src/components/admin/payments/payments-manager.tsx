@@ -21,8 +21,8 @@ import { deletePayment, fetchPayments } from "@/services/payments-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { PaymentItem } from "@/types/payments";
 
-const NEW_PATH = "/admin/payments/new";
-const BASE_PATH = "/admin/payments";
+const NEW_PATH = "/my-admin/payments/new";
+const BASE_PATH = "/my-admin/payments";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

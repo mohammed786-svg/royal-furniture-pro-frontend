@@ -14,7 +14,7 @@ import {
 } from "@/services/notifications-api";
 import type { NotificationFormValues, NotificationItem } from "@/types/notifications";
 
-const LIST_PATH = "/admin/notifications";
+const LIST_PATH = "/my-admin/notifications";
 
 const emptyForm: NotificationFormValues = {
   title: "",

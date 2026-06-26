@@ -13,7 +13,7 @@ import {
 } from "@/services/analytics-api";
 import type { PageViewFormValues, PageViewItem } from "@/types/analytics";
 
-const LIST_PATH = "/admin/analytics/page-views";
+const LIST_PATH = "/my-admin/analytics/page-views";
 
 const emptyForm: PageViewFormValues = {
   pageUrl: "",

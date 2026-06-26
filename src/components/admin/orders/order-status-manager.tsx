@@ -19,7 +19,7 @@ import { deleteOrderStatus, fetchOrderStatuses } from "@/services/orders-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { OrderStatusItem } from "@/types/orders";
 
-const NEW_PATH = "/admin/orders/status/new";
+const NEW_PATH = "/my-admin/orders/status/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -146,7 +146,7 @@ export function OrderStatusManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(row) => router.push(`/admin/orders/status/${row.id}/edit`)}
+          onEdit={(row) => router.push(`/my-admin/orders/status/${row.id}/edit`)}
           onDelete={handleDelete}
         />
         <AdminPagination

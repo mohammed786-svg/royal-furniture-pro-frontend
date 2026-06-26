@@ -14,7 +14,7 @@ import {
 } from "@/services/payments-api";
 import type { PaymentVerificationItem } from "@/types/payments";
 
-const LIST_PATH = "/admin/payments/verification";
+const LIST_PATH = "/my-admin/payments/verification";
 
 type Props = { verificationId: string };
 

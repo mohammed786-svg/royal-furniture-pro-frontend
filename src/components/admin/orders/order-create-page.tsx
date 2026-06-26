@@ -15,7 +15,7 @@ import type {
   OrderOptions,
 } from "@/types/orders";
 
-const LIST_PATH = "/admin/orders";
+const LIST_PATH = "/my-admin/orders";
 
 const emptyLineItem = (): OrderCreateLineItem => ({
   productId: "",
@@ -140,7 +140,7 @@ export function OrderCreatePage() {
         items: form.items.filter((i) => i.productId),
       });
       royalToast.success("Order created");
-      router.push(`/admin/orders/${order.id}`);
+      router.push(`/my-admin/orders/${order.id}`);
     } catch (err) {
       royalToast.error(getApiErrorMessage(err, "Failed to create order"));
     } finally {

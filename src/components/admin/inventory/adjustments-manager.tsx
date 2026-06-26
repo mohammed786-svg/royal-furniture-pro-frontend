@@ -19,7 +19,7 @@ import { fetchAdjustments, updateAdjustmentStatus } from "@/services/inventory-a
 import type { PaginationMeta } from "@/types/catalog";
 import type { AdjustmentItem } from "@/types/inventory";
 
-const NEW_PATH = "/admin/inventory/adjustments/new";
+const NEW_PATH = "/my-admin/inventory/adjustments/new";
 
 function statusTone(status: string): "active" | "inactive" | "warning" {
   if (status === "APPROVED") return "active";
@@ -136,7 +136,7 @@ export function AdjustmentsManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(r) => router.push(`/admin/inventory/adjustments/${r.id}`)}
+          onEdit={(r) => router.push(`/my-admin/inventory/adjustments/${r.id}`)}
           renderRowActions={(row) =>
             row.status === "PENDING" ? (
               <>

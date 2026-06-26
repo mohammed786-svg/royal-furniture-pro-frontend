@@ -24,8 +24,8 @@ import {
 import type { PaginationMeta } from "@/types/catalog";
 import type { SettingItem } from "@/types/settings";
 
-const NEW_PATH = "/admin/settings/new";
-const BASE_PATH = "/admin/settings";
+const NEW_PATH = "/my-admin/settings/new";
+const BASE_PATH = "/my-admin/settings";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

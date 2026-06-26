@@ -20,7 +20,7 @@ import { deleteWarehouse, fetchWarehouses } from "@/services/inventory-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { WarehouseItem } from "@/types/inventory";
 
-const NEW_PATH = "/admin/inventory/warehouses/new";
+const NEW_PATH = "/my-admin/inventory/warehouses/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -148,7 +148,9 @@ export function WarehousesManager() {
             selectedIds={new Set()}
             onToggleSelect={() => {}}
             onToggleSelectAll={() => {}}
-            onEdit={(row) => router.push(`/admin/inventory/warehouses/${row.id}/edit`)}
+            onEdit={(row) =>
+              router.push(`/my-admin/inventory/warehouses/${row.id}/edit`)
+            }
             onDelete={handleDelete}
           />
         ) : (
@@ -165,7 +167,9 @@ export function WarehousesManager() {
               { label: "Phone", value: r.contactPhone ?? "—" },
               { label: "Primary", value: r.isPrimary ? "Yes" : "No" },
             ]}
-            onEdit={(row) => router.push(`/admin/inventory/warehouses/${row.id}/edit`)}
+            onEdit={(row) =>
+              router.push(`/my-admin/inventory/warehouses/${row.id}/edit`)
+            }
             onDelete={handleDelete}
           />
         )}

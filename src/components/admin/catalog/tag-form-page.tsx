@@ -11,7 +11,7 @@ import { createTag, fetchTag, updateTag } from "@/services/catalog-tags";
 import type { CatalogProductOption } from "@/types/catalog-meta";
 import type { TagFormValues, TagItem } from "@/types/tags";
 
-const LIST_PATH = "/admin/catalog/tags";
+const LIST_PATH = "/my-admin/catalog/tags";
 
 const emptyForm: TagFormValues = {
   tagName: "",

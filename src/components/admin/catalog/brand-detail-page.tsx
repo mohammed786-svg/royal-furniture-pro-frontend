@@ -11,7 +11,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchBrand } from "@/services/catalog-brands";
 import type { BrandItem } from "@/types/brands";
 
-const LIST_PATH = "/admin/catalog/brands";
+const LIST_PATH = "/my-admin/catalog/brands";
 
 type Props = { brandId: string };
 

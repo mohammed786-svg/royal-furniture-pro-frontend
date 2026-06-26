@@ -18,7 +18,7 @@ import type {
   AdminUserItem,
 } from "@/types/admin-users";
 
-const LIST_PATH = "/admin/administration/users";
+const LIST_PATH = "/my-admin/administration/users";
 
 const emptyForm: AdminUserFormValues = {
   email: "",

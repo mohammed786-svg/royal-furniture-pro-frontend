@@ -117,7 +117,7 @@ export function WalletManager() {
           selectedIds={new Set()}
           onToggleSelect={() => {}}
           onToggleSelectAll={() => {}}
-          onEdit={(row) => router.push(`/admin/customers/wallet/${row.id}`)}
+          onEdit={(row) => router.push(`/my-admin/customers/wallet/${row.id}`)}
         />
         <AdminPagination
           page={pagination.page}

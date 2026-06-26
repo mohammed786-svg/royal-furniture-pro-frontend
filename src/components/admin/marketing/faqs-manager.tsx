@@ -20,8 +20,8 @@ import { deleteFaq, fetchFaqs } from "@/services/marketing-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { FaqItem } from "@/types/marketing";
 
-const NEW_PATH = "/admin/marketing/faqs/new";
-const BASE_PATH = "/admin/marketing/faqs";
+const NEW_PATH = "/my-admin/marketing/faqs/new";
+const BASE_PATH = "/my-admin/marketing/faqs";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

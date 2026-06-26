@@ -21,8 +21,8 @@ import { deleteAdminUser, fetchAdminUsers } from "@/services/administration-api"
 import type { AdminUserItem } from "@/types/admin-users";
 import type { PaginationMeta } from "@/types/catalog";
 
-const NEW_PATH = "/admin/administration/users/new";
-const BASE_PATH = "/admin/administration/users";
+const NEW_PATH = "/my-admin/administration/users/new";
+const BASE_PATH = "/my-admin/administration/users";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

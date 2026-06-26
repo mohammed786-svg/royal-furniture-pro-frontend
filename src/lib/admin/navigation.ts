@@ -1,6 +1,6 @@
 import type { AdminMenuGroup, AdminPageMeta } from "@/lib/admin/types";
 
-export const ADMIN_BASE = "/admin";
+export const ADMIN_BASE = "/my-admin";
 
 export const adminMenuGroups: AdminMenuGroup[] = [
   {
@@ -10,7 +10,7 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "dashboard",
         label: "Dashboard",
-        href: "/admin/dashboard",
+        href: "/my-admin/dashboard",
         icon: "LayoutDashboard",
       },
     ],
@@ -22,23 +22,33 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "products",
         label: "Products",
-        href: "/admin/catalog/products",
+        href: "/my-admin/catalog/products",
         icon: "Sofa",
       },
       {
         key: "categories",
         label: "Categories",
-        href: "/admin/catalog/categories",
+        href: "/my-admin/catalog/categories",
         icon: "Layers",
       },
-      { key: "brands", label: "Brands", href: "/admin/catalog/brands", icon: "Award" },
+      {
+        key: "brands",
+        label: "Brands",
+        href: "/my-admin/catalog/brands",
+        icon: "Award",
+      },
       {
         key: "reviews",
         label: "Reviews & Ratings",
-        href: "/admin/catalog/reviews",
+        href: "/my-admin/catalog/reviews",
         icon: "Star",
       },
-      { key: "tags", label: "Product Tags", href: "/admin/catalog/tags", icon: "Tags" },
+      {
+        key: "tags",
+        label: "Product Tags",
+        href: "/my-admin/catalog/tags",
+        icon: "Tags",
+      },
     ],
   },
   {
@@ -48,31 +58,31 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "warehouses",
         label: "Warehouses",
-        href: "/admin/inventory/warehouses",
+        href: "/my-admin/inventory/warehouses",
         icon: "Warehouse",
       },
       {
         key: "stock",
         label: "Stock Overview",
-        href: "/admin/inventory/stock",
+        href: "/my-admin/inventory/stock",
         icon: "Package",
       },
       {
         key: "adjustments",
         label: "Stock Adjustments",
-        href: "/admin/inventory/adjustments",
+        href: "/my-admin/inventory/adjustments",
         icon: "SlidersHorizontal",
       },
       {
         key: "transfers",
         label: "Stock Transfers",
-        href: "/admin/inventory/transfers",
+        href: "/my-admin/inventory/transfers",
         icon: "ArrowLeftRight",
       },
       {
         key: "alerts",
         label: "Low Stock Alerts",
-        href: "/admin/inventory/alerts",
+        href: "/my-admin/inventory/alerts",
         icon: "AlertTriangle",
       },
     ],
@@ -84,25 +94,25 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "orders",
         label: "All Orders",
-        href: "/admin/orders",
+        href: "/my-admin/orders",
         icon: "ShoppingCart",
       },
       {
         key: "order-status",
         label: "Order Status",
-        href: "/admin/orders/status",
+        href: "/my-admin/orders/status",
         icon: "ListChecks",
       },
       {
         key: "returns",
         label: "Returns & Refunds",
-        href: "/admin/orders/returns",
+        href: "/my-admin/orders/returns",
         icon: "RotateCcw",
       },
       {
         key: "tracking",
         label: "Order Tracking",
-        href: "/admin/orders/tracking",
+        href: "/my-admin/orders/tracking",
         icon: "MapPin",
       },
     ],
@@ -111,23 +121,28 @@ export const adminMenuGroups: AdminMenuGroup[] = [
     id: "customers",
     label: "CUSTOMERS",
     items: [
-      { key: "customers", label: "Customers", href: "/admin/customers", icon: "Users" },
+      {
+        key: "customers",
+        label: "Customers",
+        href: "/my-admin/customers",
+        icon: "Users",
+      },
       {
         key: "addresses",
         label: "Addresses",
-        href: "/admin/customers/addresses",
+        href: "/my-admin/customers/addresses",
         icon: "MapPinned",
       },
       {
         key: "wishlists",
         label: "Wishlists",
-        href: "/admin/customers/wishlists",
+        href: "/my-admin/customers/wishlists",
         icon: "Heart",
       },
       {
         key: "wallet",
         label: "Customer Wallet",
-        href: "/admin/customers/wallet",
+        href: "/my-admin/customers/wallet",
         icon: "Wallet",
       },
     ],
@@ -139,28 +154,33 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "coupons",
         label: "Coupons",
-        href: "/admin/marketing/coupons",
+        href: "/my-admin/marketing/coupons",
         icon: "Ticket",
       },
       {
         key: "banners",
         label: "Banners",
-        href: "/admin/marketing/banners",
+        href: "/my-admin/marketing/banners",
         icon: "Image",
       },
       {
         key: "cms",
         label: "CMS Pages",
-        href: "/admin/marketing/cms",
+        href: "/my-admin/marketing/cms",
         icon: "FileText",
       },
       {
         key: "testimonials",
         label: "Testimonials",
-        href: "/admin/marketing/testimonials",
+        href: "/my-admin/marketing/testimonials",
         icon: "MessageSquare",
       },
-      { key: "faqs", label: "FAQs", href: "/admin/marketing/faqs", icon: "HelpCircle" },
+      {
+        key: "faqs",
+        label: "FAQs",
+        href: "/my-admin/marketing/faqs",
+        icon: "HelpCircle",
+      },
     ],
   },
   {
@@ -170,13 +190,13 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "payments",
         label: "Payments",
-        href: "/admin/payments",
+        href: "/my-admin/payments",
         icon: "CreditCard",
       },
       {
         key: "payment-verification",
         label: "Verification",
-        href: "/admin/payments/verification",
+        href: "/my-admin/payments/verification",
         icon: "ShieldCheck",
       },
     ],
@@ -185,11 +205,16 @@ export const adminMenuGroups: AdminMenuGroup[] = [
     id: "shipping",
     label: "SHIPPING",
     items: [
-      { key: "shipments", label: "Shipments", href: "/admin/shipping", icon: "Truck" },
+      {
+        key: "shipments",
+        label: "Shipments",
+        href: "/my-admin/shipping",
+        icon: "Truck",
+      },
       {
         key: "shipment-tracking",
         label: "Tracking",
-        href: "/admin/shipping/tracking",
+        href: "/my-admin/shipping/tracking",
         icon: "Route",
       },
     ],
@@ -201,19 +226,19 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "sales-analytics",
         label: "Sales Analytics",
-        href: "/admin/analytics/sales",
+        href: "/my-admin/analytics/sales",
         icon: "TrendingUp",
       },
       {
         key: "page-views",
         label: "Page Views",
-        href: "/admin/analytics/page-views",
+        href: "/my-admin/analytics/page-views",
         icon: "Eye",
       },
       {
         key: "search-reports",
         label: "Search Reports",
-        href: "/admin/analytics/search",
+        href: "/my-admin/analytics/search",
         icon: "Search",
       },
     ],
@@ -225,7 +250,7 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "notifications",
         label: "Notifications",
-        href: "/admin/notifications",
+        href: "/my-admin/notifications",
         icon: "Bell",
       },
     ],
@@ -237,13 +262,13 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "settings",
         label: "Store Settings",
-        href: "/admin/settings",
+        href: "/my-admin/settings",
         icon: "Settings",
       },
       {
         key: "audit-logs",
         label: "Audit Logs",
-        href: "/admin/settings/audit-logs",
+        href: "/my-admin/settings/audit-logs",
         icon: "ScrollText",
       },
     ],
@@ -255,21 +280,21 @@ export const adminMenuGroups: AdminMenuGroup[] = [
       {
         key: "admin-users",
         label: "Admin Users",
-        href: "/admin/administration/users",
+        href: "/my-admin/administration/users",
         icon: "UserCog",
         superAdminOnly: true,
       },
       {
         key: "role-permissions",
         label: "Roles & Permissions",
-        href: "/admin/administration/roles",
+        href: "/my-admin/administration/roles",
         icon: "Shield",
         superAdminOnly: true,
       },
       {
         key: "login-history",
         label: "Login History",
-        href: "/admin/administration/login-history",
+        href: "/my-admin/administration/login-history",
         icon: "History",
         superAdminOnly: true,
       },
@@ -332,7 +357,7 @@ export function getAllAdminPages(): AdminPageMeta[] {
       href: item.href,
       superAdminOnly: item.superAdminOnly,
       breadcrumbs: [
-        { label: "Dashboard", href: "/admin/dashboard" },
+        { label: "Dashboard", href: "/my-admin/dashboard" },
         { label: sectionLabel(group.id) },
         { label: item.label },
       ],

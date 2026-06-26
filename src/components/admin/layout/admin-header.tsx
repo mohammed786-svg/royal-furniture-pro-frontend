@@ -228,7 +228,7 @@ export function AdminHeader({ onMenuOpen }: AdminHeaderProps) {
           type="button"
           onClick={async () => {
             await logout();
-            router.replace("/admin/login");
+            router.replace("/my-admin/login");
           }}
           className="admin-header-logout"
         >

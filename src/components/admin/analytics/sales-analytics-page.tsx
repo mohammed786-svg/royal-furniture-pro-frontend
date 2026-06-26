@@ -182,7 +182,7 @@ export function SalesAnalyticsPage() {
           <div className="admin-widget-header">
             <h3>Recent Orders</h3>
             <Link
-              href="/admin/orders"
+              href="/my-admin/orders"
               className="text-sm text-[var(--admin-primary)] hover:underline"
             >
               View All
@@ -207,7 +207,7 @@ export function SalesAnalyticsPage() {
                   >
                     <td className="py-3 pr-4">
                       <Link
-                        href={`/admin/orders/${order.id}`}
+                        href={`/my-admin/orders/${order.id}`}
                         className="admin-data-link"
                       >
                         {order.orderNumber}

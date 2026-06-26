@@ -17,7 +17,7 @@ import {
 import type { CatalogProductOption } from "@/types/catalog-meta";
 import type { TestimonialFormValues, TestimonialItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/testimonials";
+const LIST_PATH = "/my-admin/marketing/testimonials";
 
 const emptyForm: TestimonialFormValues = {
   customerName: "",

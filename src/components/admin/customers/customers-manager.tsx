@@ -21,7 +21,7 @@ import { deleteCustomer, fetchCustomers } from "@/services/customers-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { CustomerItem } from "@/types/customers";
 
-const NEW_PATH = "/admin/customers/new";
+const NEW_PATH = "/my-admin/customers/new";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
@@ -148,7 +148,7 @@ export function CustomersManager() {
             selectedIds={new Set()}
             onToggleSelect={() => {}}
             onToggleSelectAll={() => {}}
-            onEdit={(row) => router.push(`/admin/customers/${row.id}`)}
+            onEdit={(row) => router.push(`/my-admin/customers/${row.id}`)}
             onDelete={handleDelete}
           />
         ) : (
@@ -164,7 +164,7 @@ export function CustomersManager() {
               { label: "Type", value: r.isGuest ? "Guest" : "Registered" },
               { label: "Joined", value: formatDate(r.createdAt) },
             ]}
-            onEdit={(row) => router.push(`/admin/customers/${row.id}`)}
+            onEdit={(row) => router.push(`/my-admin/customers/${row.id}`)}
             onDelete={handleDelete}
           />
         )}

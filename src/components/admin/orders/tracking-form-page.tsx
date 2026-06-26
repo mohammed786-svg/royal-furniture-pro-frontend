@@ -9,7 +9,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { addTracking, fetchOrderOptions, fetchOrders } from "@/services/orders-api";
 import type { OrderListItem, OrderOptions, TrackingFormValues } from "@/types/orders";
 
-const LIST_PATH = "/admin/orders/tracking";
+const LIST_PATH = "/my-admin/orders/tracking";
 
 const emptyForm: TrackingFormValues = {
   orderId: "",

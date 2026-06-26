@@ -50,32 +50,32 @@ export const dashboardStats: DashboardStat[] = [
 export const quickLinks = [
   {
     label: "Add Product",
-    href: "/admin/catalog/products/new",
+    href: "/my-admin/catalog/products/new",
     icon: "Plus",
     color: "#3D5EE1",
   },
   {
     label: "View Orders",
-    href: "/admin/orders",
+    href: "/my-admin/orders",
     icon: "ShoppingCart",
     color: "#1CBEAA",
   },
   {
     label: "Stock Check",
-    href: "/admin/inventory/stock",
+    href: "/my-admin/inventory/stock",
     icon: "Package",
     color: "#FFA726",
   },
   {
     label: "Coupons",
-    href: "/admin/marketing/coupons",
+    href: "/my-admin/marketing/coupons",
     icon: "Ticket",
     color: "#E74C3C",
   },
-  { label: "Customers", href: "/admin/customers", icon: "Users", color: "#9C27B0" },
+  { label: "Customers", href: "/my-admin/customers", icon: "Users", color: "#9C27B0" },
   {
     label: "Reports",
-    href: "/admin/analytics/sales",
+    href: "/my-admin/analytics/sales",
     icon: "BarChart3",
     color: "#00BCD4",
   },

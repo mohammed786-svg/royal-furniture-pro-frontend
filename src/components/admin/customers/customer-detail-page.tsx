@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchCustomer } from "@/services/customers-api";
 import type { CustomerItem } from "@/types/customers";
 
-const LIST_PATH = "/admin/customers";
+const LIST_PATH = "/my-admin/customers";
 
 type Props = { customerId: string };
 
@@ -57,7 +57,7 @@ export function CustomerDetailPage({ customerId }: Props) {
       <div className="admin-data-card admin-order-detail">
         <div className="admin-data-tabs">
           <Link
-            href={`/admin/customers/${customerId}/edit`}
+            href={`/my-admin/customers/${customerId}/edit`}
             className="admin-btn admin-btn-primary admin-data-add-btn"
           >
             Edit Customer
@@ -95,13 +95,13 @@ export function CustomerDetailPage({ customerId }: Props) {
         </div>
         <div className="admin-inline-actions">
           <Link
-            href={`/admin/customers/addresses?customerId=${customerId}`}
+            href={`/my-admin/customers/addresses?customerId=${customerId}`}
             className="admin-btn admin-btn-outline admin-btn-sm"
           >
             View Addresses
           </Link>
           <Link
-            href={`/admin/customers/wishlists?customerId=${customerId}`}
+            href={`/my-admin/customers/wishlists?customerId=${customerId}`}
             className="admin-btn admin-btn-outline admin-btn-sm"
           >
             View Wishlist

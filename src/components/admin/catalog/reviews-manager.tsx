@@ -21,8 +21,8 @@ import {
 import type { PaginationMeta } from "@/types/catalog";
 import type { ReviewItem } from "@/types/reviews";
 
-const NEW_PATH = "/admin/catalog/reviews/new";
-const BASE_PATH = "/admin/catalog/reviews";
+const NEW_PATH = "/my-admin/catalog/reviews/new";
+const BASE_PATH = "/my-admin/catalog/reviews";
 
 type ApprovalFilter = "all" | "pending" | "approved";
 

@@ -20,7 +20,7 @@ import type {
   PaymentVerificationItem,
 } from "@/types/payments";
 
-const LIST_PATH = "/admin/payments/verification";
+const LIST_PATH = "/my-admin/payments/verification";
 
 const emptyForm: PaymentVerificationFormValues = {
   paymentId: "",

@@ -21,7 +21,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
   const groups = getVisibleMenuGroups(user);
 
   const isActive = (href: string) =>
-    href === "/admin/dashboard"
+    href === "/my-admin/dashboard"
       ? pathname === href
       : pathname === href || pathname.startsWith(`${href}/`);
 
@@ -33,7 +33,7 @@ export function AdminSidebar({ open, onClose }: AdminSidebarProps) {
       <aside className={`admin-sidebar ${open ? "open" : ""}`}>
         <div className="admin-sidebar-header">
           <Link
-            href="/admin/dashboard"
+            href="/my-admin/dashboard"
             className="admin-sidebar-brand"
             onClick={onClose}
           >

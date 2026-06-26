@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchSearch } from "@/services/analytics-api";
 import type { SearchHistoryItem } from "@/types/analytics";
 
-const LIST_PATH = "/admin/analytics/search";
+const LIST_PATH = "/my-admin/analytics/search";
 
 type Props = { searchId: string };
 

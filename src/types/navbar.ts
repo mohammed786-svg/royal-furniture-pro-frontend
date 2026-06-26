@@ -39,7 +39,7 @@ export type NavMegaMenu = {
   }[];
 };
 
-export type NavbarDataSource = "api" | "cache" | "static";
+export type NavbarDataSource = "api" | "cache" | "empty";
 
 export type NavbarState = {
   items: NavbarCategoryItem[];
@@ -50,5 +50,8 @@ export type NavbarState = {
   source: NavbarDataSource;
   isLoading: boolean;
   isFetching: boolean;
+  isRefreshing: boolean;
+  isEmpty: boolean;
   isError: boolean;
+  emptyMessage: string;
 };

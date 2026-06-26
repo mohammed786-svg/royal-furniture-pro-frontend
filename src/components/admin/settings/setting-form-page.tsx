@@ -18,7 +18,7 @@ import {
   type SettingItem,
 } from "@/types/settings";
 
-const LIST_PATH = "/admin/settings";
+const LIST_PATH = "/my-admin/settings";
 
 const emptyForm: SettingFormValues = {
   settingKey: "",

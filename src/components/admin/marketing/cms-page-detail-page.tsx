@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchCmsPage } from "@/services/marketing-api";
 import type { CmsPageItem } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/cms";
+const LIST_PATH = "/my-admin/marketing/cms";
 
 type Props = { pageId: string };
 

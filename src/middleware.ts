@@ -22,6 +22,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/contact", request.url));
   }
 
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    const nextPath = pathname.replace(/^\/admin/, "/my-admin");
+    return NextResponse.redirect(new URL(nextPath, request.url));
+  }
+
   const response = NextResponse.next();
 
   response.headers.set("X-Frame-Options", "DENY");

@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
     if (!isHydrated) return;
     async function check() {
       if (isLoggedIn() || (await restoreSession())) {
-        router.replace("/admin/dashboard");
+        router.replace("/my-admin/dashboard");
       }
     }
     check();

@@ -10,7 +10,7 @@ import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchNotification } from "@/services/notifications-api";
 import type { NotificationItem } from "@/types/notifications";
 
-const LIST_PATH = "/admin/notifications";
+const LIST_PATH = "/my-admin/notifications";
 
 type Props = { notificationId: string };
 

@@ -55,20 +55,20 @@ export function AdminDashboardContent() {
         <div>
           <h1>Admin Dashboard</h1>
           <div className="admin-breadcrumb">
-            <Link href="/admin/dashboard">Dashboard</Link>
+            <Link href="/my-admin/dashboard">Dashboard</Link>
             <span>/</span>
             <span>Admin Dashboard</span>
           </div>
         </div>
         <div className="admin-page-actions">
           <Link
-            href="/admin/catalog/products/new"
+            href="/my-admin/catalog/products/new"
             className="admin-btn admin-btn-primary"
           >
             <Plus size={16} />
             Add New Product
           </Link>
-          <Link href="/admin/payments" className="admin-btn admin-btn-outline">
+          <Link href="/my-admin/payments" className="admin-btn admin-btn-outline">
             Payment Details
           </Link>
         </div>
@@ -206,7 +206,7 @@ export function AdminDashboardContent() {
         <div className="admin-widget-header">
           <h3>Recent Orders</h3>
           <Link
-            href="/admin/orders"
+            href="/my-admin/orders"
             className="text-sm text-[var(--admin-primary)] hover:underline"
           >
             View All

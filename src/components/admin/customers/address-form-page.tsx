@@ -20,7 +20,7 @@ import type {
   CustomerOptions,
 } from "@/types/customers";
 
-const LIST_PATH = "/admin/customers/addresses";
+const LIST_PATH = "/my-admin/customers/addresses";
 
 const emptyForm: AddressFormValues = {
   customerId: "",

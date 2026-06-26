@@ -21,7 +21,7 @@ import type {
 } from "@/types/catalog";
 import type { BrandOption, ProductFormValues } from "@/types/product";
 
-const PRODUCTS_LIST_PATH = "/admin/catalog/products";
+const PRODUCTS_LIST_PATH = "/my-admin/catalog/products";
 
 type ProductFormPageProps = {
   mode: "create" | "edit";
@@ -115,7 +115,7 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
           </button>
           <h1>{title}</h1>
           <div className="admin-breadcrumb">
-            <Link href="/admin/dashboard">Dashboard</Link>
+            <Link href="/my-admin/dashboard">Dashboard</Link>
             <span>/</span>
             <Link href={PRODUCTS_LIST_PATH}>Products</Link>
             <span>/</span>

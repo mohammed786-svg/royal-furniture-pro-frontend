@@ -7,6 +7,15 @@ import type {
   NavMegaMenu,
 } from "@/types/navbar";
 
+export function emptyNavbarTree(): NavbarTreeResponse {
+  return {
+    items: [],
+    version: "empty",
+    cachedAt: null,
+  };
+}
+
+/** @deprecated Demo-only — not used on production storefront. */
 export function staticNavbarFallback(): NavbarTreeResponse {
   const items: NavbarCategoryItem[] = navCategories.map((label, index) => {
     const menu = navMegaMenus[label];

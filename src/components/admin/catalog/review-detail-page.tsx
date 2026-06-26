@@ -14,7 +14,7 @@ import {
 } from "@/services/catalog-reviews";
 import type { ReviewItem } from "@/types/reviews";
 
-const LIST_PATH = "/admin/catalog/reviews";
+const LIST_PATH = "/my-admin/catalog/reviews";
 
 type Props = { reviewId: string };
 

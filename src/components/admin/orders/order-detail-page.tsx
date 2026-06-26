@@ -16,7 +16,7 @@ import {
 } from "@/services/orders-api";
 import type { OrderDetail, OrderInvoice, OrderOptions } from "@/types/orders";
 
-const LIST_PATH = "/admin/orders";
+const LIST_PATH = "/my-admin/orders";
 
 const TABS = [
   "Summary",
@@ -160,7 +160,7 @@ export function OrderDetailPage({ orderId }: Props) {
                 <p>{order.customerEmail}</p>
                 <p>{order.customerPhone}</p>
                 <Link
-                  href={`/admin/customers/${order.customerId}`}
+                  href={`/my-admin/customers/${order.customerId}`}
                   className="admin-data-link"
                 >
                   View customer

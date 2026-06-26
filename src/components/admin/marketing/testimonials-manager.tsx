@@ -21,8 +21,8 @@ import { deleteTestimonial, fetchTestimonials } from "@/services/marketing-api";
 import type { PaginationMeta } from "@/types/catalog";
 import type { TestimonialItem } from "@/types/marketing";
 
-const NEW_PATH = "/admin/marketing/testimonials/new";
-const BASE_PATH = "/admin/marketing/testimonials";
+const NEW_PATH = "/my-admin/marketing/testimonials/new";
+const BASE_PATH = "/my-admin/marketing/testimonials";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

@@ -18,7 +18,7 @@ import {
 import type { LoginHistoryItem } from "@/types/admin-users";
 import type { PaginationMeta } from "@/types/catalog";
 
-const BASE_PATH = "/admin/administration/login-history";
+const BASE_PATH = "/my-admin/administration/login-history";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];

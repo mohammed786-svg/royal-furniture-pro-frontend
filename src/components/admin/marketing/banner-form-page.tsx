@@ -17,7 +17,7 @@ import {
 import type { CatalogOption } from "@/types/catalog";
 import type { BannerFormValues, BannerItem, BannerPosition } from "@/types/marketing";
 
-const LIST_PATH = "/admin/marketing/banners";
+const LIST_PATH = "/my-admin/marketing/banners";
 
 const emptyForm: BannerFormValues = {
   bannerPositionId: "",

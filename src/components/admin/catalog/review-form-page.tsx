@@ -11,7 +11,7 @@ import { createReview, fetchReview, updateReview } from "@/services/catalog-revi
 import type { CatalogCustomerOption, CatalogProductOption } from "@/types/catalog-meta";
 import type { ReviewFormValues, ReviewItem } from "@/types/reviews";
 
-const LIST_PATH = "/admin/catalog/reviews";
+const LIST_PATH = "/my-admin/catalog/reviews";
 
 const emptyForm: ReviewFormValues = {
   productId: "",

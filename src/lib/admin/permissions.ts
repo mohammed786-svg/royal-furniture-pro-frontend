@@ -3,7 +3,7 @@ import type { AdminMenuGroup, AdminUser } from "@/lib/admin/types";
 
 const PERMISSIONS_STORAGE_KEY = "royal-admin-menu-permissions";
 
-const ALWAYS_ALLOWED_PREFIXES = ["/admin/profile"];
+const ALWAYS_ALLOWED_PREFIXES = ["/my-admin/profile"];
 
 export function isAlwaysAllowedHref(href: string): boolean {
   return ALWAYS_ALLOWED_PREFIXES.some(

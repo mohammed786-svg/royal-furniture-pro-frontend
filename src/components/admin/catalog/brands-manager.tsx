@@ -21,8 +21,8 @@ import { deleteBrand, fetchBrands } from "@/services/catalog-brands";
 import type { BrandItem } from "@/types/brands";
 import type { PaginationMeta } from "@/types/catalog";
 
-const NEW_PATH = "/admin/catalog/brands/new";
-const BASE_PATH = "/admin/catalog/brands";
+const NEW_PATH = "/my-admin/catalog/brands/new";
+const BASE_PATH = "/my-admin/catalog/brands";
 
 function parseSort(value: string) {
   const [sortBy, sortDir] = value.split("-") as [string, "asc" | "desc"];
