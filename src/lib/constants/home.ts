@@ -76,19 +76,21 @@ export const navCategories = [
   "House of Interiors",
 ] as const;
 
-/** Mobile/tablet nav icons (Royal Oak category_slider_icon) */
+/** Mobile/tablet nav icons — replace with real PNGs in public/images/nav/ when available */
+const NAV_ICON = "/images/nav/category.svg";
+
 export const navCategoryIcons: Record<(typeof navCategories)[number], string> = {
-  "International Collection": "/images/nav/international.png",
-  Living: "/images/nav/living.png",
-  Bedroom: "/images/nav/bedroom.png",
-  Mattresses: "/images/nav/mattress.png",
-  Dining: "/images/nav/dining.png",
-  "Study & Office": "/images/nav/study.png",
-  Outdoor: "/images/nav/outdoor.png",
-  Decor: "/images/nav/decor.png",
-  Furnishings: "/images/nav/furnishings.png",
-  "New Arrivals": "/images/nav/offers.png",
-  "House of Interiors": "/images/nav/dining.png",
+  "International Collection": NAV_ICON,
+  Living: NAV_ICON,
+  Bedroom: NAV_ICON,
+  Mattresses: NAV_ICON,
+  Dining: NAV_ICON,
+  "Study & Office": NAV_ICON,
+  Outdoor: NAV_ICON,
+  Decor: NAV_ICON,
+  Furnishings: NAV_ICON,
+  "New Arrivals": NAV_ICON,
+  "House of Interiors": NAV_ICON,
 };
 
 export const features = [

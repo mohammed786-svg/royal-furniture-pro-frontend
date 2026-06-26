@@ -1,6 +1,10 @@
 "use client";
 
 import { create } from "zustand";
+import {
+  getCustomerAuthToken,
+  hydrateCustomerAuthToken,
+} from "@/lib/axios/customer-auth-token";
 import { productDetailToProductItem } from "@/lib/cart/line-item";
 import type { CartLineItem } from "@/lib/constants/cart-data";
 import type { ProductItem } from "@/lib/constants/home-data";
@@ -84,7 +88,12 @@ export const useCartStore = create<CartStore>()((set, get) => ({
     } catch {
       set({ cartLoading: false, hydrated: true });
     }
-    await refreshWishlist(set);
+    hydrateCustomerAuthToken();
+    if (getCustomerAuthToken()) {
+      await refreshWishlist(set);
+    } else {
+      set({ wishlistLoading: false });
+    }
   },
 
   addToCart: async (product, quantity = 1) => {

@@ -28,6 +28,15 @@ export const mediaConfig = {
   mediaPrefix: "/media",
 } as const;
 
+/** Paths served from Next.js `public/` — not Django `/media/` uploads. */
+function isStaticPublicAssetPath(path: string): boolean {
+  return (
+    path.startsWith("/images/") ||
+    path.startsWith("/logos/") ||
+    path.startsWith("/payment/")
+  );
+}
+
 export function getMediaBaseUrl(): string {
   return mediaConfig.baseUrl;
 }
@@ -51,6 +60,11 @@ export function buildMediaUrl(path?: string | null): string | null {
   }
 
   let normalized = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+
+  if (isStaticPublicAssetPath(normalized)) {
+    return normalized;
+  }
+
   if (!normalized.startsWith("/media/")) {
     normalized = `${mediaConfig.mediaPrefix}${normalized.startsWith("/") ? normalized : `/${normalized}`}`;
   }

@@ -41,6 +41,12 @@ function isAuthRefreshRequest(url: string | undefined): boolean {
   return Boolean(url?.includes("/auth/admin/refresh/"));
 }
 
+function isStorefrontCustomerAuthRequest(url: string | undefined): boolean {
+  return Boolean(
+    url?.includes("/storefront/wishlist") || url?.includes("/storefront/addresses"),
+  );
+}
+
 function notifyUnauthorized(error: AxiosError): void {
   royalToast.unauthorized(
     getApiErrorMessage(error, "Unauthorized access. Please sign in again."),
@@ -190,7 +196,12 @@ export function createAxiosInstance(): AxiosInstance {
       }
 
       if (error.response?.status === 401 && !isAuthLoginRequest(requestUrl)) {
-        notifyUnauthorized(error);
+        hydrateCustomerAuthToken();
+        const optionalGuestEndpoint = isStorefrontCustomerAuthRequest(requestUrl);
+        const hasCustomerToken = Boolean(getCustomerAuthToken());
+        if (!optionalGuestEndpoint || hasCustomerToken) {
+          notifyUnauthorized(error);
+        }
       }
 
       return Promise.reject(error);

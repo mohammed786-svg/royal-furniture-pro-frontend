@@ -82,9 +82,15 @@ export function buildNavbarLookups(items: NavbarCategoryItem[]) {
 }
 
 export function resolveNavCategoryIcon(item: NavbarCategoryItem): string | null {
-  if (item.iconUrl) return item.iconUrl;
-  const staticIcon = navCategoryIcons[item.name as keyof typeof navCategoryIcons];
-  return staticIcon ?? null;
+  const icon =
+    item.iconUrl ??
+    navCategoryIcons[item.name as keyof typeof navCategoryIcons] ??
+    null;
+  if (!icon) return null;
+  if (icon.startsWith("/images/nav/") && icon.endsWith(".png")) {
+    return "/images/nav/category.svg";
+  }
+  return icon;
 }
 
 export function activeNavLabelFromItems(
