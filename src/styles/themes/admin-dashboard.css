@@ -24,11 +24,15 @@
 .admin-login-logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
   margin-bottom: 2rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--admin-primary);
+}
+
+.admin-login-logo__image {
+  display: block;
+  width: min(220px, 72vw);
+  height: auto;
+  object-fit: contain;
 }
 
 .admin-login-card {

@@ -8,6 +8,10 @@ export const siteConfig = {
   locale: "en_IN",
   twitterHandle: "@royalfurniture",
   logoSrc: "/logos/royal_furniture_pro_logo.png",
+  /** Square tab / PWA icons generated from logo */
+  iconSrc: "/icon.png",
+  appleIconSrc: "/apple-icon.png",
+  faviconSrc: "/favicon.png",
 } as const;
 
 export const defaultMetadata: Metadata = {
@@ -18,6 +22,16 @@ export const defaultMetadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
+  icons: {
+    icon: [
+      { url: siteConfig.faviconSrc, sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: siteConfig.appleIconSrc, sizes: "180x180", type: "image/png" }],
+    shortcut: siteConfig.faviconSrc,
+  },
+  manifest: "/site.webmanifest",
   robots: {
     index: true,
     follow: true,
@@ -28,10 +42,17 @@ export const defaultMetadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.name,
     description: siteConfig.description,
+    images: [
+      {
+        url: siteConfig.logoSrc,
+        alt: siteConfig.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
+    images: [siteConfig.logoSrc],
   },
 };

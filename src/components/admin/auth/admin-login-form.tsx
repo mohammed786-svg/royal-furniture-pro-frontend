@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail } from "lucide-react";
+import { siteConfig } from "@/config/seo/metadata.config";
 import { useAdminAuthStore } from "@/lib/admin/auth-store";
 
 export function AdminLoginForm() {
@@ -35,18 +37,14 @@ export function AdminLoginForm() {
   return (
     <div className="admin-login-page">
       <div className="admin-login-logo">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden>
-          <rect width="32" height="32" rx="8" fill="#3D5EE1" />
-          <path
-            d="M8 22V12l8-4 8 4v10"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M12 18h8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-        Royal Furniture Pro
+        <Image
+          src={siteConfig.logoSrc}
+          alt={siteConfig.name}
+          width={220}
+          height={94}
+          className="admin-login-logo__image"
+          priority
+        />
       </div>
 
       <div className="admin-login-card">
