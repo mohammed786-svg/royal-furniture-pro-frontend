@@ -286,6 +286,7 @@
 }
 
 .popular-cat-thumb {
+  position: relative;
   width: 100%;
   max-width: 160px;
   aspect-ratio: 1;
@@ -782,19 +783,30 @@
 }
 
 .mobile-nav-row__icon {
+  position: relative;
   display: flex;
   width: 44px;
   height: 44px;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #f5f5f5;
+}
+
+.mobile-nav-row__icon .media-image,
+.mobile-nav-row__icon .media-image-placeholder {
+  width: 100%;
+  height: 100%;
 }
 
 .mobile-nav-row__icon img {
   display: block;
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .mobile-nav-row__label {
@@ -4174,9 +4186,9 @@
   color: var(--royal-gold-brand, #c5a059);
 }
 
-/* Homepage hero carousel (API-driven banners) */
+/* Homepage hero carousel + promo banners (Royal Oak: full-width, natural height) */
 .hero-carousel {
-  background: #e8e8e8;
+  background: #ffffff;
 }
 
 .hero-carousel__loading {
@@ -4194,17 +4206,22 @@
 
 .hero-banner-slide {
   position: relative;
+  display: block;
   width: 100%;
-  min-height: 220px;
-  max-height: 500px;
-  aspect-ratio: 1305 / 500;
   overflow: hidden;
-  background: #e8e8e8;
+  background: #f0f0f0;
+  line-height: 0;
+}
+
+.hero-banner-slide__link {
+  display: block;
+  width: 100%;
 }
 
 .hero-banner-slide__frame {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  display: block;
+  width: 100%;
 }
 
 .hero-banner-slide__frame--desktop {
@@ -4216,10 +4233,6 @@
 }
 
 @media (min-width: 768px) {
-  .hero-banner-slide {
-    min-height: 320px;
-  }
-
   .hero-banner-slide__frame--desktop {
     display: block;
   }
@@ -4229,18 +4242,45 @@
   }
 }
 
-.hero-banner-slide__media,
-.hero-banner-slide__placeholder {
+.hero-banner-slide .media-image {
+  display: block;
   width: 100%;
-  height: 100%;
+  position: relative;
 }
 
-.hero-banner-slide__img {
+.hero-banner-slide .media-image__placeholder {
+  position: relative;
+  inset: auto;
+  display: block;
   width: 100%;
-  height: 100%;
-  max-height: 500px;
-  object-fit: cover;
-  object-position: center;
+  min-height: 200px;
+}
+
+.hero-banner-slide__placeholder {
+  display: block;
+  width: 100%;
+  min-height: 200px;
+}
+
+.hero-banner-slide__media .media-image__img,
+.hero-banner-slide__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+.hero-banner-slide--empty,
+.hero-banner-slide--no-media {
+  min-height: 200px;
+}
+
+@media (min-width: 768px) {
+  .hero-banner-slide--empty,
+  .hero-banner-slide--no-media {
+    min-height: 280px;
+  }
 }
 
 .hero-banner-slide--empty .hero-banner-slide__caption,

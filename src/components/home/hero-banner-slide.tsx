@@ -26,11 +26,9 @@ function BannerFrame({
       <MediaImage
         src={src}
         alt={alt}
-        fill
-        fit="cover"
         loading={priority ? "eager" : "lazy"}
         placeholderSize="lg"
-        showLabel
+        showLabel={false}
         resolveUrl
         wrapperClassName="hero-banner-slide__media"
         className="hero-banner-slide__placeholder"
@@ -47,7 +45,9 @@ export function HeroBannerSlide({ slide, priority = false }: HeroBannerSlideProp
   const hasMobile = isValidMediaSrc(mobileSrc);
   const useSplitLayout =
     hasDesktop && hasMobile && desktopSrc && mobileSrc && desktopSrc !== mobileSrc;
-  const fallbackSrc = hasMobile ? mobileSrc : hasDesktop ? desktopSrc : null;
+  const fallbackSrc = hasDesktop ? desktopSrc : hasMobile ? mobileSrc : null;
+  const showCaption =
+    Boolean(slide.title || slide.subtitle) && (slide.isEmpty || !fallbackSrc);
 
   const alt = slide.subtitle
     ? `${slide.title} — ${slide.subtitle}`
@@ -76,7 +76,7 @@ export function HeroBannerSlide({ slide, priority = false }: HeroBannerSlideProp
         <BannerFrame src={fallbackSrc} alt={alt} priority={priority} />
       )}
 
-      {(slide.title || slide.subtitle) && (
+      {(slide.title || slide.subtitle) && showCaption && (
         <div className="hero-banner-slide__caption">
           {slide.title ? (
             <p className="hero-banner-slide__title">{slide.title}</p>

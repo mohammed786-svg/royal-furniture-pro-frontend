@@ -95,9 +95,8 @@ export function resolveNavCategoryIcon(item: NavbarCategoryItem): string | null 
     item.iconUrl ??
     navCategoryIcons[item.name as keyof typeof navCategoryIcons] ??
     null;
-  if (!icon) return null;
-  if (icon.startsWith("/images/nav/") && icon.endsWith(".png")) {
-    return "/images/nav/category.svg";
+  if (!icon || icon === "/images/nav/category.svg") {
+    return null;
   }
   return icon;
 }

@@ -20,7 +20,7 @@ export function PromoBanner() {
   const { data } = useHomepage();
 
   return (
-    <section className="w-full shrink-0 bg-white">
+    <section className="promo-banner-section w-full shrink-0 bg-white">
       {data.promoBanners.map((banner) => (
         <HeroBannerSlide key={banner.id} slide={toSlide(banner)} />
       ))}

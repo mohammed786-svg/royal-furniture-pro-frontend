@@ -139,10 +139,11 @@ function CategoryIcon({ item }: { item: NavbarCategoryItem }) {
       <MediaImage
         src={icon}
         alt=""
-        width={40}
-        height={40}
-        fit="contain"
+        fill
+        rounded="full"
+        fit="cover"
         placeholderSize="xs"
+        showLabel={false}
         resolveUrl
       />
     </span>

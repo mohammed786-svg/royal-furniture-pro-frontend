@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImageIcon, ImageOff } from "lucide-react";
 import { isValidMediaSrc, resolveMediaUrl } from "@/lib/media/resolve-url";
 
@@ -100,12 +100,21 @@ export function MediaImage({
       ? String(src).trim()
       : null;
   const hasSource = isValidMediaSrc(resolved);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [status, setStatus] = useState<MediaImageStatus>(
     hasSource ? "loading" : "empty",
   );
 
   useEffect(() => {
     setStatus(hasSource ? "loading" : "empty");
+  }, [resolved, hasSource]);
+
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!hasSource || !img) return;
+    if (img.complete && img.naturalWidth > 0) {
+      setStatus("loaded");
+    }
   }, [resolved, hasSource]);
 
   useEffect(() => {
@@ -149,11 +158,13 @@ export function MediaImage({
       ) : null}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        ref={imgRef}
         src={resolved!}
         alt={alt}
         width={fill ? undefined : width}
         height={fill ? undefined : height}
         loading={loading}
+        decoding="async"
         className={cn(
           "media-image__img",
           `media-image__img--${fit}`,

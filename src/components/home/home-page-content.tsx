@@ -2,13 +2,11 @@
 
 import { FeaturesBar } from "@/components/home/features-bar";
 import { InternationalCollection } from "@/components/home/international-collection";
-import { LimitedDeals } from "@/components/home/limited-deals";
-import { OfferBar } from "@/components/home/offer-bar";
 import { OnlineExclusiveSection } from "@/components/home/online-exclusive-section";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { ProductGridSection } from "@/components/home/product-grid-section";
 import { PromoBanner } from "@/components/home/promo-banner";
-import { RoyalDecor } from "@/components/home/royal-decor";
+// import { RoyalDecor } from "@/components/home/royal-decor";
 import { SeoContent } from "@/components/home/seo-content";
 import { ShopByCelebrity } from "@/components/home/shop-by-celebrity";
 import { SpotlightSection } from "@/components/home/spotlight-section";
@@ -23,7 +21,6 @@ export function HomePageContent() {
 
   return (
     <main>
-      <OfferBar />
       <FeaturesBar />
       <PromoBanner />
       <PopularCategories />
@@ -43,8 +40,7 @@ export function HomePageContent() {
         products={getHomeProducts(data, "newArrivals")}
         bgClassName="bg-[#f5f5f5]"
       />
-      <RoyalDecor />
-      <LimitedDeals />
+      {/* <RoyalDecor /> */}
       <TestimonialsSection />
       <SeoContent />
     </main>

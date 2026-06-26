@@ -60,7 +60,7 @@ export function HeroCarousel() {
 
   return (
     <section
-      className="hero-carousel relative w-full shrink-0 overflow-hidden bg-[#e8e8e8]"
+      className="hero-carousel relative w-full shrink-0 overflow-hidden bg-white"
       aria-roledescription="carousel"
       aria-label="Homepage promotions"
       onMouseEnter={() => setIsPaused(true)}

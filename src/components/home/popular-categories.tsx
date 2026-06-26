@@ -33,7 +33,7 @@ export function PopularCategories() {
                     rounded="full"
                     fit="cover"
                     placeholderSize="md"
-                    showLabel
+                    showLabel={false}
                   />
                 </div>
                 <h5 className="popular-cat-label">{cat.name}</h5>
