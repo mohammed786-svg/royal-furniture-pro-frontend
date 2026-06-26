@@ -24,6 +24,8 @@ function pickListing(
   apiData: StorefrontCategoryListingResponse | undefined,
   local: StorefrontCategoryListingResponse | null,
   stale: StorefrontCategoryListingResponse | null,
+  categorySlug: string,
+  subCategorySlug: string,
 ): { data: CategoryListingState["data"]; source: CatalogListingDataSource } {
   if (apiData) {
     return { data: mapCategoryListingResponse(apiData), source: "api" };
@@ -34,7 +36,10 @@ function pickListing(
   if (stale?.products) {
     return { data: mapCategoryListingResponse(stale), source: "cache" };
   }
-  return { data: emptyCategoryListing(), source: "empty" };
+  return {
+    data: emptyCategoryListing(categorySlug, subCategorySlug),
+    source: "empty",
+  };
 }
 
 export function useCategoryListing(
@@ -69,8 +74,9 @@ export function useCategoryListing(
   }, [query.data, categorySlug, subCategorySlug]);
 
   const { data, source } = useMemo(
-    () => pickListing(query.data, localCache, staleLocal),
-    [query.data, localCache, staleLocal],
+    () =>
+      pickListing(query.data, localCache, staleLocal, categorySlug, subCategorySlug),
+    [query.data, localCache, staleLocal, categorySlug, subCategorySlug],
   );
 
   const resolvedData = data ?? emptyCategoryListing(categorySlug, subCategorySlug);

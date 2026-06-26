@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { HeroBannerSlide } from "@/components/home/hero-banner-slide";
 import { useHomepage } from "@/providers/homepage-provider";
 import type { HeroBannerItem } from "@/types/hero-banners";
