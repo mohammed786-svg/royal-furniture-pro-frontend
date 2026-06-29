@@ -121,6 +121,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           product={product}
           quantity={qty}
           className="product-purchase__cart-btn"
+          disabled={!product.inStock}
         >
           ADD TO CART
         </AddToCartButton>
@@ -128,6 +129,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           product={product}
           quantity={qty}
           className="product-purchase__buy-btn"
+          disabled={!product.inStock}
         >
           BUY NOW
         </BuyNowButton>

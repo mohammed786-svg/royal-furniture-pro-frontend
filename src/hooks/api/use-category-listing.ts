@@ -26,6 +26,7 @@ function pickListing(
   stale: StorefrontCategoryListingResponse | null,
   categorySlug: string,
   subCategorySlug: string,
+  underSubCategorySlug?: string,
 ): { data: CategoryListingState["data"]; source: CatalogListingDataSource } {
   if (apiData) {
     return { data: mapCategoryListingResponse(apiData), source: "api" };
@@ -37,7 +38,7 @@ function pickListing(
     return { data: mapCategoryListingResponse(stale), source: "cache" };
   }
   return {
-    data: emptyCategoryListing(categorySlug, subCategorySlug),
+    data: emptyCategoryListing(categorySlug, subCategorySlug, underSubCategorySlug),
     source: "empty",
   };
 }
@@ -45,6 +46,7 @@ function pickListing(
 export function useCategoryListing(
   categorySlug: string,
   subCategorySlug: string,
+  underSubCategorySlug?: string,
 ): CategoryListingState {
   const [localCache, setLocalCache] =
     useState<StorefrontCategoryListingResponse | null>(null);
@@ -52,13 +54,33 @@ export function useCategoryListing(
     useState<StorefrontCategoryListingResponse | null>(null);
 
   useEffect(() => {
-    setLocalCache(readCategoryListingCache(categorySlug, subCategorySlug));
-    setStaleLocal(readCategoryListingCacheStale(categorySlug, subCategorySlug));
-  }, [categorySlug, subCategorySlug]);
+    setLocalCache(
+      readCategoryListingCache(categorySlug, subCategorySlug, underSubCategorySlug),
+    );
+    setStaleLocal(
+      readCategoryListingCacheStale(
+        categorySlug,
+        subCategorySlug,
+        underSubCategorySlug,
+      ),
+    );
+  }, [categorySlug, subCategorySlug, underSubCategorySlug]);
 
   const query = useQuery({
-    queryKey: queryKeys.categories.listing(categorySlug, subCategorySlug),
-    queryFn: () => fetchCategoryListing(categorySlug, subCategorySlug),
+    queryKey: queryKeys.categories.listing(
+      categorySlug,
+      subCategorySlug,
+      underSubCategorySlug,
+    ),
+    queryFn: () => {
+      const cachedIds = localCache ?? staleLocal;
+      return fetchCategoryListing(categorySlug, subCategorySlug, {
+        underSubCategorySlug,
+        categoryId: cachedIds?.categoryId,
+        subCategoryId: cachedIds?.subCategoryId,
+        underSubCategoryId: cachedIds?.underSubCategoryId ?? undefined,
+      });
+    },
     staleTime: queryCacheConfig.staleTime.catalog,
     gcTime: queryCacheConfig.gcTime.catalog,
     placeholderData: () => localCache ?? staleLocal ?? undefined,
@@ -66,20 +88,44 @@ export function useCategoryListing(
 
   useEffect(() => {
     if (!query.data?.version) return;
-    const cached = readCategoryListingCacheStale(categorySlug, subCategorySlug);
+    const cached = readCategoryListingCacheStale(
+      categorySlug,
+      subCategorySlug,
+      underSubCategorySlug,
+    );
     if (!cached || cached.version !== query.data.version) {
-      writeCategoryListingCache(categorySlug, subCategorySlug, query.data);
+      writeCategoryListingCache(
+        categorySlug,
+        subCategorySlug,
+        query.data,
+        underSubCategorySlug,
+      );
       setLocalCache(query.data);
     }
-  }, [query.data, categorySlug, subCategorySlug]);
+  }, [query.data, categorySlug, subCategorySlug, underSubCategorySlug]);
 
   const { data, source } = useMemo(
     () =>
-      pickListing(query.data, localCache, staleLocal, categorySlug, subCategorySlug),
-    [query.data, localCache, staleLocal, categorySlug, subCategorySlug],
+      pickListing(
+        query.data,
+        localCache,
+        staleLocal,
+        categorySlug,
+        subCategorySlug,
+        underSubCategorySlug,
+      ),
+    [
+      query.data,
+      localCache,
+      staleLocal,
+      categorySlug,
+      subCategorySlug,
+      underSubCategorySlug,
+    ],
   );
 
-  const resolvedData = data ?? emptyCategoryListing(categorySlug, subCategorySlug);
+  const resolvedData =
+    data ?? emptyCategoryListing(categorySlug, subCategorySlug, underSubCategorySlug);
 
   return {
     data: resolvedData,

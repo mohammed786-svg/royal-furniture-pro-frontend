@@ -1,6 +1,7 @@
 "use client";
 
 import toast from "react-hot-toast";
+import { useRequireCustomerLogin } from "@/lib/auth/require-customer-login";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -10,6 +11,7 @@ type AddToCartButtonProps = {
   quantity?: number;
   className?: string;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 
 function isProductDetail(p: ProductItem | ProductDetail): p is ProductDetail {
@@ -21,13 +23,16 @@ export function AddToCartButton({
   quantity = 1,
   className,
   children = "Add to Cart",
+  disabled = false,
 }: AddToCartButtonProps) {
+  const requireLogin = useRequireCustomerLogin();
   const addToCart = useCartStore((s) => s.addToCart);
   const addDetailToCart = useCartStore((s) => s.addDetailToCart);
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!requireLogin()) return;
 
     try {
       if (isProductDetail(product)) {
@@ -42,7 +47,12 @@ export function AddToCartButton({
   };
 
   return (
-    <button type="button" className={className} onClick={handleClick}>
+    <button
+      type="button"
+      className={className}
+      onClick={handleClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

@@ -30,9 +30,16 @@ export function mapCategoryListingResponse(
   response: StorefrontCategoryListingResponse,
 ): CategoryPageData {
   return {
+    categoryId: response.categoryId,
+    subCategoryId: response.subCategoryId,
+    underSubCategoryId: response.underSubCategoryId ?? undefined,
     department: response.department,
     category: response.category,
+    underSubCategory: response.underSubCategory ?? undefined,
     title: response.title,
+    categorySlug: response.categorySlug,
+    subCategorySlug: response.subCategorySlug,
+    underSubCategorySlug: response.underSubCategorySlug ?? undefined,
     subcategories: response.subcategories.map((sub) => ({
       label: sub.label,
       image: resolveMediaUrl(sub.imageUrl) ?? PLACEHOLDER_IMAGE,
@@ -71,21 +78,34 @@ export function mapProductDetailResponse(
 }
 
 export function emptyCategoryListing(
-  departmentSlug: string,
+  categorySlug: string,
   subCategorySlug: string,
+  underSubCategorySlug?: string,
 ): CategoryPageData {
-  const title = subCategorySlug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+  const title = underSubCategorySlug
+    ? underSubCategorySlug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ")
+    : subCategorySlug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
 
   return {
-    department: departmentSlug
+    department: categorySlug
       .split("-")
       .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
       .join(" "),
-    category: title,
+    category: subCategorySlug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" "),
+    underSubCategory: underSubCategorySlug ? title : undefined,
     title,
+    categorySlug,
+    subCategorySlug,
+    underSubCategorySlug,
     subcategories: [],
     products: [],
     sortOptions: [

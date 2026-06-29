@@ -9,11 +9,35 @@ import type {
 export async function fetchCategoryListing(
   categorySlug: string,
   subCategorySlug: string,
-  params?: { page?: number; pageSize?: number; sort?: string },
+  params?: {
+    page?: number;
+    pageSize?: number;
+    sort?: string;
+    underSubCategorySlug?: string;
+    categoryId?: string;
+    subCategoryId?: string;
+    underSubCategoryId?: string;
+  },
 ): Promise<StorefrontCategoryListingResponse> {
+  const under = params?.underSubCategorySlug;
+  const path = under
+    ? `/storefront/catalog/${categorySlug}/${subCategorySlug}/${under}/`
+    : `/storefront/catalog/${categorySlug}/${subCategorySlug}/`;
+
+  const query: Record<string, string | number | undefined> = {
+    page: params?.page,
+    pageSize: params?.pageSize,
+    sort: params?.sort,
+    categoryId: params?.categoryId,
+    subCategoryId: params?.subCategoryId,
+    underSubCategoryId: params?.underSubCategoryId,
+  };
+
   const { data } = await apiClient.get<ApiEnvelope<StorefrontCategoryListingResponse>>(
-    `/storefront/catalog/${categorySlug}/${subCategorySlug}/`,
-    { params },
+    path,
+    {
+      params: query,
+    },
   );
   return assertApiSuccess(data);
 }

@@ -1,6 +1,18 @@
 import { navCategories } from "@/lib/constants/home";
 import { navMegaMenus } from "@/lib/constants/nav-mega-menu";
 
+/** Build storefront PLP path from API category slugs */
+export function categoryListingHref(
+  categorySlug: string,
+  subCategorySlug: string,
+  underSubCategorySlug?: string | null,
+): string {
+  if (underSubCategorySlug) {
+    return `/${categorySlug}/${subCategorySlug}/${underSubCategorySlug}`;
+  }
+  return `/${categorySlug}/${subCategorySlug}`;
+}
+
 /** URL slug from nav label (e.g. "Study & Office" → "study-office") */
 export function toCategorySlug(label: string): string {
   return label
@@ -70,3 +82,15 @@ export const popularCategoryHrefs: Record<string, string> = {
   "Dressing Table": categoryPageHref("Bedroom", "Tables"),
   "Coffee Tables": categoryPageHref("Living", "Living Room Tables"),
 };
+
+export function resolvePopularCategoryHref(cat: {
+  name: string;
+  slug?: string;
+  href?: string;
+}): string {
+  if (cat.href && cat.href !== "#") return cat.href;
+  if (cat.slug) return `/${cat.slug}`;
+  const mapped = popularCategoryHrefs[cat.name];
+  if (mapped) return mapped;
+  return categoryPageHref(cat.name);
+}

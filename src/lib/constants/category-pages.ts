@@ -16,9 +16,16 @@ export type CategorySubcategory = {
 };
 
 export type CategoryPageData = {
+  categoryId?: string;
+  subCategoryId?: string;
+  underSubCategoryId?: string;
   department: string;
   category: string;
+  underSubCategory?: string;
   title: string;
+  categorySlug?: string;
+  subCategorySlug?: string;
+  underSubCategorySlug?: string;
   subcategories: CategorySubcategory[];
   products: ProductItem[];
   sortOptions: string[];

@@ -119,12 +119,8 @@ export const useCartStore = create<CartStore>()((set, get) => ({
 
   addToWishlist: async (product) => {
     if (findByProductId(get().wishlistItems, product.id)) return;
-    try {
-      const data = await addStorefrontWishlistItem(product.id);
-      set({ wishlistItems: normalizeCartItems(data.items) });
-    } catch {
-      // Guest users must sign in for wishlist
-    }
+    const data = await addStorefrontWishlistItem(product.id);
+    set({ wishlistItems: normalizeCartItems(data.items) });
   },
 
   addDetailToWishlist: async (product) => {

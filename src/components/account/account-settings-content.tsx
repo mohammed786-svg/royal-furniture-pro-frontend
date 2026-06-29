@@ -6,6 +6,10 @@ import { AccountShell } from "@/components/account/account-shell";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useDeliveryStore } from "@/lib/store/delivery-store";
 import { royalToast } from "@/lib/toast/royal-toast";
+import {
+  formatIndianMobileDisplay,
+  isMissingCustomerMobile,
+} from "@/lib/validators/indian-mobile";
 
 export function AccountSettingsContent() {
   const router = useRouter();
@@ -35,7 +39,13 @@ export function AccountSettingsContent() {
         </div>
         <div>
           <dt>Mobile</dt>
-          <dd>+91 {user?.mobile}</dd>
+          <dd>
+            {user && !isMissingCustomerMobile(user.mobile) ? (
+              <>+91 {formatIndianMobileDisplay(user.mobile)}</>
+            ) : (
+              <Link href="/account/profile">Add mobile number</Link>
+            )}
+          </dd>
         </div>
         <div>
           <dt>Default pincode</dt>

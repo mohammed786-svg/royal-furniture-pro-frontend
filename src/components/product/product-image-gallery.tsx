@@ -95,7 +95,7 @@ export function ProductImageGallery({
                 fill
                 fit="cover"
                 placeholderSize="sm"
-                resolveUrl={false}
+                resolveUrl
               />
             </button>
           </li>
@@ -118,7 +118,7 @@ export function ProductImageGallery({
             fit="cover"
             loading="eager"
             placeholderSize="lg"
-            resolveUrl={false}
+            resolveUrl
             imgClassName="product-gallery__main-image"
             onStatusChange={(status) => setMainImageLoaded(status === "loaded")}
           />

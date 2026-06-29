@@ -1,18 +1,8 @@
-import { notFound, redirect } from "next/navigation";
-import { navCategories } from "@/lib/constants/home";
-import {
-  getDefaultCategorySlugForDepartment,
-  toCategorySlug,
-} from "@/lib/routes/category";
+import { notFound } from "next/navigation";
+import { DepartmentRedirect } from "@/components/category/department-redirect";
 import { isReservedTopLevelSlug } from "@/lib/routes/reserved-slugs";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return navCategories.map((label) => ({
-    department: toCategorySlug(label),
-  }));
-}
+export const dynamicParams = true;
 
 type PageProps = {
   params: Promise<{ department: string }>;
@@ -25,6 +15,5 @@ export default async function DepartmentPage({ params }: PageProps) {
     notFound();
   }
 
-  const category = getDefaultCategorySlugForDepartment(department);
-  redirect(`/${department}/${category}`);
+  return <DepartmentRedirect department={department} />;
 }

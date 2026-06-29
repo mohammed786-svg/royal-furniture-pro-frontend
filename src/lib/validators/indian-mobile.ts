@@ -36,3 +36,11 @@ export function indianMobileError(input: string): string | null {
   }
   return null;
 }
+
+/** True when Google/social login user has no usable mobile on file. */
+export function isMissingCustomerMobile(mobile?: string | null): boolean {
+  if (!mobile) return true;
+  const trimmed = mobile.trim().toUpperCase();
+  if (trimmed === "NA" || trimmed === "N/A") return true;
+  return normalizeIndianMobile(mobile).length !== 10;
+}

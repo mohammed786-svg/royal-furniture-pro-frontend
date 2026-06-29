@@ -15,12 +15,17 @@ export const queryKeys = {
     all: () => [...queryKeys.all, "categories"] as const,
     tree: () => [...queryKeys.categories.all(), "tree"] as const,
     detail: (slug: string) => [...queryKeys.categories.all(), "detail", slug] as const,
-    listing: (categorySlug: string, subCategorySlug: string) =>
+    listing: (
+      categorySlug: string,
+      subCategorySlug: string,
+      underSubCategorySlug?: string,
+    ) =>
       [
         ...queryKeys.categories.all(),
         "listing",
         categorySlug,
         subCategorySlug,
+        underSubCategorySlug ?? "",
       ] as const,
   },
   products: {

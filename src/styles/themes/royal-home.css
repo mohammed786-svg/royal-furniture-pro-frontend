@@ -1300,13 +1300,21 @@
 }
 
 .product-gallery__thumb {
+  position: relative;
   display: block;
   width: 100%;
+  height: 76px;
   padding: 0;
   border: 1px solid #e0e0e0;
   background: #ffffff;
   cursor: pointer;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .product-gallery__thumb {
+    height: 88px;
+  }
 }
 
 .product-gallery__thumb--active {
@@ -2042,6 +2050,82 @@
 }
 
 /* Login form (right) */
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 36px 28px 32px;
+}
+
+@media (min-width: 768px) {
+  .login-page__form {
+    padding: 44px 40px 36px;
+  }
+}
+
+.login-page__title {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.login-page__subtitle {
+  margin: 0 0 28px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #666666;
+  text-align: center;
+}
+
+.login-google-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-google-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.login-google-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-page__footer-note {
+  margin: 24px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: #666666;
+}
+
+.login-page__footer-note a {
+  color: #c5a059;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-page__footer-note a:hover {
+  text-decoration: underline;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -3621,6 +3705,20 @@
   margin: 0;
   font-size: 12px;
   opacity: 0.85;
+}
+
+.account-sidebar__add-mobile {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--royal-gold-brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.account-sidebar__add-mobile:hover {
+  color: var(--royal-navy);
 }
 
 .account-sidebar__section {

@@ -12,6 +12,10 @@ import {
 } from "@/lib/constants/account-menu";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { royalToast } from "@/lib/toast/royal-toast";
+import {
+  formatIndianMobileDisplay,
+  isMissingCustomerMobile,
+} from "@/lib/validators/indian-mobile";
 
 function MenuSection({
   title,
@@ -93,7 +97,15 @@ export function AccountSidebar() {
         </div>
         <div>
           <p className="account-sidebar__name">{user.name}</p>
-          <p className="account-sidebar__mobile">+91 {user.mobile}</p>
+          {!isMissingCustomerMobile(user.mobile) ? (
+            <p className="account-sidebar__mobile">
+              +91 {formatIndianMobileDisplay(user.mobile)}
+            </p>
+          ) : (
+            <Link href="/account/profile" className="account-sidebar__add-mobile">
+              Add mobile number
+            </Link>
+          )}
           {user.email && <p className="account-sidebar__email">{user.email}</p>}
         </div>
       </div>

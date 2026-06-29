@@ -42,9 +42,33 @@ export async function verifyStorefrontOtp(
   return assertApiSuccess(data);
 }
 
+export async function verifyStorefrontGoogle(idToken: string) {
+  const { data } = await apiClient.post<ApiEnvelope<VerifyOtpResponse>>(
+    "/storefront/auth/google/",
+    { idToken },
+  );
+  return assertApiSuccess(data);
+}
+
 export async function fetchStorefrontMe() {
   const { data } =
     await apiClient.get<ApiEnvelope<VerifyOtpResponse["user"]>>("/storefront/auth/me/");
+  return assertApiSuccess(data);
+}
+
+export async function updateStorefrontProfile(payload: {
+  fullName?: string;
+  email?: string;
+  mobile?: string;
+}) {
+  const { data } = await apiClient.patch<ApiEnvelope<VerifyOtpResponse["user"]>>(
+    "/storefront/auth/me/",
+    {
+      fullName: payload.fullName,
+      email: payload.email || undefined,
+      phone: payload.mobile,
+    },
+  );
   return assertApiSuccess(data);
 }
 

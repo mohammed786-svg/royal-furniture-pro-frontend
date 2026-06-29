@@ -2,6 +2,7 @@
 
 import { Heart } from "lucide-react";
 import toast from "react-hot-toast";
+import { useRequireCustomerLogin } from "@/lib/auth/require-customer-login";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -23,14 +24,17 @@ export function ProductWishlistButton({
   iconClassName = "h-4 w-4 stroke-[#a67c00] stroke-[1.75]",
   filledClassName = "fill-[#c5a059]",
 }: ProductWishlistButtonProps) {
+  const requireLogin = useRequireCustomerLogin();
   const isInWishlist = useCartStore((s) => s.isInWishlist(product.id));
   const addToWishlist = useCartStore((s) => s.addToWishlist);
   const addDetailToWishlist = useCartStore((s) => s.addDetailToWishlist);
   const removeFromWishlist = useCartStore((s) => s.removeFromWishlist);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!isInWishlist && !requireLogin()) return;
 
     if (isInWishlist) {
       const lineId = `wl-${product.id}`;
@@ -39,12 +43,16 @@ export function ProductWishlistButton({
       return;
     }
 
-    if (isProductDetail(product)) {
-      addDetailToWishlist(product);
-    } else {
-      addToWishlist(product);
+    try {
+      if (isProductDetail(product)) {
+        await addDetailToWishlist(product);
+      } else {
+        await addToWishlist(product);
+      }
+      toast.success("Added to wishlist");
+    } catch {
+      toast.error("Could not add to wishlist");
     }
-    toast.success("Added to wishlist");
   };
 
   return (

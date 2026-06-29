@@ -5,8 +5,13 @@ type StoredListing = StorefrontCategoryListingResponse & {
   storedAt: number;
 };
 
-function storageKey(categorySlug: string, subCategorySlug: string): string {
-  return `${browserCacheConfig.prefix}:plp:${categorySlug}/${subCategorySlug}`;
+function storageKey(
+  categorySlug: string,
+  subCategorySlug: string,
+  underSubCategorySlug?: string,
+): string {
+  const under = underSubCategorySlug ? `/${underSubCategorySlug}` : "";
+  return `${browserCacheConfig.prefix}:plp:${categorySlug}/${subCategorySlug}${under}`;
 }
 
 function isFresh(entry: StoredListing): boolean {
@@ -16,10 +21,13 @@ function isFresh(entry: StoredListing): boolean {
 export function readCategoryListingCache(
   categorySlug: string,
   subCategorySlug: string,
+  underSubCategorySlug?: string,
 ): StorefrontCategoryListingResponse | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(storageKey(categorySlug, subCategorySlug));
+    const raw = window.localStorage.getItem(
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+    );
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredListing;
     if (!parsed?.version) return null;
@@ -34,10 +42,13 @@ export function readCategoryListingCache(
 export function readCategoryListingCacheStale(
   categorySlug: string,
   subCategorySlug: string,
+  underSubCategorySlug?: string,
 ): StorefrontCategoryListingResponse | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(storageKey(categorySlug, subCategorySlug));
+    const raw = window.localStorage.getItem(
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+    );
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredListing;
     const { storedAt: _storedAt, ...data } = parsed;
@@ -51,12 +62,13 @@ export function writeCategoryListingCache(
   categorySlug: string,
   subCategorySlug: string,
   data: StorefrontCategoryListingResponse,
+  underSubCategorySlug?: string,
 ): void {
   if (typeof window === "undefined") return;
   try {
     const payload: StoredListing = { ...data, storedAt: Date.now() };
     window.localStorage.setItem(
-      storageKey(categorySlug, subCategorySlug),
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
       JSON.stringify(payload),
     );
   } catch {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MediaImage } from "@/components/ui/media-image";
-import { categoryPageHref } from "@/lib/routes/category";
+import { resolvePopularCategoryHref } from "@/lib/routes/category";
 import { useHomepage } from "@/providers/homepage-provider";
 
 export function PopularCategories() {
@@ -21,10 +21,7 @@ export function PopularCategories() {
         <ul className="popular-categories-grid">
           {data.popularCategories.map((cat) => (
             <li key={cat.id} className="popular-categories-grid__item">
-              <Link
-                href={cat.href !== "#" ? cat.href : categoryPageHref(cat.name)}
-                className="popular-cat-link"
-              >
+              <Link href={resolvePopularCategoryHref(cat)} className="popular-cat-link">
                 <div className="popular-cat-thumb">
                   <MediaImage
                     src={cat.imageUrl}
@@ -43,7 +40,7 @@ export function PopularCategories() {
         </ul>
 
         <div className="popular-categories-explore">
-          <Link href="#">Explore Complete Catalogue</Link>
+          <Link href="/living">Explore Complete Catalogue</Link>
         </div>
       </div>
     </section>

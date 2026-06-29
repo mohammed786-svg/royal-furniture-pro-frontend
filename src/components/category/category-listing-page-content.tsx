@@ -7,15 +7,18 @@ import { useCategoryListing } from "@/hooks/api/use-category-listing";
 type CategoryListingPageContentProps = {
   categorySlug: string;
   subCategorySlug: string;
+  underSubCategorySlug?: string;
 };
 
 export function CategoryListingPageContent({
   categorySlug,
   subCategorySlug,
+  underSubCategorySlug,
 }: CategoryListingPageContentProps) {
   const { data, isLoading, isError } = useCategoryListing(
     categorySlug,
     subCategorySlug,
+    underSubCategorySlug,
   );
 
   if (isLoading && !data?.products.length) {

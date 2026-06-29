@@ -20,11 +20,16 @@ export type StorefrontPlpSubcategory = {
 };
 
 export type StorefrontCategoryListingResponse = {
+  categoryId: string;
+  subCategoryId: string;
+  underSubCategoryId?: string | null;
   department: string;
   category: string;
+  underSubCategory?: string | null;
   title: string;
   categorySlug: string;
   subCategorySlug: string;
+  underSubCategorySlug?: string | null;
   subcategories: StorefrontPlpSubcategory[];
   products: StorefrontPlpProduct[];
   sortOptions: string[];
