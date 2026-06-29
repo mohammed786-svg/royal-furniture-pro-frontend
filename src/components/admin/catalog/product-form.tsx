@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { ProductFormField } from "@/components/admin/catalog/product-form-field";
 import { ProductImagesPanel } from "@/components/admin/catalog/product-images-panel";
+import { DIMENSION_UNIT_OPTIONS } from "@/lib/admin/dimension-units";
 import {
   getSectionCompletion,
   validateProductForm,
@@ -50,6 +51,10 @@ export const emptyProductForm: ProductFormValues = {
   fabric: "",
   color: "",
   dimensions: "",
+  packageLength: 0,
+  packageBreadth: 0,
+  packageHeight: 0,
+  packageDimensionUnit: "cm" as const,
   weight: 0,
   assemblyRequired: false,
   warranty: "",
@@ -580,13 +585,69 @@ export function ProductForm({
                   onChange={(e) => patchForm({ color: e.target.value })}
                 />
               </ProductFormField>
-              <ProductFormField label="Dimensions">
+              <ProductFormField label="Display dimensions (optional)">
                 <input
                   value={form.dimensions}
                   onChange={(e) => patchForm({ dimensions: e.target.value })}
-                  placeholder="L x W x H (cm)"
+                  placeholder="W 81 x D 99 x H 101 cm — shown on product page"
                 />
               </ProductFormField>
+              <ProductFormField label="Package unit">
+                <select
+                  value={form.packageDimensionUnit}
+                  onChange={(e) =>
+                    patchForm({
+                      packageDimensionUnit: e.target
+                        .value as ProductFormValues["packageDimensionUnit"],
+                    })
+                  }
+                >
+                  {DIMENSION_UNIT_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </ProductFormField>
+              <ProductFormField label={`Package length (${form.packageDimensionUnit})`}>
+                <input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.packageLength || ""}
+                  onChange={(e) =>
+                    patchForm({ packageLength: Number(e.target.value) || 0 })
+                  }
+                  placeholder="For Shiprocket"
+                />
+              </ProductFormField>
+              <ProductFormField
+                label={`Package breadth (${form.packageDimensionUnit})`}
+              >
+                <input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.packageBreadth || ""}
+                  onChange={(e) =>
+                    patchForm({ packageBreadth: Number(e.target.value) || 0 })
+                  }
+                />
+              </ProductFormField>
+              <ProductFormField label={`Package height (${form.packageDimensionUnit})`}>
+                <input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={form.packageHeight || ""}
+                  onChange={(e) =>
+                    patchForm({ packageHeight: Number(e.target.value) || 0 })
+                  }
+                />
+              </ProductFormField>
+              <p className="admin-form-hint admin-product-section-grid__full">
+                Package dimensions are saved in cm and sent to Shiprocket on checkout.
+              </p>
               <ProductFormField label="Weight (kg)" error={fieldError("weight")}>
                 <input
                   type="number"

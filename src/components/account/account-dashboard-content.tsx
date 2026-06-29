@@ -1,20 +1,54 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart, MapPin, Package, Truck } from "lucide-react";
 import { AccountShell } from "@/components/account/account-shell";
+import { getApiErrorMessage } from "@/lib/api/api-error";
 import { formatPrice } from "@/lib/constants/cart-data";
 import { useAddressStore } from "@/lib/store/address-store";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
-import { useOrderStore } from "@/lib/store/order-store";
+import { fetchStorefrontOrders } from "@/services/storefront-commerce";
+import type { StorefrontOrderSummary } from "@/types/storefront-commerce";
 
 export function AccountDashboardContent() {
   const user = useAuthStore((s) => s.user);
-  const orders = useOrderStore((s) => s.orders);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  const accessToken = useAuthStore((s) => s.accessToken);
   const addresses = useAddressStore((s) => s.addresses);
   const wishlistCount = useCartStore((s) => s.wishlistItems.length);
   const cartCount = useCartStore((s) => s.cartItemCount());
+
+  const [orders, setOrders] = useState<StorefrontOrderSummary[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    if (!accessToken) {
+      setOrders([]);
+      setLoadingOrders(false);
+      return;
+    }
+
+    let active = true;
+    (async () => {
+      setLoadingOrders(true);
+      try {
+        const data = await fetchStorefrontOrders({ pageSize: 10 });
+        if (active) setOrders(data.items);
+      } catch (error) {
+        if (active) {
+          console.error(getApiErrorMessage(error, "Could not load orders"));
+        }
+      } finally {
+        if (active) setLoadingOrders(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [isHydrated, accessToken]);
 
   const recent = orders.slice(0, 3);
 
@@ -28,7 +62,9 @@ export function AccountDashboardContent() {
       <div className="account-stats">
         <Link href="/account/orders" className="account-stat-card">
           <Package className="account-stat-card__icon" />
-          <span className="account-stat-card__value">{orders.length}</span>
+          <span className="account-stat-card__value">
+            {loadingOrders ? "…" : orders.length}
+          </span>
           <span className="account-stat-card__label">Orders</span>
         </Link>
         <Link href="/account/addresses" className="account-stat-card">
@@ -66,25 +102,29 @@ export function AccountDashboardContent() {
             </Link>
           )}
         </div>
-        {recent.length === 0 ? (
+        {loadingOrders ? (
+          <p className="account-empty">Loading orders…</p>
+        ) : recent.length === 0 ? (
           <p className="account-empty">
             No orders yet. Start shopping to see orders here.
           </p>
         ) : (
           <ul className="account-order-list">
             {recent.map((order) => (
-              <li key={order.id} className="account-order-row">
+              <li key={order.orderId} className="account-order-row">
                 <div>
-                  <p className="account-order-row__id">{order.id}</p>
+                  <p className="account-order-row__id">{order.orderNumber}</p>
                   <p className="account-order-row__meta">
-                    {order.items.length} item(s) ·{" "}
-                    {new Date(order.createdAt).toLocaleDateString("en-IN")}
+                    {order.statusName || order.status}
+                    {order.createdAt
+                      ? ` · ${new Date(order.createdAt).toLocaleDateString("en-IN")}`
+                      : ""}
                   </p>
                 </div>
                 <div className="account-order-row__right">
-                  <strong>{formatPrice(order.total)}</strong>
+                  <strong>{formatPrice(order.totalAmount)}</strong>
                   <Link
-                    href={`/track-order?orderId=${encodeURIComponent(order.id)}`}
+                    href={`/track-order?orderId=${encodeURIComponent(order.orderNumber)}`}
                     className="account-link"
                   >
                     Track

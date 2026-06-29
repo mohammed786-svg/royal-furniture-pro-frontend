@@ -1,13 +1,46 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AccountShell } from "@/components/account/account-shell";
+import { getApiErrorMessage } from "@/lib/api/api-error";
 import { formatPrice } from "@/lib/constants/cart-data";
-import { useOrderStore } from "@/lib/store/order-store";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { royalToast } from "@/lib/toast/royal-toast";
+import { fetchStorefrontOrders } from "@/services/storefront-commerce";
+import type { StorefrontOrderSummary } from "@/types/storefront-commerce";
 
 export function AccountOrdersContent() {
-  const orders = useOrderStore((s) => s.orders);
+  const isHydrated = useAuthStore((s) => s.isHydrated);
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const [orders, setOrders] = useState<StorefrontOrderSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    if (!accessToken) {
+      setLoading(false);
+      setOrders([]);
+      return;
+    }
+
+    let active = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await fetchStorefrontOrders();
+        if (active) setOrders(data.items);
+      } catch (error) {
+        if (active)
+          royalToast.error(getApiErrorMessage(error, "Could not load orders"));
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [isHydrated, accessToken]);
 
   return (
     <AccountShell
@@ -18,7 +51,17 @@ export function AccountOrdersContent() {
         { label: "My Orders" },
       ]}
     >
-      {orders.length === 0 ? (
+      {loading ? (
+        <p className="account-empty">Loading orders…</p>
+      ) : !accessToken ? (
+        <p className="account-empty">
+          Please{" "}
+          <Link href="/login" className="account-link">
+            sign in
+          </Link>{" "}
+          to view your orders.
+        </p>
+      ) : orders.length === 0 ? (
         <p className="account-empty">
           You have no orders yet.{" "}
           <Link href="/" className="account-link">
@@ -28,45 +71,30 @@ export function AccountOrdersContent() {
       ) : (
         <ul className="account-orders-full">
           {orders.map((order) => (
-            <li key={order.id} className="account-order-card">
+            <li key={order.orderId} className="account-order-card">
               <header className="account-order-card__head">
                 <div>
-                  <p className="account-order-card__id">{order.id}</p>
+                  <p className="account-order-card__id">{order.orderNumber}</p>
                   <p className="account-order-card__date">
-                    {new Date(order.createdAt).toLocaleString("en-IN")}
+                    {order.createdAt
+                      ? new Date(order.createdAt).toLocaleString("en-IN")
+                      : "—"}
+                  </p>
+                  <p className="account-order-card__status">
+                    {order.statusName || order.status}
                   </p>
                 </div>
                 <div className="account-order-card__total">
                   <span>Total</span>
-                  <strong>{formatPrice(order.total)}</strong>
+                  <strong>{formatPrice(order.totalAmount)}</strong>
                 </div>
               </header>
-              <ul className="account-order-card__items">
-                {order.items.map((item) => (
-                  <li key={item.id}>
-                    <Image
-                      src={item.image}
-                      alt=""
-                      width={56}
-                      height={56}
-                      className="account-order-card__thumb"
-                    />
-                    <div>
-                      <p className="account-order-card__name">{item.name}</p>
-                      <p className="account-order-card__qty">Qty {item.quantity}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <footer className="account-order-card__foot">
-                <span className="account-order-card__status">Payment verification</span>
-                <Link
-                  href={`/track-order?orderId=${encodeURIComponent(order.id)}`}
-                  className="account-form__submit account-form__submit--inline"
-                >
-                  Track order
-                </Link>
-              </footer>
+              <Link
+                href={`/track-order?orderId=${encodeURIComponent(order.orderNumber)}`}
+                className="account-link"
+              >
+                Track shipment
+              </Link>
             </li>
           ))}
         </ul>

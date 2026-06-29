@@ -81,7 +81,7 @@ export function LoginOtpForm() {
     try {
       const digits = normalizeIndianMobile(mobile);
       const result = await verifyStorefrontOtp(digits, code, { purpose: "login" });
-      setSession(result.user, result.accessToken);
+      setSession(result.user, result.accessToken, result.refreshToken);
       useCartStore.setState({ hydrated: false });
       useAddressStore.setState({ hydrated: false });
       await hydrateCart();

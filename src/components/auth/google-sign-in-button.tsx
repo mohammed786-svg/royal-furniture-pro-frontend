@@ -38,7 +38,7 @@ export function GoogleSignInButton({
       const result = await signInWithPopup(auth, googleAuthProvider);
       const idToken = await result.user.getIdToken();
       const data = await verifyStorefrontGoogle(idToken);
-      setSession(data.user, data.accessToken);
+      setSession(data.user, data.accessToken, data.refreshToken);
       toast.success("Signed in successfully");
 
       const redirect = searchParams.get("redirect");

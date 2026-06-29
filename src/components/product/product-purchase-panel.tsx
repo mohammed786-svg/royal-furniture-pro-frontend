@@ -14,6 +14,7 @@ type ProductPurchasePanelProps = {
 };
 
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
+  const maxQty = Math.max(0, product.availableStock ?? 0);
   const [qty, setQty] = useState(1);
   const pincode = useDeliveryStore((s) => s.pincode);
   const setPincode = useDeliveryStore((s) => s.setPincode);
@@ -23,13 +24,19 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
     setLocalPincode(pincode);
   }, [pincode]);
 
+  useEffect(() => {
+    if (maxQty > 0) {
+      setQty((current) => Math.min(Math.max(1, current), maxQty));
+    }
+  }, [maxQty, product.id]);
+
   const handleCheckPincode = () => {
     const value = localPincode.replace(/\D/g, "").slice(0, 6);
     if (!isValidPincode(value)) {
       royalToast.error("Enter a valid 6-digit pincode");
       return;
     }
-    setPincode(value);
+    setPincode(value, "manual");
     royalToast.success(`Delivery available for pincode ${value}`);
   };
 
@@ -64,14 +71,19 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
       <div className="product-purchase__offer">
         <p className="product-purchase__offer-label">BEST OFFER FOR YOU</p>
         <p className="product-purchase__offer-text">
-          Snapmint EMI offer available on this product. See more details at checkout.
+          Bajaj Finance EMI offer available on this product. See more details at
+          checkout.
         </p>
       </div>
 
       <p className="product-purchase__stock">
         Availability :{" "}
         <strong className={product.inStock ? "product-purchase__in-stock" : ""}>
-          {product.inStock ? "In Stock" : "Out of Stock"}
+          {product.inStock
+            ? maxQty > 0
+              ? `In Stock (${maxQty} available)`
+              : "In Stock"
+            : "Out of Stock"}
         </strong>
       </p>
 
@@ -102,6 +114,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
             type="button"
             aria-label="Decrease quantity"
             onClick={() => setQty((q) => Math.max(1, q - 1))}
+            disabled={!product.inStock || maxQty <= 0}
           >
             <Minus className="h-4 w-4" />
           </button>
@@ -109,7 +122,8 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           <button
             type="button"
             aria-label="Increase quantity"
-            onClick={() => setQty((q) => q + 1)}
+            onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+            disabled={!product.inStock || qty >= maxQty}
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -121,7 +135,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           product={product}
           quantity={qty}
           className="product-purchase__cart-btn"
-          disabled={!product.inStock}
+          disabled={!product.inStock || maxQty <= 0}
         >
           ADD TO CART
         </AddToCartButton>
@@ -129,7 +143,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           product={product}
           quantity={qty}
           className="product-purchase__buy-btn"
-          disabled={!product.inStock}
+          disabled={!product.inStock || maxQty <= 0}
         >
           BUY NOW
         </BuyNowButton>

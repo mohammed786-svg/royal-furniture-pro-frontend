@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, MapPin, Pencil, X } from "lucide-react";
+import { Check, Crosshair, MapPin, Pencil, X } from "lucide-react";
+import { resolveDeliveryPincode } from "@/lib/delivery/resolve-pincode";
 import { isValidPincode, useDeliveryStore } from "@/lib/store/delivery-store";
 import { royalToast } from "@/lib/toast/royal-toast";
 
 export function DeliveryPincodeBar() {
   const pincode = useDeliveryStore((s) => s.pincode);
+  const cityLabel = useDeliveryStore((s) => s.cityLabel);
+  const isDetecting = useDeliveryStore((s) => s.isDetecting);
   const setPincode = useDeliveryStore((s) => s.setPincode);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(pincode);
@@ -38,10 +41,26 @@ export function DeliveryPincodeBar() {
       royalToast.error("Enter a valid 6-digit pincode");
       return;
     }
-    setPincode(value);
+    setPincode(value, "manual");
     setEditing(false);
     royalToast.success(`Delivery pincode updated to ${value}`);
   };
+
+  const detectLocation = async () => {
+    const found = await resolveDeliveryPincode({ force: true, preferGeo: true });
+    if (found) {
+      const next = useDeliveryStore.getState();
+      royalToast.success(
+        next.cityLabel
+          ? `Detected ${next.cityLabel} · ${next.pincode}`
+          : `Detected pincode ${next.pincode}`,
+      );
+      return;
+    }
+    royalToast.error("Could not detect your pincode. Please enter it manually.");
+  };
+
+  const displayValue = cityLabel ? `${cityLabel} · ${pincode}` : pincode;
 
   return (
     <div className="delivery-pincode-bar">
@@ -63,6 +82,7 @@ export function DeliveryPincodeBar() {
             }}
             className="delivery-pincode-bar__input"
             aria-label="Delivery pincode"
+            placeholder="6-digit pincode"
           />
           <button
             type="button"
@@ -83,12 +103,26 @@ export function DeliveryPincodeBar() {
         </div>
       ) : (
         <>
-          <span className="delivery-pincode-bar__value">{pincode}</span>
+          <span className="delivery-pincode-bar__value">
+            {isDetecting ? "Detecting…" : displayValue}
+          </span>
+          <button
+            type="button"
+            className="delivery-pincode-bar__pencil"
+            aria-label="Detect my location"
+            title="Detect my location"
+            onClick={() => void detectLocation()}
+            disabled={isDetecting}
+          >
+            <Crosshair className="h-3 w-3" />
+          </button>
           <button
             type="button"
             className="delivery-pincode-bar__pencil"
             aria-label="Edit pincode"
+            title="Change pincode"
             onClick={startEdit}
+            disabled={isDetecting}
           >
             <Pencil className="h-3 w-3" />
           </button>

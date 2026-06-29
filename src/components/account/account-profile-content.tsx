@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AccountShell } from "@/components/account/account-shell";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { useAuthStore } from "@/lib/store/auth-store";
@@ -14,6 +15,9 @@ import {
 import { updateStorefrontProfile } from "@/services/storefront-commerce";
 
 export function AccountProfileContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectAfterSave = searchParams.get("redirect");
   const user = useAuthStore((s) => s.user);
   const setUser = useAuthStore((s) => s.setUser);
   const [name, setName] = useState(user?.name ?? "");
@@ -27,8 +31,6 @@ export function AccountProfileContent() {
 
   if (!user) return null;
 
-  const canEditMobile = isMissingCustomerMobile(user.mobile);
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -36,12 +38,10 @@ export function AccountProfileContent() {
       return;
     }
 
-    if (canEditMobile) {
-      const mobileError = indianMobileError(mobile);
-      if (mobileError) {
-        royalToast.error(mobileError);
-        return;
-      }
+    const mobileError = indianMobileError(mobile);
+    if (mobileError) {
+      royalToast.error(mobileError);
+      return;
     }
 
     setSaving(true);
@@ -49,7 +49,7 @@ export function AccountProfileContent() {
       const updated = await updateStorefrontProfile({
         fullName: name.trim(),
         email: email.trim() || undefined,
-        mobile: canEditMobile ? normalizeIndianMobile(mobile) : undefined,
+        mobile: normalizeIndianMobile(mobile),
       });
 
       setUser({
@@ -64,6 +64,9 @@ export function AccountProfileContent() {
         setMobile(formatIndianMobileDisplay(updated.mobile));
       }
       royalToast.success("Profile updated");
+      if (redirectAfterSave && redirectAfterSave.startsWith("/")) {
+        router.push(redirectAfterSave);
+      }
     } catch (error) {
       royalToast.error(getApiErrorMessage(error, "Could not update profile"));
     } finally {
@@ -80,6 +83,11 @@ export function AccountProfileContent() {
         { label: "My Profile" },
       ]}
     >
+      {redirectAfterSave && isMissingCustomerMobile(user.mobile) ? (
+        <p className="account-form__hint" style={{ marginBottom: "1rem" }}>
+          Add your mobile number below to continue shopping and checkout.
+        </p>
+      ) : null}
       <form className="account-form" onSubmit={handleSave}>
         <div className="account-form__field">
           <label htmlFor="profile-name">Full name</label>
@@ -93,41 +101,24 @@ export function AccountProfileContent() {
         </div>
         <div className="account-form__field">
           <label htmlFor="profile-mobile">Mobile</label>
-          {canEditMobile ? (
-            <>
-              <input
-                id="profile-mobile"
-                type="tel"
-                inputMode="numeric"
-                autoComplete="tel"
-                value={mobile}
-                onChange={(e) =>
-                  setMobile(
-                    formatIndianMobileDisplay(normalizeIndianMobile(e.target.value)),
-                  )
-                }
-                className="account-form__input"
-                placeholder="10-digit mobile number"
-                maxLength={11}
-              />
-              <p className="account-form__hint">
-                Add your mobile for order updates and delivery. Required for checkout.
-              </p>
-            </>
-          ) : (
-            <>
-              <input
-                id="profile-mobile"
-                type="text"
-                value={formatIndianMobileDisplay(user.mobile)}
-                className="account-form__input account-form__input--readonly"
-                readOnly
-              />
-              <p className="account-form__hint">
-                Mobile cannot be changed here. Contact support if needed.
-              </p>
-            </>
-          )}
+          <input
+            id="profile-mobile"
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
+            value={mobile}
+            onChange={(e) =>
+              setMobile(
+                formatIndianMobileDisplay(normalizeIndianMobile(e.target.value)),
+              )
+            }
+            className="account-form__input"
+            placeholder="10-digit mobile number"
+            maxLength={11}
+          />
+          <p className="account-form__hint">
+            Used for order updates and delivery. You can update this anytime.
+          </p>
         </div>
         <div className="account-form__field">
           <label htmlFor="profile-email">Email</label>
@@ -139,7 +130,7 @@ export function AccountProfileContent() {
             className="account-form__input"
             placeholder="you@example.com"
           />
-          {user.email && !canEditMobile && (
+          {user.email && (
             <p className="account-form__hint">
               Signed in with Google — email is linked to your account.
             </p>

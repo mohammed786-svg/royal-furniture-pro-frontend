@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ProductForm } from "@/components/admin/catalog/product-form";
 import { getApiErrorMessage } from "@/lib/api/api-error";
-import { detailToForm } from "@/lib/catalog/product-form-utils";
+import { detailToForm, formToPayload } from "@/lib/catalog/product-form-utils";
 import { royalToast } from "@/lib/toast/royal-toast";
 import {
   createProduct,
@@ -74,12 +74,13 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
   }, [loadPage]);
 
   async function handleSubmit(values: ProductFormValues) {
+    const payload = formToPayload(values);
     try {
       if (mode === "edit" && productId) {
-        await updateProduct(productId, values);
+        await updateProduct(productId, payload);
         royalToast.success("Product updated");
       } else {
-        await createProduct(values);
+        await createProduct(payload);
         royalToast.success("Product created");
       }
       router.push(PRODUCTS_LIST_PATH);

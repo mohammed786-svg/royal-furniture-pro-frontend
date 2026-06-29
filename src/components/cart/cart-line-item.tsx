@@ -25,6 +25,8 @@ export function CartLineItemRow({
   onAddToCart,
 }: CartLineItemRowProps) {
   const savings = lineItemSavings(item);
+  const maxQty = item.maxQuantity ?? item.availableStock;
+  const atMax = maxQty != null && item.quantity >= maxQty;
 
   return (
     <article className="cart-line-item">
@@ -75,10 +77,17 @@ export function CartLineItemRow({
               type="button"
               className="cart-line-item__qty-btn"
               aria-label="Increase quantity"
-              onClick={() => onQuantityChange?.(item.id, item.quantity + 1)}
+              disabled={atMax}
+              onClick={() => {
+                if (atMax) return;
+                onQuantityChange?.(item.id, item.quantity + 1);
+              }}
             >
               <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
             </button>
+            {maxQty != null && (
+              <span className="cart-line-item__stock-hint">{maxQty} in stock</span>
+            )}
           </div>
         ) : (
           <button

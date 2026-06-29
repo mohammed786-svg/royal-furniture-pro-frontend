@@ -14,7 +14,9 @@ import {
   type ViewMode,
 } from "@/components/admin/data-table/admin-data-toolbar";
 import { AdminPagination } from "@/components/admin/data-table/admin-pagination";
+import { OrderStatusBadge } from "@/components/admin/orders/order-status-badge";
 import { formatCurrency, formatDate } from "@/lib/admin/format-currency";
+import { resolveOrderStatusBadge } from "@/lib/admin/order-status-badge";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchOrders } from "@/services/orders-api";
@@ -88,9 +90,11 @@ export function OrdersManager() {
         key: "currentStatus",
         label: "Status",
         render: (r) => (
-          <span className="admin-status-badge active">
-            {r.statusName || r.currentStatus}
-          </span>
+          <OrderStatusBadge
+            statusCode={r.statusCode}
+            statusName={r.statusName}
+            currentStatus={r.currentStatus}
+          />
         ),
       },
       {
@@ -145,7 +149,14 @@ export function OrdersManager() {
             rows={rows.map((r) => ({ ...r, name: r.orderNumber }))}
             loading={loading}
             subtitle={(r) => r.customerName}
-            status={(r) => ({ label: r.currentStatus, tone: "active" })}
+            status={(r) => {
+              const badge = resolveOrderStatusBadge({
+                statusCode: r.statusCode,
+                statusName: r.statusName,
+                currentStatus: r.currentStatus,
+              });
+              return { label: badge.label, className: badge.className };
+            }}
             fields={(r) => [
               { label: "Total", value: formatCurrency(r.totalAmount) },
               { label: "Payment", value: r.paymentMethod },

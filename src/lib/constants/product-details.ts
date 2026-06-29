@@ -24,6 +24,7 @@ export type ProductDetail = {
   discount?: string;
   badge?: string;
   inStock: boolean;
+  availableStock: number;
   sku: string;
   department: string;
   category: string;
@@ -54,6 +55,7 @@ const NOVA_DETAIL: ProductDetail = {
   discount: "66% off",
   badge: "New Arrival",
   inStock: true,
+  availableStock: 9,
   sku: "SF201970-1",
   department: "Living",
   category: "Recliners",
@@ -133,6 +135,7 @@ function buildFromItem(
     discount,
     badge: item.badge,
     inStock: true,
+    availableStock: 0,
     sku: item.id.toUpperCase(),
     department,
     category,

@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { AdminGuard } from "@/components/admin/auth/admin-guard";
 import { AdminHeader } from "@/components/admin/layout/admin-header";
 import { AdminSidebar } from "@/components/admin/layout/admin-sidebar";
+import { AdminOrderNotificationListener } from "@/components/admin/notifications/admin-order-notification-listener";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
@@ -12,6 +13,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <AdminGuard>
+      <AdminOrderNotificationListener />
       <div className={`admin-shell ${resolvedTheme === "dark" ? "dark" : ""}`}>
         <div className="admin-shell-layout">
           <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />

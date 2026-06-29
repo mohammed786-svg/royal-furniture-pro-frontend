@@ -37,6 +37,7 @@ export function AccountAddressesContent() {
               {addr.line1}
               {addr.line2 ? `, ${addr.line2}` : ""}
             </p>
+            {addr.landmark ? <p>Near {addr.landmark}</p> : null}
             <p>
               {addr.city}, {addr.state} — {addr.pincode}
             </p>

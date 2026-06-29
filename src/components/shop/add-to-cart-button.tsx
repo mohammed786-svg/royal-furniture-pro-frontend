@@ -1,7 +1,8 @@
 "use client";
 
 import toast from "react-hot-toast";
-import { useRequireCustomerLogin } from "@/lib/auth/require-customer-login";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { useRequireCustomerCommerce } from "@/lib/auth/require-customer-login";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -25,14 +26,14 @@ export function AddToCartButton({
   children = "Add to Cart",
   disabled = false,
 }: AddToCartButtonProps) {
-  const requireLogin = useRequireCustomerLogin();
+  const requireCommerce = useRequireCustomerCommerce();
   const addToCart = useCartStore((s) => s.addToCart);
   const addDetailToCart = useCartStore((s) => s.addDetailToCart);
 
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!requireLogin()) return;
+    if (!requireCommerce()) return;
 
     try {
       if (isProductDetail(product)) {
@@ -41,8 +42,8 @@ export function AddToCartButton({
         await addToCart(product, quantity);
       }
       toast.success("Added to cart");
-    } catch {
-      toast.error("Could not add to cart");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not add to cart"));
     }
   };
 

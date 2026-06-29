@@ -3,14 +3,10 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Package, ShoppingBag } from "lucide-react";
-import { formatPrice } from "@/lib/constants/cart-data";
-import { useOrderStore } from "@/lib/store/order-store";
 
 export function OrderSuccessContent() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
-  const getOrder = useOrderStore((s) => s.getOrder);
-  const order = orderId ? getOrder(orderId) : undefined;
+  const orderNumber = searchParams.get("orderId");
 
   return (
     <main className="order-success-page">
@@ -22,32 +18,14 @@ export function OrderSuccessContent() {
           <h1 className="order-success-card__title">Order booked successfully!</h1>
           <p className="order-success-card__subtitle">
             Thank you for shopping with Royal Furniture Pro. We have received your
-            payment details and will verify shortly.
+            payment details and will verify shortly. Your order is being prepared for
+            Shiprocket dispatch.
           </p>
 
-          {order && (
-            <div className="order-success-card__details">
-              <p>
-                <span>Order ID</span>
-                <strong>{order.id}</strong>
-              </p>
-              <p>
-                <span>Amount</span>
-                <strong>{formatPrice(order.total)}</strong>
-              </p>
-              <p>
-                <span>Payment ref.</span>
-                <strong>{order.paymentReference}</strong>
-              </p>
-              <p>
-                <span>Items</span>
-                <strong>{order.items.length}</strong>
-              </p>
-            </div>
-          )}
-
-          {orderId && !order && (
-            <p className="order-success-card__ref">Reference: {orderId}</p>
+          {orderNumber && (
+            <p className="order-success-card__ref">
+              Order ID: <strong>{orderNumber}</strong>
+            </p>
           )}
 
           <div className="order-success-card__actions">
@@ -60,8 +38,8 @@ export function OrderSuccessContent() {
             </Link>
             <Link
               href={
-                orderId
-                  ? `/track-order?orderId=${encodeURIComponent(orderId)}`
+                orderNumber
+                  ? `/track-order?orderId=${encodeURIComponent(orderNumber)}`
                   : "/track-order"
               }
               className="order-success-card__btn order-success-card__btn--outline"

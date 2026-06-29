@@ -120,6 +120,11 @@ export function AddressPageContent() {
                             {addr.line1}
                             {addr.line2 ? `, ${addr.line2}` : ""}
                           </p>
+                          {addr.landmark ? (
+                            <p className="address-card__landmark">
+                              Near {addr.landmark}
+                            </p>
+                          ) : null}
                           <p className="address-card__city">
                             {addr.city}, {addr.state} — {addr.pincode}
                           </p>

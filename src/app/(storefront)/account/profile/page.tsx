@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { AccountProfileContent } from "@/components/account/account-profile-content";
 
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function AccountProfilePage() {
-  return <AccountProfileContent />;
+  return (
+    <Suspense fallback={null}>
+      <AccountProfileContent />
+    </Suspense>
+  );
 }

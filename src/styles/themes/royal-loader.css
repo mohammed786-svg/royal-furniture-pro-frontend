@@ -227,8 +227,13 @@
   transition: color 0.2s ease;
 }
 
-.delivery-pincode-bar__pencil:hover {
+.delivery-pincode-bar__pencil:hover:not(:disabled) {
   color: var(--royal-gold-brand, #c5a059);
+}
+
+.delivery-pincode-bar__pencil:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .delivery-pincode-bar__edit {

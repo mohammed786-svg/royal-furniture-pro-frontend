@@ -13,7 +13,11 @@ type AdminDataGridProps<T extends { id: string; name: string }> = {
   loading?: boolean;
   imageKey?: keyof T;
   subtitle?: (row: T) => string;
-  status?: (row: T) => { label: string; tone: "active" | "inactive" };
+  status?: (row: T) => {
+    label: string;
+    tone?: "active" | "inactive" | "warning";
+    className?: string;
+  };
   fields: (row: T) => AdminGridField[];
   onEdit: (row: T) => void;
   onDelete: (row: T) => void;
@@ -49,7 +53,11 @@ export function AdminDataGrid<T extends { id: string; name: string }>({
             <div className="admin-data-grid-card-top">
               <span className="admin-data-id">#{row.id}</span>
               {badge && (
-                <span className={`admin-status-badge ${badge.tone}`}>
+                <span
+                  className={
+                    badge.className ?? `admin-status-badge ${badge.tone ?? "inactive"}`
+                  }
+                >
                   {badge.label}
                 </span>
               )}

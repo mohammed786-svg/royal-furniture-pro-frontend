@@ -14,6 +14,8 @@ export type CartLineItem = {
   price: number;
   mrp: number;
   quantity: number;
+  availableStock?: number;
+  maxQuantity?: number;
   collection?: string;
   collectionLogo?: string;
   deliveryNote?: DeliveryNote;

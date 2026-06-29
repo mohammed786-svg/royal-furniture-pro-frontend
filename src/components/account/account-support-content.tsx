@@ -2,27 +2,13 @@
 
 import { Mail, MessageCircle, Phone } from "lucide-react";
 import { AccountShell } from "@/components/account/account-shell";
-
-const SUPPORT_CHANNELS = [
-  {
-    icon: Phone,
-    title: "Call us",
-    detail: "1800-123-4567",
-    sub: "Mon–Sat, 9 AM – 8 PM",
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    detail: "support@royalfurniturepro.com",
-    sub: "Reply within 24 hours",
-  },
-  {
-    icon: MessageCircle,
-    title: "WhatsApp",
-    detail: "+91 82965 65587",
-    sub: "Furniture experts on chat",
-  },
-];
+import {
+  ROYAL_EMAIL,
+  ROYAL_PHONE_DISPLAY,
+  ROYAL_PHONE_TEL,
+  ROYAL_WHATSAPP_DISPLAY,
+  ROYAL_WHATSAPP_LINK,
+} from "@/lib/constants/royal-cms-content";
 
 const FAQ = [
   "How long does sofa delivery take?",
@@ -42,21 +28,36 @@ export function AccountSupportContent() {
       ]}
     >
       <div className="account-support-grid">
-        {SUPPORT_CHANNELS.map((ch) => (
-          <div key={ch.title} className="account-support-card">
-            <ch.icon className="account-support-card__icon" />
-            <h3>{ch.title}</h3>
-            <p className="account-support-card__detail">{ch.detail}</p>
-            <p className="account-support-card__sub">{ch.sub}</p>
-          </div>
-        ))}
+        <a href={ROYAL_PHONE_TEL} className="account-support-card">
+          <Phone className="account-support-card__icon" />
+          <h3>Call us</h3>
+          <p>{ROYAL_PHONE_DISPLAY}</p>
+          <span>Mon–Sat, 9 AM – 8 PM</span>
+        </a>
+        <a href={`mailto:${ROYAL_EMAIL}`} className="account-support-card">
+          <Mail className="account-support-card__icon" />
+          <h3>Email</h3>
+          <p>{ROYAL_EMAIL}</p>
+          <span>Reply within 24 hours</span>
+        </a>
+        <a
+          href={ROYAL_WHATSAPP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="account-support-card"
+        >
+          <MessageCircle className="account-support-card__icon" />
+          <h3>WhatsApp</h3>
+          <p>{ROYAL_WHATSAPP_DISPLAY}</p>
+          <span>Furniture experts on chat</span>
+        </a>
       </div>
 
-      <section className="account-section">
+      <section className="account-faq">
         <h2>Common questions</h2>
-        <ul className="account-faq-list">
-          {FAQ.map((q) => (
-            <li key={q}>{q}</li>
+        <ul>
+          {FAQ.map((item) => (
+            <li key={item}>{item}</li>
           ))}
         </ul>
       </section>

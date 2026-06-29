@@ -1,6 +1,7 @@
 import { assertApiSuccess } from "@/lib/api/api-error";
 import type { ApiEnvelope } from "@/lib/api/types";
 import { apiClient } from "@/lib/axios/instance";
+import type { OrderActionsInfo } from "@/lib/orders/order-reasons";
 import type {
   OrderCreateFormValues,
   OrderDetail,
@@ -148,6 +149,47 @@ export async function initiateReturn(payload: ReturnFormValues) {
   const { data } = await apiClient.post<ApiEnvelope<{ item: OrderDetail }>>(
     "/orders/returns/",
     { ...payload, changeReason: payload.reason },
+  );
+  return assertApiSuccess(data).item;
+}
+
+export async function fetchOrderActions(orderId: string) {
+  const { data } = await apiClient.get<ApiEnvelope<OrderActionsInfo>>(
+    `/orders/orders/${orderId}/actions/`,
+  );
+  return assertApiSuccess(data);
+}
+
+export async function cancelOrder(
+  orderId: string,
+  payload: { reasonCode: string; reasonText?: string },
+) {
+  const { data } = await apiClient.post<ApiEnvelope<{ item: OrderDetail }>>(
+    `/orders/orders/${orderId}/cancel/`,
+    payload,
+  );
+  return assertApiSuccess(data).item;
+}
+
+export async function assignOrderAwb(orderId: string, courierId?: number) {
+  const { data } = await apiClient.post<ApiEnvelope<{ item: OrderDetail }>>(
+    `/orders/orders/${orderId}/assign-awb/`,
+    courierId ? { courierId } : {},
+  );
+  return assertApiSuccess(data).item;
+}
+
+export async function returnExchangeOrder(
+  orderId: string,
+  payload: {
+    requestType: "RETURN" | "EXCHANGE";
+    reasonCode: string;
+    reasonText?: string;
+  },
+) {
+  const { data } = await apiClient.post<ApiEnvelope<{ item: OrderDetail }>>(
+    `/orders/orders/${orderId}/return-exchange/`,
+    payload,
   );
   return assertApiSuccess(data).item;
 }

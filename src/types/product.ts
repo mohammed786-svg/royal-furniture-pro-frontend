@@ -1,3 +1,4 @@
+import type { DimensionUnit } from "@/lib/admin/dimension-units";
 import type { PaginationMeta } from "@/types/catalog";
 
 export type ProductImage = {
@@ -79,6 +80,9 @@ export type ProductDetail = ProductListItem & {
   fabric?: string | null;
   color?: string | null;
   dimensions?: string | null;
+  lengthCm?: number;
+  breadthCm?: number;
+  heightCm?: number;
   weight: number;
   assemblyRequired: boolean;
   warranty?: string | null;
@@ -107,6 +111,10 @@ export type ProductFormValues = {
   fabric: string;
   color: string;
   dimensions: string;
+  packageLength: number;
+  packageBreadth: number;
+  packageHeight: number;
+  packageDimensionUnit: DimensionUnit;
   weight: number;
   assemblyRequired: boolean;
   warranty: string;

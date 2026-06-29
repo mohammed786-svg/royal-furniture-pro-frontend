@@ -67,6 +67,7 @@ export function mapProductDetailResponse(
     discount: response.discount ?? undefined,
     badge: response.badge ?? undefined,
     inStock: response.inStock,
+    availableStock: response.availableStock,
     sku: response.sku,
     department: response.department,
     category: response.category,

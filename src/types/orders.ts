@@ -100,6 +100,8 @@ export type OrderDetail = OrderListItem & {
   history: OrderHistory[];
   shipments: {
     id: string;
+    shiprocketOrderId?: string | null;
+    shipmentIdExternal?: string | null;
     awbNumber?: string | null;
     courierName?: string | null;
     trackingNumber?: string | null;

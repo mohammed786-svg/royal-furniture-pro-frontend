@@ -16,6 +16,7 @@ export function AccountSettingsContent() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const pincode = useDeliveryStore((s) => s.pincode);
+  const cityLabel = useDeliveryStore((s) => s.cityLabel);
 
   const handleLogout = () => {
     logout();
@@ -50,8 +51,9 @@ export function AccountSettingsContent() {
         <div>
           <dt>Default pincode</dt>
           <dd>
+            {cityLabel ? `${cityLabel} · ` : ""}
             {pincode}{" "}
-            <span className="account-form__hint">(edit from header Deliver to)</span>
+            <span className="account-form__hint">(change from header Deliver to)</span>
           </dd>
         </div>
       </dl>

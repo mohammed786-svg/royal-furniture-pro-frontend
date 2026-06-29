@@ -36,6 +36,9 @@ import { PaymentsManager } from "@/components/admin/payments/payments-manager";
 import { SettingsManager } from "@/components/admin/settings/settings-manager";
 import { ShipmentTrackingManager } from "@/components/admin/shipping/shipment-tracking-manager";
 import { ShipmentsManager } from "@/components/admin/shipping/shipments-manager";
+import { ShiprocketOrdersManager } from "@/components/admin/shiprocket/shiprocket-orders-manager";
+import { ShiprocketRatesManager } from "@/components/admin/shiprocket/shiprocket-rates-manager";
+import { ShiprocketTrackingManager } from "@/components/admin/shiprocket/shiprocket-tracking-manager";
 import { RolePermissionsManager } from "@/components/admin/super-admin/role-permissions-manager";
 import type { AdminPageMeta } from "@/lib/admin/types";
 
@@ -94,6 +97,12 @@ export function AdminPageShell({ page }: AdminPageShellProps) {
         <ReturnsManager />
       ) : page.key === "tracking" ? (
         <OrderTrackingManager />
+      ) : page.key === "shiprocket-orders" ? (
+        <ShiprocketOrdersManager />
+      ) : page.key === "shiprocket-tracking" ? (
+        <ShiprocketTrackingManager />
+      ) : page.key === "shiprocket-rates" ? (
+        <ShiprocketRatesManager />
       ) : page.key === "customers" ? (
         <CustomersManager />
       ) : page.key === "addresses" ? (

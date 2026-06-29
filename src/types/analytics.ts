@@ -17,6 +17,7 @@ export type DonutSegment = {
 export type SalesSummary = {
   totalRevenue: number;
   totalOrders: number;
+  revenueOrders?: number;
   avgOrderValue: number;
   revenueChangePercent: number;
   ordersChangePercent: number;
@@ -39,6 +40,31 @@ export type SalesRecentOrder = {
   createdAt?: string | null;
 };
 
+export type SalesCatalogStats = {
+  totalCustomers: number;
+  activeCustomers: number;
+  inactiveCustomers: number;
+  totalProducts: number;
+  activeProducts: number;
+  inactiveProducts: number;
+  customersChangePercent: number;
+  productsChangePercent: number;
+};
+
+export type SalesOrderStats = {
+  totalOrders: number;
+  activeOrders: number;
+  inactiveOrders: number;
+};
+
+export type SalesDashboardAlert = {
+  orderId: string;
+  orderNumber: string;
+  customerName: string;
+  message: string;
+  avatar: string;
+};
+
 export type SalesDashboard = {
   summary: SalesSummary;
   revenueTrend: ChartDataPoint[];
@@ -46,6 +72,9 @@ export type SalesDashboard = {
   topProducts: SalesTopProduct[];
   paymentBreakdown: ChartDataPoint[];
   recentOrders: SalesRecentOrder[];
+  catalogStats?: SalesCatalogStats;
+  orderStats?: SalesOrderStats;
+  alert?: SalesDashboardAlert | null;
 };
 
 export type PageViewSummary = {

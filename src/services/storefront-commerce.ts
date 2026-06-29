@@ -2,10 +2,13 @@ import { assertApiSuccess } from "@/lib/api/api-error";
 import type { ApiEnvelope } from "@/lib/api/types";
 import { apiClient } from "@/lib/axios/instance";
 import type { NewAddressInput } from "@/lib/store/address-store";
+import type { OrderInvoice } from "@/types/orders";
 import type {
   StorefrontAddressesResponse,
   StorefrontCartResponse,
   StorefrontCheckoutResponse,
+  StorefrontOrdersListResponse,
+  StorefrontTrackOrderResponse,
   StorefrontWishlistResponse,
   VerifyOtpResponse,
 } from "@/types/storefront-commerce";
@@ -176,6 +179,60 @@ export async function placeStorefrontOrder(payload: {
 }) {
   const { data } = await apiClient.post<ApiEnvelope<StorefrontCheckoutResponse>>(
     "/storefront/checkout/",
+    payload,
+  );
+  return assertApiSuccess(data);
+}
+
+export async function fetchStorefrontOrders(params?: {
+  page?: number;
+  pageSize?: number;
+}) {
+  const { data } = await apiClient.get<ApiEnvelope<StorefrontOrdersListResponse>>(
+    "/storefront/orders/",
+    { params },
+  );
+  return assertApiSuccess(data);
+}
+
+export async function trackStorefrontOrder(orderNumber: string, mobile?: string) {
+  const params: Record<string, string> = { orderNumber };
+  if (mobile) params.mobile = mobile;
+  const { data } = await apiClient.get<ApiEnvelope<StorefrontTrackOrderResponse>>(
+    "/storefront/orders/track/",
+    { params },
+  );
+  return assertApiSuccess(data);
+}
+
+export async function fetchStorefrontOrderInvoice(orderNumber: string) {
+  const { data } = await apiClient.get<ApiEnvelope<{ invoice: OrderInvoice }>>(
+    "/storefront/orders/invoice/",
+    { params: { orderNumber } },
+  );
+  return assertApiSuccess(data).invoice;
+}
+
+export async function cancelStorefrontOrder(payload: {
+  orderNumber: string;
+  reasonCode: string;
+  reasonText?: string;
+}) {
+  const { data } = await apiClient.post<ApiEnvelope<{ order: StorefrontOrderSummary }>>(
+    "/storefront/orders/cancel/",
+    payload,
+  );
+  return assertApiSuccess(data);
+}
+
+export async function returnExchangeStorefrontOrder(payload: {
+  orderNumber: string;
+  requestType: "RETURN" | "EXCHANGE";
+  reasonCode: string;
+  reasonText?: string;
+}) {
+  const { data } = await apiClient.post<ApiEnvelope<{ order: StorefrontOrderSummary }>>(
+    "/storefront/orders/return-exchange/",
     payload,
   );
   return assertApiSuccess(data);

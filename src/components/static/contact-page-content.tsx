@@ -8,6 +8,8 @@ import {
   ROYAL_EMAIL,
   ROYAL_PHONE_DISPLAY,
   ROYAL_PHONE_TEL,
+  ROYAL_WHATSAPP_DISPLAY,
+  ROYAL_WHATSAPP_LINK,
 } from "@/lib/constants/royal-cms-content";
 import { royalToast } from "@/lib/toast/royal-toast";
 
@@ -111,6 +113,22 @@ export function ContactPageContent() {
                 />
                 <a href={ROYAL_PHONE_TEL} className="royal-contact-info-item__link">
                   {ROYAL_PHONE_DISPLAY}
+                </a>
+              </div>
+
+              <div className="royal-contact-info-item">
+                <Phone
+                  className="royal-contact-info-item__icon"
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+                <a
+                  href={ROYAL_WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="royal-contact-info-item__link"
+                >
+                  WhatsApp: {ROYAL_WHATSAPP_DISPLAY}
                 </a>
               </div>
 

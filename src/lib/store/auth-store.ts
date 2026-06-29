@@ -2,7 +2,11 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { setCustomerAuthToken } from "@/lib/axios/customer-auth-token";
+import {
+  clearCustomerAuthTokens,
+  setCustomerAuthToken,
+  setCustomerRefreshToken,
+} from "@/lib/axios/customer-auth-token";
 import type { StorefrontAuthUser } from "@/types/storefront-commerce";
 
 export type AuthUser = {
@@ -15,7 +19,13 @@ export type AuthUser = {
 type AuthStore = {
   user: AuthUser | null;
   accessToken: string | null;
-  setSession: (user: StorefrontAuthUser, accessToken: string) => void;
+  refreshToken: string | null;
+  isHydrated: boolean;
+  setSession: (
+    user: StorefrontAuthUser,
+    accessToken: string,
+    refreshToken?: string | null,
+  ) => void;
   setUser: (user: AuthUser) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
@@ -26,11 +36,15 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       user: null,
       accessToken: null,
+      refreshToken: null,
+      isHydrated: false,
 
-      setSession: (user, accessToken) => {
+      setSession: (user, accessToken, refreshToken = null) => {
         setCustomerAuthToken(accessToken);
+        setCustomerRefreshToken(refreshToken);
         set({
           accessToken,
+          refreshToken,
           user: {
             customerId: user.customerId,
             name: user.name,
@@ -43,12 +57,28 @@ export const useAuthStore = create<AuthStore>()(
       setUser: (user) => set({ user }),
 
       logout: () => {
-        setCustomerAuthToken(null);
-        set({ user: null, accessToken: null });
+        clearCustomerAuthTokens();
+        set({ user: null, accessToken: null, refreshToken: null });
       },
 
       isLoggedIn: () => Boolean(get().accessToken && get().user),
     }),
-    { name: "royal-auth-store" },
+    {
+      name: "royal-auth-store",
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.accessToken) {
+          setCustomerAuthToken(state.accessToken);
+        }
+        if (state?.refreshToken) {
+          setCustomerRefreshToken(state.refreshToken);
+        }
+        useAuthStore.setState({ isHydrated: true });
+      },
+    },
   ),
 );

@@ -2,16 +2,16 @@
 
 export const ROYAL_BRAND = "Royal Furniture Pro";
 export const ROYAL_EMAIL = "customercare@royalfurniturepro.com";
-export const ROYAL_PHONE = "+91-7676367636";
-export const ROYAL_PHONE_DISPLAY = "+91-76 7636 7636";
-export const ROYAL_PHONE_TEL = "tel:+917676367636";
+export const ROYAL_PHONE = "+918073093766";
+export const ROYAL_PHONE_DISPLAY = "080730 93766";
+export const ROYAL_PHONE_TEL = "tel:+918073093766";
+export const ROYAL_WHATSAPP = "+918296565587";
+export const ROYAL_WHATSAPP_DISPLAY = "+91 82965 65587";
+export const ROYAL_WHATSAPP_LINK = "https://wa.me/918296565587";
 
 export const ROYAL_ADDRESS = {
-  company: "ROYAL FURNITURE PRO INCORPORATION PRIVATE LIMITED",
-  lines: [
-    "4th Floor, No 5, Raj square, Vijaya Bank Colony Main Road,",
-    "Banaswadi Ring Road, Bengaluru Urban, Karnataka — 560043",
-  ],
+  company: "Royal Furniture Pro",
+  lines: ["1st Cross, Azam Nagar,", "Belagavi, Karnataka 590010"],
 };
 
 export const ABOUT_STATS = [

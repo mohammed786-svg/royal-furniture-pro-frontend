@@ -2,7 +2,7 @@
 
 import { Heart } from "lucide-react";
 import toast from "react-hot-toast";
-import { useRequireCustomerLogin } from "@/lib/auth/require-customer-login";
+import { useRequireCustomerCommerce } from "@/lib/auth/require-customer-login";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -24,7 +24,7 @@ export function ProductWishlistButton({
   iconClassName = "h-4 w-4 stroke-[#a67c00] stroke-[1.75]",
   filledClassName = "fill-[#c5a059]",
 }: ProductWishlistButtonProps) {
-  const requireLogin = useRequireCustomerLogin();
+  const requireCommerce = useRequireCustomerCommerce();
   const isInWishlist = useCartStore((s) => s.isInWishlist(product.id));
   const addToWishlist = useCartStore((s) => s.addToWishlist);
   const addDetailToWishlist = useCartStore((s) => s.addDetailToWishlist);
@@ -34,7 +34,7 @@ export function ProductWishlistButton({
     e.preventDefault();
     e.stopPropagation();
 
-    if (!isInWishlist && !requireLogin()) return;
+    if (!isInWishlist && !requireCommerce()) return;
 
     if (isInWishlist) {
       const lineId = `wl-${product.id}`;

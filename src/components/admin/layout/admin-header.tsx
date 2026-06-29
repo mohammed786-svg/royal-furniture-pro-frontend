@@ -14,7 +14,7 @@ import {
   Search,
   Sun,
 } from "lucide-react";
-import { AdminFiscalYearSelector } from "@/components/admin/layout/admin-fiscal-year-selector";
+// import { AdminFiscalYearSelector } from "@/components/admin/layout/admin-fiscal-year-selector";
 import { AdminHeaderPanel } from "@/components/admin/layout/admin-header-panel";
 import { AdminProfileDropdown } from "@/components/admin/profile/admin-profile-dropdown";
 import { useFullscreen } from "@/hooks/use-fullscreen";
@@ -102,7 +102,7 @@ export function AdminHeader({ onMenuOpen }: AdminHeaderProps) {
         <input type="search" placeholder="Search products, orders, customers..." />
       </div>
 
-      <AdminFiscalYearSelector onOpen={closeOverlays} />
+      {/* <AdminFiscalYearSelector onOpen={closeOverlays} /> */}
 
       <div className="admin-header-actions">
         <button

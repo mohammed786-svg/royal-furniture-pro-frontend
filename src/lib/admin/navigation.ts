@@ -118,6 +118,30 @@ export const adminMenuGroups: AdminMenuGroup[] = [
     ],
   },
   {
+    id: "shiprocket",
+    label: "SHIPROCKET",
+    items: [
+      {
+        key: "shiprocket-orders",
+        label: "SR Orders",
+        href: "/my-admin/shiprocket/orders",
+        icon: "Truck",
+      },
+      {
+        key: "shiprocket-tracking",
+        label: "SR Tracking",
+        href: "/my-admin/shiprocket/tracking",
+        icon: "Route",
+      },
+      {
+        key: "shiprocket-rates",
+        label: "SR Rate Calculator",
+        href: "/my-admin/shiprocket/rates",
+        icon: "IndianRupee",
+      },
+    ],
+  },
+  {
     id: "customers",
     label: "CUSTOMERS",
     items: [
@@ -318,6 +342,9 @@ const pageDescriptions: Record<string, string> = {
   "order-status": "Configure order status workflow.",
   returns: "Process returns, refunds, and exchanges.",
   tracking: "Track order fulfillment and delivery status.",
+  "shiprocket-orders": "Live Shiprocket orders from your account.",
+  "shiprocket-tracking": "Track AWB and shipment scans from Shiprocket.",
+  "shiprocket-rates": "Calculate courier rates by weight and dimensions.",
   customers: "Manage registered and guest customers.",
   addresses: "View customer delivery addresses.",
   wishlists: "Monitor customer wishlist activity.",
@@ -393,6 +420,9 @@ export const defaultAdminAllowedMenus = [
   "order-status",
   "returns",
   "tracking",
+  "shiprocket-orders",
+  "shiprocket-tracking",
+  "shiprocket-rates",
   "customers",
   "addresses",
   "wishlists",

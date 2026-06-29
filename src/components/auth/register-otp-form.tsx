@@ -98,7 +98,7 @@ export function RegisterOtpForm() {
         fullName: name.trim(),
         email: email.trim() || undefined,
       });
-      setSession(result.user, result.accessToken);
+      setSession(result.user, result.accessToken, result.refreshToken);
       useCartStore.setState({ hydrated: false });
       useAddressStore.setState({ hydrated: false });
       await hydrateCart();

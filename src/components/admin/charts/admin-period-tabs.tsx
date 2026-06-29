@@ -11,12 +11,17 @@ const PERIODS: { value: AnalyticsPeriod; label: string }[] = [
 type AdminPeriodTabsProps = {
   value: AnalyticsPeriod;
   onChange: (period: AnalyticsPeriod) => void;
+  periods?: { value: AnalyticsPeriod; label: string }[];
 };
 
-export function AdminPeriodTabs({ value, onChange }: AdminPeriodTabsProps) {
+export function AdminPeriodTabs({
+  value,
+  onChange,
+  periods = PERIODS,
+}: AdminPeriodTabsProps) {
   return (
     <div className="admin-period-tabs">
-      {PERIODS.map((period) => (
+      {periods.map((period) => (
         <button
           key={period.value}
           type="button"

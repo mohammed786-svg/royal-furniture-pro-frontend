@@ -19,6 +19,45 @@ const ADDRESS_TYPES: { value: AddressType; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
+const INDIAN_STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
+];
+
 type AddressFormProps = {
   initial?: SavedAddress;
   onSubmit: (input: NewAddressInput) => void;
@@ -31,9 +70,11 @@ const emptyForm = (): NewAddressInput => ({
   phone: "",
   line1: "",
   line2: "",
+  landmark: "",
   city: "",
   state: "",
   pincode: "",
+  country: "India",
 });
 
 export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
@@ -42,6 +83,7 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
       ? {
           type: initial.type,
           customLabel: initial.customLabel,
+          landmark: initial.landmark ?? "",
           fullName: initial.fullName,
           phone: formatIndianMobileDisplay(normalizeIndianMobile(initial.phone)),
           line1: initial.line1,
@@ -49,6 +91,7 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
           city: initial.city,
           state: initial.state,
           pincode: initial.pincode,
+          country: initial.country ?? "India",
         }
       : emptyForm(),
   );
@@ -91,7 +134,9 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
       phone: normalizeIndianMobile(form.phone),
       pincode: form.pincode.replace(/\D/g, "").slice(0, 6),
       customLabel: form.type === "other" ? form.customLabel?.trim() : undefined,
+      landmark: form.landmark?.trim() || undefined,
       line2: form.line2?.trim() || undefined,
+      country: form.country?.trim() || "India",
     });
   };
 
@@ -158,7 +203,7 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
           />
         </div>
         <div className="address-form__field address-form__field--full">
-          <label htmlFor="addr-line1">Address line 1</label>
+          <label htmlFor="addr-line1">House / flat / building</label>
           <input
             id="addr-line1"
             type="text"
@@ -166,10 +211,11 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
             onChange={(e) => update("line1", e.target.value)}
             className="address-form__input"
             autoComplete="address-line1"
+            placeholder="Flat 12, Royal Apartments"
           />
         </div>
         <div className="address-form__field address-form__field--full">
-          <label htmlFor="addr-line2">Address line 2 (optional)</label>
+          <label htmlFor="addr-line2">Street / area (optional)</label>
           <input
             id="addr-line2"
             type="text"
@@ -177,6 +223,18 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
             onChange={(e) => update("line2", e.target.value)}
             className="address-form__input"
             autoComplete="address-line2"
+            placeholder="MG Road, Koramangala"
+          />
+        </div>
+        <div className="address-form__field address-form__field--full">
+          <label htmlFor="addr-landmark">Landmark</label>
+          <input
+            id="addr-landmark"
+            type="text"
+            value={form.landmark ?? ""}
+            onChange={(e) => update("landmark", e.target.value)}
+            className="address-form__input"
+            placeholder="Near City Mall, opposite petrol pump"
           />
         </div>
         <div className="address-form__field">
@@ -194,10 +252,17 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
           <input
             id="addr-state"
             type="text"
+            list="addr-state-list"
             value={form.state}
             onChange={(e) => update("state", e.target.value)}
             className="address-form__input"
+            placeholder="Select or type state"
           />
+          <datalist id="addr-state-list">
+            {INDIAN_STATES.map((state) => (
+              <option key={state} value={state} />
+            ))}
+          </datalist>
         </div>
         <div className="address-form__field">
           <label htmlFor="addr-pin">Pincode</label>
@@ -209,6 +274,16 @@ export function AddressForm({ initial, onSubmit, onCancel }: AddressFormProps) {
             value={form.pincode}
             onChange={(e) => update("pincode", e.target.value.replace(/\D/g, ""))}
             className="address-form__input"
+          />
+        </div>
+        <div className="address-form__field">
+          <label htmlFor="addr-country">Country</label>
+          <input
+            id="addr-country"
+            type="text"
+            value={form.country ?? "India"}
+            readOnly
+            className="address-form__input address-form__input--readonly"
           />
         </div>
       </div>

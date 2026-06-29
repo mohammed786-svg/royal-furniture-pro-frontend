@@ -14,6 +14,7 @@ export type SavedAddress = {
   id: string;
   type: AddressType;
   customLabel?: string;
+  landmark?: string;
   fullName: string;
   phone: string;
   line1: string;
@@ -21,6 +22,7 @@ export type SavedAddress = {
   city: string;
   state: string;
   pincode: string;
+  country?: string;
   isDefault?: boolean;
 };
 

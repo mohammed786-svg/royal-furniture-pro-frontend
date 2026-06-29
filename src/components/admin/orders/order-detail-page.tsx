@@ -4,6 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OrderInvoiceView } from "@/components/admin/orders/order-invoice-view";
+import { OrderLifecyclePanel } from "@/components/admin/orders/order-lifecycle-panel";
+import { OrderPaymentsPanel } from "@/components/admin/orders/order-payments-panel";
+import { OrderShiprocketTrackingPanel } from "@/components/admin/orders/order-shiprocket-tracking-panel";
 import { AdminSectionHeader } from "@/components/admin/shared/admin-section-header";
 import { formatCurrency, formatDate } from "@/lib/admin/format-currency";
 import { getApiErrorMessage } from "@/lib/api/api-error";
@@ -205,6 +208,11 @@ export function OrderDetailPage({ orderId }: Props) {
                 <p>{order.notes}</p>
               </div>
             )}
+            <OrderLifecyclePanel
+              orderId={orderId}
+              order={order}
+              onOrderUpdated={setOrder}
+            />
             <div className="admin-order-status-update">
               <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
                 {(options?.statuses ?? []).map((s) => (
@@ -261,38 +269,14 @@ export function OrderDetailPage({ orderId }: Props) {
         )}
 
         {tab === "Tracking" && (
-          <div className="admin-data-table-wrap">
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Message</th>
-                  <th>Location</th>
-                  <th>Tracked At</th>
-                  <th>Visible</th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.tracking.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="admin-data-empty">
-                      No tracking events
-                    </td>
-                  </tr>
-                ) : (
-                  order.tracking.map((t) => (
-                    <tr key={t.id}>
-                      <td>{t.statusCode}</td>
-                      <td>{t.statusMessage}</td>
-                      <td>{t.location ?? "—"}</td>
-                      <td>{formatDate(t.trackedAt)}</td>
-                      <td>{t.isCustomerVisible ? "Yes" : "No"}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <OrderLifecyclePanel
+              orderId={orderId}
+              order={order}
+              onOrderUpdated={setOrder}
+            />
+            <OrderShiprocketTrackingPanel order={order} />
+          </>
         )}
 
         {tab === "History" && (
@@ -331,38 +315,11 @@ export function OrderDetailPage({ orderId }: Props) {
         )}
 
         {tab === "Payments" && (
-          <div className="admin-data-table-wrap">
-            <table className="admin-data-table">
-              <thead>
-                <tr>
-                  <th>Method</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Reference</th>
-                  <th>Paid At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.payments.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="admin-data-empty">
-                      No payments recorded
-                    </td>
-                  </tr>
-                ) : (
-                  order.payments.map((p) => (
-                    <tr key={p.id}>
-                      <td>{p.paymentMethod}</td>
-                      <td>{formatCurrency(p.paymentAmount)}</td>
-                      <td>{p.paymentStatus}</td>
-                      <td>{p.transactionRef ?? "—"}</td>
-                      <td>{formatDate(p.paidAt)}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          <OrderPaymentsPanel
+            orderId={orderId}
+            order={order}
+            onOrderUpdated={setOrder}
+          />
         )}
 
         {tab === "Invoice" &&

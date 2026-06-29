@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useRequireCustomerLogin } from "@/lib/auth/require-customer-login";
+import { getApiErrorMessage } from "@/lib/api/api-error";
+import { useRequireCustomerCommerce } from "@/lib/auth/require-customer-login";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -27,12 +28,12 @@ export function BuyNowButton({
   disabled = false,
 }: BuyNowButtonProps) {
   const router = useRouter();
-  const requireLogin = useRequireCustomerLogin();
+  const requireCommerce = useRequireCustomerCommerce();
   const addToCart = useCartStore((s) => s.addToCart);
   const addDetailToCart = useCartStore((s) => s.addDetailToCart);
 
   const handleClick = async () => {
-    if (!requireLogin()) return;
+    if (!requireCommerce()) return;
 
     try {
       if (isProductDetail(product)) {
@@ -40,10 +41,9 @@ export function BuyNowButton({
       } else {
         await addToCart(product, quantity);
       }
-      toast.success("Added to cart");
-      router.push("/cart");
-    } catch {
-      toast.error("Could not add to cart");
+      router.push("/checkout/address");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not proceed to checkout"));
     }
   };
 

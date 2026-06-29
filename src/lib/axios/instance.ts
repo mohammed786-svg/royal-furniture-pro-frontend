@@ -6,9 +6,13 @@ import axios, {
 import { getApiErrorMessage, isApiEnvelope } from "@/lib/api/api-error";
 import type { EncryptedApiEnvelope } from "@/lib/api/types";
 import { getAdminAuthToken } from "@/lib/axios/admin-auth-token";
+import { refreshCustomerAuthSession } from "@/lib/axios/customer-auth-refresh";
 import {
   getCustomerAuthToken,
+  getCustomerRefreshToken,
   hydrateCustomerAuthToken,
+  setCustomerAuthToken,
+  setCustomerRefreshToken,
 } from "@/lib/axios/customer-auth-token";
 import {
   decryptPayload,
@@ -38,12 +42,18 @@ function isAuthLoginRequest(url: string | undefined): boolean {
 }
 
 function isAuthRefreshRequest(url: string | undefined): boolean {
-  return Boolean(url?.includes("/auth/admin/refresh/"));
+  return Boolean(
+    url?.includes("/auth/admin/refresh/") || url?.includes("/storefront/auth/refresh"),
+  );
 }
 
-function isStorefrontCustomerAuthRequest(url: string | undefined): boolean {
+function isStorefrontProtectedRequest(url: string | undefined): boolean {
   return Boolean(
-    url?.includes("/storefront/wishlist") || url?.includes("/storefront/addresses"),
+    url?.includes("/storefront/orders") ||
+    url?.includes("/storefront/wishlist") ||
+    url?.includes("/storefront/addresses") ||
+    url?.includes("/storefront/checkout") ||
+    url?.includes("/storefront/auth/me"),
   );
 }
 
@@ -78,10 +88,63 @@ async function decryptResponseData(data: unknown): Promise<unknown> {
   return decryptPayload(data.payload);
 }
 
+async function handleCustomerTokenRefresh(
+  originalRequest: InternalAxiosRequestConfig & { _retry?: boolean },
+  client: AxiosInstance,
+) {
+  const refreshToken = getCustomerRefreshToken();
+  if (!refreshToken) {
+    return Promise.reject(new Error("Customer session expired"));
+  }
+
+  if (isRefreshing) {
+    return new Promise((resolve, reject) => {
+      refreshQueue.push((token) => {
+        if (!token) {
+          reject(new Error("Token refresh failed"));
+          return;
+        }
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        resolve(client(originalRequest));
+      });
+    });
+  }
+
+  isRefreshing = true;
+  originalRequest._retry = true;
+
+  try {
+    const result = await refreshCustomerAuthSession(refreshToken);
+    const { useAuthStore } = await import("@/lib/store/auth-store");
+    useAuthStore
+      .getState()
+      .setSession(result.user, result.accessToken, result.refreshToken ?? refreshToken);
+    const newToken = result.accessToken;
+    setCustomerAuthToken(newToken);
+    if (result.refreshToken) {
+      setCustomerRefreshToken(result.refreshToken);
+    }
+    processRefreshQueue(newToken);
+    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+    return client(originalRequest);
+  } catch (error) {
+    processRefreshQueue(null);
+    const { useAuthStore } = await import("@/lib/store/auth-store");
+    useAuthStore.getState().logout();
+    return Promise.reject(error);
+  } finally {
+    isRefreshing = false;
+  }
+}
+
 async function handleTokenRefresh(
   originalRequest: InternalAxiosRequestConfig & { _retry?: boolean },
   client: AxiosInstance,
 ) {
+  if (isStorefrontCommerceRequest(originalRequest.url)) {
+    return handleCustomerTokenRefresh(originalRequest, client);
+  }
+
   if (!refreshHandler) {
     return Promise.reject(new Error("Token refresh handler not configured"));
   }
@@ -197,7 +260,7 @@ export function createAxiosInstance(): AxiosInstance {
 
       if (error.response?.status === 401 && !isAuthLoginRequest(requestUrl)) {
         hydrateCustomerAuthToken();
-        const optionalGuestEndpoint = isStorefrontCustomerAuthRequest(requestUrl);
+        const optionalGuestEndpoint = !isStorefrontProtectedRequest(requestUrl);
         const hasCustomerToken = Boolean(getCustomerAuthToken());
         if (!optionalGuestEndpoint || hasCustomerToken) {
           notifyUnauthorized(error);
