@@ -8,10 +8,15 @@ import { AdminDonutChart } from "@/components/admin/charts/admin-donut-chart";
 import { AdminPeriodTabs } from "@/components/admin/charts/admin-period-tabs";
 import { AdminStatCards } from "@/components/admin/charts/admin-stat-cards";
 import { AdminIcon } from "@/components/admin/layout/admin-icon";
+import { AdminConnectionPanel } from "@/components/admin/shared/admin-connection-panel";
 import { useAdminAuthStore } from "@/lib/admin/auth-store";
 import { quickLinks } from "@/lib/admin/dashboard-data";
 import { formatCurrency, formatDate } from "@/lib/admin/format-currency";
 import { getApiErrorMessage } from "@/lib/api/api-error";
+import {
+  classifyConnectionIssue,
+  type ConnectionIssueKind,
+} from "@/lib/connectivity/connection-issue";
 import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchSalesDashboard } from "@/services/analytics-api";
 import type { AnalyticsPeriod, SalesDashboard } from "@/types/analytics";
@@ -47,13 +52,20 @@ export function AdminDashboardContent() {
   const [period, setPeriod] = useState<AnalyticsPeriod>("30d");
   const [data, setData] = useState<SalesDashboard | null>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionIssue, setConnectionIssue] = useState<ConnectionIssueKind>(null);
   const [showAlert, setShowAlert] = useState(true);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       setData(await fetchSalesDashboard(period));
+      setConnectionIssue(null);
     } catch (err) {
+      const issue = classifyConnectionIssue(err);
+      setConnectionIssue(issue);
+      if (!issue) {
+        setData(null);
+      }
       royalToast.error(getApiErrorMessage(err, "Failed to load dashboard"));
     } finally {
       setLoading(false);
@@ -175,6 +187,29 @@ export function AdminDashboardContent() {
     );
   }
 
+  if (!loading && !data && connectionIssue) {
+    return (
+      <>
+        <div className="admin-page-header">
+          <div>
+            <h1>Admin Dashboard</h1>
+            <div className="admin-breadcrumb">
+              <Link href="/my-admin/dashboard">Dashboard</Link>
+              <span>/</span>
+              <span>Admin Dashboard</span>
+            </div>
+          </div>
+        </div>
+        <AdminConnectionPanel
+          kind={connectionIssue}
+          onRetry={() => void load()}
+          loading={loading}
+          title="Dashboard unavailable"
+        />
+      </>
+    );
+  }
+
   const alert = data?.alert;
 
   return (
@@ -202,6 +237,14 @@ export function AdminDashboardContent() {
         </div>
       </div>
 
+      {connectionIssue ? (
+        <AdminConnectionPanel
+          kind={connectionIssue}
+          onRetry={() => void load()}
+          loading={loading}
+          title="Could not refresh dashboard"
+        />
+      ) : null}
       {showAlert && alert && (
         <div className="admin-alert-banner">
           <div className="admin-alert-avatar">{alert.avatar}</div>

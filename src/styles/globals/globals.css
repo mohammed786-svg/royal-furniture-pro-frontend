@@ -10,6 +10,7 @@
 @import "../themes/royal-error-pages.css";
 @import "../themes/media-image.css";
 @import "../components/tax-invoice.css";
+@import "../components/network-status.css";
 
 @custom-variant dark (&:is(.dark *));
 

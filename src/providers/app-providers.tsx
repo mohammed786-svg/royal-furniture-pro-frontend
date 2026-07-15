@@ -1,6 +1,7 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
+import { NetworkStatusBanner } from "@/components/layout/network-status-banner";
 import { QueryProvider } from "@/providers/query/query-provider";
 import { ReduxProvider } from "@/providers/redux/redux-provider";
 import { SocketProvider } from "@/providers/socket/socket-provider";
@@ -16,6 +17,7 @@ export function AppProviders({ children }: AppProvidersProps) {
       <QueryProvider>
         <ThemeProvider>
           <SocketProvider>
+            <NetworkStatusBanner />
             {children}
             <Toaster
               position="top-center"

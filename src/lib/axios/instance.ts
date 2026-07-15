@@ -14,6 +14,7 @@ import {
   setCustomerAuthToken,
   setCustomerRefreshToken,
 } from "@/lib/axios/customer-auth-token";
+import { notifyServerHealth } from "@/lib/connectivity/server-health";
 import {
   decryptPayload,
   encryptPayload,
@@ -30,6 +31,33 @@ let isRefreshing = false;
 let refreshQueue: Array<(token: string | null) => void> = [];
 
 const MUTATING_METHODS = new Set(["post", "put", "patch", "delete"]);
+const SERVER_ERROR_STATUSES = new Set([500, 502, 503, 504]);
+
+function notifyConnectivityFromAxios(error: AxiosError): void {
+  if (typeof navigator !== "undefined" && !navigator.onLine) return;
+
+  const status = error.response?.status;
+  if (status && SERVER_ERROR_STATUSES.has(status)) {
+    notifyServerHealth({
+      kind: "error",
+      message: "Internal server error",
+    });
+    return;
+  }
+
+  // No HTTP response → DNS / connection refused / server down
+  if (
+    !error.response &&
+    (error.code === "ERR_NETWORK" ||
+      error.message === "Network Error" ||
+      error.code === "ECONNABORTED")
+  ) {
+    notifyServerHealth({
+      kind: "unreachable",
+      message: "Server is unavailable",
+    });
+  }
+}
 
 function isStorefrontCommerceRequest(url: string | undefined): boolean {
   return Boolean(url?.includes("/storefront/"));
@@ -266,6 +294,8 @@ export function createAxiosInstance(): AxiosInstance {
           notifyUnauthorized(error);
         }
       }
+
+      notifyConnectivityFromAxios(error);
 
       return Promise.reject(error);
     },

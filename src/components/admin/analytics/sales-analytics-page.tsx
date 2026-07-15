@@ -6,9 +6,14 @@ import { AdminBarChart } from "@/components/admin/charts/admin-bar-chart";
 import { AdminDonutChart } from "@/components/admin/charts/admin-donut-chart";
 import { AdminPeriodTabs } from "@/components/admin/charts/admin-period-tabs";
 import { AdminStatCards } from "@/components/admin/charts/admin-stat-cards";
+import { AdminConnectionPanel } from "@/components/admin/shared/admin-connection-panel";
 import { useAdminAuthStore } from "@/lib/admin/auth-store";
 import { formatCurrency, formatDate } from "@/lib/admin/format-currency";
 import { getApiErrorMessage } from "@/lib/api/api-error";
+import {
+  classifyConnectionIssue,
+  type ConnectionIssueKind,
+} from "@/lib/connectivity/connection-issue";
 import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchSalesDashboard } from "@/services/analytics-api";
 import type { AnalyticsPeriod, SalesDashboard } from "@/types/analytics";
@@ -23,12 +28,16 @@ export function SalesAnalyticsPage() {
   const [period, setPeriod] = useState<AnalyticsPeriod>("30d");
   const [data, setData] = useState<SalesDashboard | null>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionIssue, setConnectionIssue] = useState<ConnectionIssueKind>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       setData(await fetchSalesDashboard(period));
+      setConnectionIssue(null);
     } catch (err) {
+      const issue = classifyConnectionIssue(err);
+      setConnectionIssue(issue);
       royalToast.error(getApiErrorMessage(err, "Failed to load sales analytics"));
     } finally {
       setLoading(false);
@@ -92,12 +101,33 @@ export function SalesAnalyticsPage() {
     );
   }
 
+  if (!loading && !data && connectionIssue) {
+    return (
+      <div className="admin-analytics-section">
+        <AdminConnectionPanel
+          kind={connectionIssue}
+          onRetry={() => void load()}
+          loading={loading}
+          title="Sales analytics unavailable"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="admin-analytics-section">
+      {connectionIssue ? (
+        <AdminConnectionPanel
+          kind={connectionIssue}
+          onRetry={() => void load()}
+          loading={loading}
+          title="Could not refresh sales data"
+        />
+      ) : null}
+
       <div className="admin-analytics-toolbar">
         <AdminPeriodTabs value={period} onChange={setPeriod} />
       </div>
-
       <div className="admin-welcome-banner">
         <div>
           <h2>Sales Overview, {user?.fullName ?? "Admin"}</h2>

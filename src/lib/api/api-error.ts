@@ -52,6 +52,16 @@ export function getApiErrorMessage(
   }
 
   if (isAxiosError(error)) {
+    if (!error.response) {
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        return "No internet available";
+      }
+      return "Server is unavailable. Please try again shortly.";
+    }
+    const status = error.response.status;
+    if (status >= 500) {
+      return "Internal server error. Please try again later.";
+    }
     const data = error.response?.data;
     if (isApiEnvelope(data)) {
       return getApiErrorMessage(new ApiError(data), fallback);
