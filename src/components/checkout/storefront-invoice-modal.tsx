@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Download, Printer, X } from "lucide-react";
 import { StorefrontInvoiceDocument } from "@/components/checkout/storefront-invoice-document";
 import { getApiErrorMessage } from "@/lib/api/api-error";
+import { printTaxInvoice } from "@/lib/invoices/print-tax-invoice";
 import { royalToast } from "@/lib/toast/royal-toast";
 import { fetchStorefrontOrderInvoice } from "@/services/storefront-commerce";
 import type { OrderInvoice } from "@/types/orders";
@@ -56,7 +57,7 @@ export function StorefrontInvoiceModal({
   }, [open, onClose]);
 
   function handlePrint() {
-    window.print();
+    printTaxInvoice();
   }
 
   if (!open) return null;

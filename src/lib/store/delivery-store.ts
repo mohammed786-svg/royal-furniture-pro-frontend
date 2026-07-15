@@ -2,8 +2,9 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { COMPANY_INFO } from "@/lib/constants/company-info";
 
-const DEFAULT_PINCODE = "560001";
+const DEFAULT_PINCODE = COMPANY_INFO.pincode;
 
 export type PincodeSource = "default" | "manual" | "address" | "geo";
 
@@ -25,7 +26,7 @@ export const useDeliveryStore = create<DeliveryStore>()(
   persist(
     (set) => ({
       pincode: DEFAULT_PINCODE,
-      cityLabel: "",
+      cityLabel: COMPANY_INFO.city,
       pincodeSource: "default",
       isDetecting: false,
       setPincode: (pincode, source = "manual", cityLabel) =>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ORDER_REASON_OPTIONS } from "@/lib/orders/order-reasons";
+import { ORDER_REASON_OPTIONS, type OrderReasonCode } from "@/lib/orders/order-reasons";
 
 type OrderActionDialogProps = {
   open: boolean;
@@ -23,7 +23,9 @@ export function OrderActionDialog({
   onClose,
   onSubmit,
 }: OrderActionDialogProps) {
-  const [reasonCode, setReasonCode] = useState(ORDER_REASON_OPTIONS[0].code);
+  const [reasonCode, setReasonCode] = useState<OrderReasonCode>(
+    ORDER_REASON_OPTIONS[0].code,
+  );
   const [reasonText, setReasonText] = useState("");
 
   if (!open) return null;

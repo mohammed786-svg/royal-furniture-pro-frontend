@@ -1,90 +1,78 @@
 /** CMS page copy — adapted from Royal Oak reference with Royal Furniture Pro branding */
 
-export const ROYAL_BRAND = "Royal Furniture Pro";
-export const ROYAL_EMAIL = "customercare@royalfurniturepro.com";
-export const ROYAL_PHONE = "+918073093766";
-export const ROYAL_PHONE_DISPLAY = "080730 93766";
-export const ROYAL_PHONE_TEL = "tel:+918073093766";
-export const ROYAL_WHATSAPP = "+918296565587";
-export const ROYAL_WHATSAPP_DISPLAY = "+91 82965 65587";
-export const ROYAL_WHATSAPP_LINK = "https://wa.me/918296565587";
+import { COMPANY_INFO, ROYAL_STORE_ADDRESS } from "@/lib/constants/company-info";
 
-export const ROYAL_ADDRESS = {
-  company: "Royal Furniture Pro",
-  lines: ["1st Cross, Azam Nagar,", "Belagavi, Karnataka 590010"],
-};
+export const ROYAL_BRAND = COMPANY_INFO.name;
+export const ROYAL_EMAIL = COMPANY_INFO.email;
+export const ROYAL_PHONE = COMPANY_INFO.phoneTel;
+export const ROYAL_PHONE_DISPLAY = COMPANY_INFO.phone;
+export const ROYAL_PHONE_TEL = `tel:${COMPANY_INFO.phoneTel}`;
+export const ROYAL_WHATSAPP = COMPANY_INFO.whatsapp;
+export const ROYAL_WHATSAPP_DISPLAY = COMPANY_INFO.whatsappDisplay;
+export const ROYAL_WHATSAPP_LINK = COMPANY_INFO.whatsappLink;
+
+export const ROYAL_ADDRESS = ROYAL_STORE_ADDRESS;
 
 export const ABOUT_STATS = [
-  { value: "200+", label: "We have a national presence at over 200+ locations." },
   {
-    value: "Fast Delivery",
-    label: "Royal Furniture Pro sells furniture every 2 minutes.",
+    value: "8+",
+    label: "More than 8 furniture stores across India — growing every year.",
   },
-  { value: "10k+ Products", label: "More than 10,000 products to choose from." },
   {
-    value: "Successful Industry",
+    value: "Belagavi HQ",
+    label: "Flagship showroom at 1st Cross, Azam Nagar, near Basaveshwar Temple.",
+  },
+  {
+    value: "Home & Living",
+    label: "Sofas, beds, dining, wardrobes, recliners and complete home sets.",
+  },
+  {
+    value: "Fair Prices",
+    label: "Quality furniture with transparent pricing and local after-sales care.",
+  },
+  {
+    value: "Online + Store",
+    label: "Shop on royalfurniturepro.com or visit a store for a hands-on experience.",
+  },
+  {
+    value: "India First",
     label:
-      "We are one of the pioneer retail organizations in the modern pre-manufactured furniture industry.",
+      "Built for Indian homes — styles, sizes, and delivery that fit how you live.",
   },
-  {
-    value: "International Style",
-    label:
-      "Collections include American, Italian, Turkish, European, Malaysian and Indian designs.",
-  },
-  { value: "5.00 M+", label: "5.00 Million+ happy customers" },
 ] as const;
 
 export const ABOUT_VISION = [
-  "Emerge as a global leader.",
-  "Creating vast growth opportunities for employees and partners.",
-  "Elevating customers lifestyle at unbeatable prices.",
+  "Make stylish, durable furniture easy to buy for every Indian home.",
+  "Grow trust through honest pricing, reliable delivery, and store-side support.",
+  "Expand carefully across India while staying rooted in Belagavi quality and service.",
 ] as const;
 
 export const ABOUT_STORY = [
   {
-    period: "2010",
-    title: "2010",
+    period: "Beginnings",
+    title: "Our beginnings",
     bullets: [
-      "We kicked off in 2010 with our 1st store in Bangalore.",
-      "Became Bangalore's biggest furniture store.",
-      "Introduced international style range of products.",
+      "Royal Furniture Pro started with a clear goal — bring well-made furniture to homes at fair prices.",
+      "Our Belagavi showroom in Azam Nagar became the home base for customers who want to see and feel products before they buy.",
+      "Near Basaveshwar Temple, Azam Nagar — a known local landmark for shoppers looking for trusted furniture.",
     ],
   },
   {
-    period: "2013-16",
-    title: "2013-16",
+    period: "Growth",
+    title: "Growing across India",
     bullets: [
-      "Became Incorporated Pvt Ltd company.",
-      "Became India's the best Recliner Sofa Retailer.",
-      "Launched www.royalfurniturepro.com website.",
+      "We expanded to more than 8 stores across India, bringing the same range and service beyond Belagavi.",
+      "Each store focuses on living-room, bedroom, and dining collections suited for Indian apartments and villas.",
+      "Customers get guided buying help in-store plus support for online orders and delivery.",
     ],
   },
   {
-    period: "2018-19",
-    title: "2018-19",
+    period: "Today",
+    title: "Today",
     bullets: [
-      "Became first South Indian brand to open stores in Mumbai.",
-      "Achieved a milestone of launching our flagship store in Kolkata.",
-      "Expanded our franchise business module all over India.",
-      "Opened India's biggest furniture warehouse.",
-    ],
-  },
-  {
-    period: "2021-23",
-    title: "2021-23",
-    bullets: [
-      "Became India's No 1 furniture Brand in India with 120+ Stores.",
-      "Won Best International Furniture Retailer Award.",
-    ],
-  },
-  {
-    period: "2024-2025",
-    title: "2024-2025",
-    bullets: [
-      "Sustaining the position of India's Leading Furniture Retailer.",
-      "Operating in 200+ stores in India.",
-      "Set up our first warehouse and 4 stores in UAE.",
-      "3 stores in Ras-al-Khaimah, Fujairah and Dubai have been launched.",
+      "Shop online at royalfurniturepro.com or walk into a Royal Furniture Pro store near you.",
+      "Visit our Belagavi showroom for hours, directions, and a hands-on look at our collections.",
+      "We keep adding fresh designs while staying focused on quality, warranty, and after-sales care.",
     ],
   },
 ] as const;

@@ -8,6 +8,7 @@ import type {
   StorefrontCartResponse,
   StorefrontCheckoutResponse,
   StorefrontOrdersListResponse,
+  StorefrontOrderSummary,
   StorefrontTrackOrderResponse,
   StorefrontWishlistResponse,
   VerifyOtpResponse,

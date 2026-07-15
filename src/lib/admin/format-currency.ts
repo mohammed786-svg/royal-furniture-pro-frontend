@@ -1,3 +1,5 @@
+import { formatApiDateTime } from "@/lib/datetime/format-api-datetime";
+
 export function formatCurrency(value: number) {
   return `₹${value.toLocaleString("en-IN", {
     minimumFractionDigits: 2,
@@ -5,14 +7,6 @@ export function formatCurrency(value: number) {
   })}`;
 }
 
-export function formatDate(value?: string | null) {
-  if (!value) return "—";
-  try {
-    return new Date(value).toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  } catch {
-    return value;
-  }
+export function formatDate(value?: string | null, options?: { dateOnly?: boolean }) {
+  return formatApiDateTime(value, options);
 }

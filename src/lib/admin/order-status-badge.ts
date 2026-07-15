@@ -59,3 +59,13 @@ export function resolveOrderStatusBadge(order: OrderStatusInput): {
     className: `admin-order-status-badge admin-order-status-badge--${variant}`,
   };
 }
+
+const EXCLUDED_SPEND_STATUSES = new Set(["CANCELLED", "RETURNED", "REFUNDED"]);
+
+export function isDeliveredOrder(order: OrderStatusInput): boolean {
+  const code = (order.statusCode || order.currentStatus || "").trim().toUpperCase();
+  if (code === "DELIVERED") return true;
+  if (EXCLUDED_SPEND_STATUSES.has(code)) return false;
+  const label = (order.statusName || order.currentStatus || "").toLowerCase();
+  return label.includes("deliver") && !label.includes("undeliver");
+}

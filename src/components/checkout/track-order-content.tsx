@@ -19,6 +19,7 @@ import { StorefrontInvoiceModal } from "@/components/checkout/storefront-invoice
 import { StorefrontOrderActionsBar } from "@/components/orders/storefront-order-actions-bar";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { formatPrice } from "@/lib/constants/cart-data";
+import { formatApiDateTime } from "@/lib/datetime/format-api-datetime";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { royalToast } from "@/lib/toast/royal-toast";
 import { trackStorefrontOrder } from "@/services/storefront-commerce";
@@ -56,15 +57,7 @@ function cleanValue(value?: string | null): string {
 }
 
 function formatTrackDate(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatApiDateTime(value);
 }
 
 function resolveStatusCode(status: string): string {

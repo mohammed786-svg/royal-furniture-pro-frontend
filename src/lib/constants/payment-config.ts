@@ -1,3 +1,5 @@
+import { COMPANY_INFO } from "@/lib/constants/company-info";
+
 export type PaymentMethod = "upi_qr" | "bank_transfer" | "gpay";
 
 export const PAYMENT_METHODS: {
@@ -27,7 +29,7 @@ export const BANK_DETAILS = {
   bankName: "HDFC Bank",
   accountNumber: "50200012345678",
   ifsc: "HDFC0001234",
-  branch: "MG Road, Bengaluru",
+  branch: COMPANY_INFO.addressFull,
   upiId: "royalfurniture@hdfcbank",
 };
 

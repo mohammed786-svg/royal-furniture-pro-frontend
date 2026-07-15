@@ -4786,33 +4786,6 @@
   color: #c45c26;
 }
 
-@media print {
-  .sf-invoice-print-hide,
-  .sf-invoice-modal__backdrop,
-  .sf-invoice-modal__toolbar {
-    display: none !important;
-  }
-
-  .sf-invoice-modal {
-    position: static;
-    inset: auto;
-    padding: 0;
-    background: #ffffff;
-  }
-
-  .sf-invoice-modal__panel {
-    width: 100%;
-    max-height: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .sf-invoice-modal__body {
-    overflow: visible;
-    padding: 0;
-  }
-}
-
 .track-recent h2 {
   margin: 0 0 12px;
   font-size: 16px;

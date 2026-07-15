@@ -11,7 +11,10 @@ import {
   POLICIES_HUB_SECTIONS,
   POLICY_QUICK_LINKS,
   PRIVACY_SECTIONS,
+  ROYAL_ADDRESS,
   ROYAL_BRAND,
+  ROYAL_PHONE_DISPLAY,
+  ROYAL_PHONE_TEL,
 } from "@/lib/constants/royal-cms-content";
 import type { StaticPageSlug } from "@/lib/constants/static-page-data";
 
@@ -61,29 +64,25 @@ function AboutContent() {
   return (
     <div className="royal-cms-about">
       <section className="royal-cms-section royal-cms-section--center">
-        <h2 className="royal-cms-h2">International Furniture Unbeatable Price</h2>
+        <h2 className="royal-cms-h2">Furniture for real Indian homes</h2>
         <p className="royal-cms-lead">
-          Discover {ROYAL_BRAND}, India&apos;s premier furniture brand, renowned as the
-          unrivaled leader in the industry. With an unmatched range of products at
-          unbeatable prices, we have solidified our position as the number one choice
-          for furniture enthusiasts across the country. Our founders bring over 40+
-          years of industry expertise.
+          {ROYAL_BRAND} is a growing furniture brand with more than 8 stores across
+          India. From sofas and beds to dining and storage, we help families choose
+          pieces that look good, last longer, and fit everyday living — not just
+          showroom photos.
         </p>
         <p className="royal-cms-body">
-          {ROYAL_BRAND} brings the best of world furniture to India and exports to over
-          10 countries. The tagline &apos;International furniture, elevating
-          lifestyles&apos; bears testimony to our commitment of delivering excellence.
-          Our furniture range includes designs inspired by America, Italy, Turkey,
-          Malaysia, and our vibrant home country, India amongst others. They exude
-          sophistication, comfort, ergonomics, and are cost efficient.
+          Our flagship presence is in Belagavi (Belgaum), Karnataka — at{" "}
+          {ROYAL_ADDRESS.lines.join(" ")} near Basaveshwar Temple, Azam Nagar. Walk in
+          to compare finishes and seating comfort, or shop online and we&apos;ll deliver
+          to your door.
         </p>
         <p className="royal-cms-body">
-          At {ROYAL_BRAND}, we always look for ideas that will elevate lifestyles, which
-          is why we extend a one-year warranty on manufacturing defects on most of our
-          items, ensuring complete peace of mind and a worry-free purchase.
-        </p>
-        <p className="royal-cms-body">
-          Get inspired on our website, or visit one of our 200+ stores located near you.
+          Call us at{" "}
+          <a href={ROYAL_PHONE_TEL} className="royal-cms-inline-link">
+            {ROYAL_PHONE_DISPLAY}
+          </a>{" "}
+          or explore the catalogue on this website.
         </p>
       </section>
 
@@ -122,9 +121,24 @@ function AboutContent() {
       </section>
 
       <section className="royal-cms-section royal-cms-section--center">
-        <h2 className="royal-cms-h2">Our Achievements</h2>
+        <h2 className="royal-cms-h2">Visit us</h2>
+        <p className="royal-cms-body">
+          <strong>{ROYAL_BRAND}</strong>
+          <br />
+          {ROYAL_ADDRESS.lines[0]}
+          <br />
+          {ROYAL_ADDRESS.lines[1]}
+          <br />
+          Near Basaveshwar Temple, Azam Nagar, Belagavi
+        </p>
         <p className="royal-cms-body royal-cms-muted">
-          Trusted by millions — award-winning international furniture retailer.
+          <Link href="/contact" className="royal-cms-inline-link">
+            Contact us
+          </Link>
+          {" · "}
+          <Link href="/stores" className="royal-cms-inline-link">
+            Our stores
+          </Link>
         </p>
       </section>
     </div>

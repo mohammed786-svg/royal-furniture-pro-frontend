@@ -197,6 +197,19 @@ export type InvoiceLineItem = {
   lineTotal: number;
   hsnCode: string;
   gstPercent: number;
+  taxableValue?: number;
+};
+
+export type InvoiceGstBreakdown = {
+  mode: "intra" | "inter";
+  gstPercent: number;
+  taxableAmount: number;
+  cgstPercent: number;
+  cgstAmount: number;
+  sgstPercent: number;
+  sgstAmount: number;
+  igstPercent: number;
+  igstAmount: number;
 };
 
 export type OrderInvoice = {
@@ -209,6 +222,7 @@ export type OrderInvoice = {
     address: string;
     phone: string;
     email: string;
+    state?: string;
   };
   customer: {
     id: string;
@@ -222,9 +236,11 @@ export type OrderInvoice = {
   totals: {
     subtotal: number;
     discountAmount: number;
+    taxableAmount?: number;
     taxAmount: number;
     shippingAmount: number;
     grandTotal: number;
+    gstBreakdown?: InvoiceGstBreakdown;
   };
   paymentMethod: string;
   currentStatus: string;

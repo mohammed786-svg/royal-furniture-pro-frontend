@@ -71,7 +71,7 @@ export const initialCartItems: CartLineItem[] = [
   toLineItem(sofaSet, {
     id: "line-1",
     quantity: 1,
-    deliveryNote: { type: "unavailable", text: "Product is not available at: 560001" },
+    deliveryNote: { type: "unavailable", text: "Product is not available at: 590010" },
   }),
   toLineItem(carpet, {
     id: "line-2",

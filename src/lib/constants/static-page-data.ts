@@ -18,6 +18,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { COMPANY_INFO } from "@/lib/constants/company-info";
 
 export type StaticPageSlug =
   | "stores"
@@ -70,43 +71,47 @@ export const STATIC_PAGES: Record<StaticPageSlug, StaticPageConfig> = {
     slug: "stores",
     title: "Royal Furniture Stores",
     subtitle:
-      "200+ showrooms across India & UAE — touch, feel, and take furniture home",
+      "More than 8 stores across India — visit Belagavi HQ or a showroom near you",
     icon: Store,
     accent: "gold",
     blocks: [
       {
         type: "intro",
-        text: "Visit our experience centres for recliners, sofas, dining sets, wardrobes, and complete home makeovers with expert stylists on floor.",
+        text: "Touch sofas, compare finishes, and plan entire rooms with our team. Flagship showroom in Azam Nagar, Belagavi — near Basaveshwar Temple.",
       },
       {
         type: "features",
         items: [
-          { icon: MapPin, title: "Pan-India presence", text: "Metro & tier-2 cities" },
+          { icon: MapPin, title: "8+ stores in India", text: "Growing city presence" },
           { icon: Sparkles, title: "Live displays", text: "Full room settings" },
-          { icon: Truck, title: "Store pickup", text: "Buy online, collect in store" },
+          {
+            icon: Truck,
+            title: "Store + online",
+            text: "Buy in store or on the website",
+          },
         ],
       },
       {
         type: "stores",
         cities: [
           {
-            city: "Bengaluru",
-            count: 24,
-            address: "MG Road, Indiranagar, Whitefield & more",
+            city: "Belagavi (HQ)",
+            count: 1,
+            address: `${COMPANY_INFO.addressFull} · Near Basaveshwar Temple, Azam Nagar`,
           },
-          { city: "Mumbai", count: 18, address: "Andheri, Thane, Navi Mumbai" },
-          { city: "Delhi NCR", count: 22, address: "South Ex, Gurgaon, Noida" },
-          { city: "Hyderabad", count: 12, address: "Banjara Hills, Gachibowli" },
-          { city: "Chennai", count: 14, address: "Anna Nagar, OMR" },
-          { city: "Dubai", count: 8, address: "Sheikh Zayed Road & Al Quoz" },
+          {
+            city: "Across India",
+            count: 8,
+            address: "More than 8 Royal Furniture Pro stores serving homes nationwide",
+          },
         ],
       },
       {
         type: "cta",
-        title: "Find a store near you",
-        text: "Call our store locator line or chat with support for directions & timings.",
+        title: "Find us in Belagavi",
+        text: "Prefer online? Contact us for delivery, or visit a Royal Furniture Pro store near you.",
         primary: { label: "Contact us", href: "/contact" },
-        secondary: { label: "Shop online", href: "/" },
+        secondary: { label: "About us", href: "/about" },
       },
     ],
   },
