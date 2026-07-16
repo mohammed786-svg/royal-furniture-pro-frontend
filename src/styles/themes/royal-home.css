@@ -36,11 +36,13 @@
 
 .product-card-hover:hover .product-card-cart-layer {
   opacity: 1;
-  pointer-events: auto;
+  /* Keep none so clicks pass through to the product Link; only the button is clickable */
+  pointer-events: none;
 }
 
 .product-card-hover:hover .product-card-cart-btn {
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 /* Shared homepage section container — matches Popular Categories gutters */
@@ -4360,6 +4362,33 @@
   border-radius: 12px;
   background: #fff3e0;
   color: #ef6c00;
+}
+
+.track-order-item__media-link {
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.track-order-item__media {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f1f5f9;
+}
+
+.track-order-item__name--link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.track-order-item__name--link:hover {
+  color: #1a2744;
+  text-decoration: underline;
 }
 
 .track-order-item__body {

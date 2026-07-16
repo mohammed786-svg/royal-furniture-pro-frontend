@@ -510,8 +510,13 @@ export function ProductForm({
                   type="number"
                   min={0}
                   step="0.01"
-                  value={form.basePrice}
-                  onChange={(e) => patchForm({ basePrice: Number(e.target.value) })}
+                  value={form.basePrice || ""}
+                  onChange={(e) =>
+                    patchForm({
+                      basePrice: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
+                  }
+                  placeholder="0"
                 />
               </ProductFormField>
               <ProductFormField label="Sale Price (₹)" error={fieldError("salePrice")}>
@@ -519,8 +524,13 @@ export function ProductForm({
                   type="number"
                   min={0}
                   step="0.01"
-                  value={form.salePrice}
-                  onChange={(e) => patchForm({ salePrice: Number(e.target.value) })}
+                  value={form.salePrice || ""}
+                  onChange={(e) =>
+                    patchForm({
+                      salePrice: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
+                  }
+                  placeholder="0"
                 />
               </ProductFormField>
               <ProductFormField label="MRP (₹)" error={fieldError("mrp")}>
@@ -528,8 +538,13 @@ export function ProductForm({
                   type="number"
                   min={0}
                   step="0.01"
-                  value={form.mrp}
-                  onChange={(e) => patchForm({ mrp: Number(e.target.value) })}
+                  value={form.mrp || ""}
+                  onChange={(e) =>
+                    patchForm({
+                      mrp: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
+                  }
+                  placeholder="0"
                 />
               </ProductFormField>
               <ProductFormField label="GST %" error={fieldError("gstPercent")}>
@@ -616,7 +631,9 @@ export function ProductForm({
                   step="0.01"
                   value={form.packageLength || ""}
                   onChange={(e) =>
-                    patchForm({ packageLength: Number(e.target.value) || 0 })
+                    patchForm({
+                      packageLength: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
                   }
                   placeholder="For Shiprocket"
                 />
@@ -630,8 +647,12 @@ export function ProductForm({
                   step="0.01"
                   value={form.packageBreadth || ""}
                   onChange={(e) =>
-                    patchForm({ packageBreadth: Number(e.target.value) || 0 })
+                    patchForm({
+                      packageBreadth:
+                        e.target.value === "" ? 0 : Number(e.target.value),
+                    })
                   }
+                  placeholder="Optional"
                 />
               </ProductFormField>
               <ProductFormField label={`Package height (${form.packageDimensionUnit})`}>
@@ -641,8 +662,11 @@ export function ProductForm({
                   step="0.01"
                   value={form.packageHeight || ""}
                   onChange={(e) =>
-                    patchForm({ packageHeight: Number(e.target.value) || 0 })
+                    patchForm({
+                      packageHeight: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
                   }
+                  placeholder="Optional"
                 />
               </ProductFormField>
               <p className="admin-form-hint admin-product-section-grid__full">
@@ -653,8 +677,13 @@ export function ProductForm({
                   type="number"
                   min={0}
                   step="0.01"
-                  value={form.weight}
-                  onChange={(e) => patchForm({ weight: Number(e.target.value) })}
+                  value={form.weight || ""}
+                  onChange={(e) =>
+                    patchForm({
+                      weight: e.target.value === "" ? 0 : Number(e.target.value),
+                    })
+                  }
+                  placeholder="Optional"
                 />
               </ProductFormField>
               <ProductFormField label="Warranty">

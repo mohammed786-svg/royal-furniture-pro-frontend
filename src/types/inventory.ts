@@ -151,7 +151,7 @@ export type AlertItem = {
 
 export type InventoryOptions = {
   warehouses: { id: string; code: string; name: string; isPrimary: boolean }[];
-  products: { id: string; name: string; sku: string }[];
+  products: { id: string; name: string; sku: string; imageUrl?: string }[];
   variants: {
     id: string;
     productId: string;

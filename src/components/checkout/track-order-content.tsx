@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { StorefrontInvoiceModal } from "@/components/checkout/storefront-invoice-modal";
 import { StorefrontOrderActionsBar } from "@/components/orders/storefront-order-actions-bar";
+import { MediaImage } from "@/components/ui/media-image";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { formatPrice } from "@/lib/constants/cart-data";
 import { formatApiDateTime } from "@/lib/datetime/format-api-datetime";
@@ -459,25 +460,60 @@ export function TrackOrderContent() {
                 )}
 
                 <ul className="track-order-items track-order-items--fancy track-panel__items">
-                  {result.items.map((item) => (
-                    <li
-                      key={item.id}
-                      className="track-order-item track-order-item--fancy"
-                    >
-                      <div className="track-order-item__icon">
-                        <Package className="h-5 w-5" />
+                  {result.items.map((item) => {
+                    const productHref =
+                      item.href ||
+                      (item.productSlug ? `/product/${item.productSlug}` : "");
+                    const media = (
+                      <div className="track-order-item__media">
+                        <MediaImage
+                          src={item.imageUrl || null}
+                          alt={item.name}
+                          fill
+                          fit="cover"
+                          placeholderSize="sm"
+                          showLabel
+                        />
                       </div>
-                      <div className="track-order-item__body">
-                        <p className="track-order-item__name">{item.name}</p>
-                        <p className="track-order-item__meta">
-                          SKU {item.sku || "—"} · Qty {item.quantity}
-                        </p>
-                      </div>
-                      <strong className="track-order-item__price">
-                        {formatPrice(item.lineTotal)}
-                      </strong>
-                    </li>
-                  ))}
+                    );
+
+                    return (
+                      <li
+                        key={item.id}
+                        className="track-order-item track-order-item--fancy"
+                      >
+                        {productHref ? (
+                          <Link
+                            href={productHref}
+                            className="track-order-item__media-link"
+                            aria-label={`View ${item.name}`}
+                          >
+                            {media}
+                          </Link>
+                        ) : (
+                          media
+                        )}
+                        <div className="track-order-item__body">
+                          {productHref ? (
+                            <Link
+                              href={productHref}
+                              className="track-order-item__name track-order-item__name--link"
+                            >
+                              {item.name}
+                            </Link>
+                          ) : (
+                            <p className="track-order-item__name">{item.name}</p>
+                          )}
+                          <p className="track-order-item__meta">
+                            SKU {item.sku || "—"} · Qty {item.quantity}
+                          </p>
+                        </div>
+                        <strong className="track-order-item__price">
+                          {formatPrice(item.lineTotal)}
+                        </strong>
+                      </li>
+                    );
+                  })}
                 </ul>
 
                 <StorefrontOrderActionsBar

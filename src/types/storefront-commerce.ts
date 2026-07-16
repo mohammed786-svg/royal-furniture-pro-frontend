@@ -58,6 +58,10 @@ export type StorefrontTrackOrderResponse = {
     unitPrice: number;
     lineTotal: number;
     sku: string;
+    productId?: string | null;
+    productSlug?: string;
+    imageUrl?: string;
+    href?: string;
   }[];
   shipment: {
     shiprocketOrderId?: string | null;

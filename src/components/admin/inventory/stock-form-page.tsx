@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductFormField } from "@/components/admin/catalog/product-form-field";
 import { InventoryPageHeader } from "@/components/admin/inventory/inventory-page-header";
+import { MediaImage } from "@/components/ui/media-image";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { royalToast } from "@/lib/toast/royal-toast";
 import {
@@ -80,6 +81,16 @@ export function StockFormPage({ mode, stockId }: Props) {
         (v) => !form.productId || v.productId === form.productId,
       ) ?? [],
     [options, form.productId],
+  );
+
+  const selectedProduct = useMemo(
+    () => options?.products.find((p) => p.id === form.productId) ?? null,
+    [options, form.productId],
+  );
+
+  const selectedVariant = useMemo(
+    () => variants.find((v) => v.id === form.productVariantId) ?? null,
+    [variants, form.productVariantId],
   );
 
   function validate() {
@@ -194,6 +205,33 @@ export function StockFormPage({ mode, stockId }: Props) {
                   ))}
                 </select>
               </ProductFormField>
+
+              {selectedProduct && (
+                <div className="admin-stock-product-preview admin-product-section-grid__full">
+                  <div className="admin-stock-product-preview__media">
+                    <MediaImage
+                      src={selectedProduct.imageUrl || null}
+                      alt={selectedProduct.name}
+                      fill
+                      fit="cover"
+                      placeholderSize="md"
+                      showLabel
+                    />
+                  </div>
+                  <div className="admin-stock-product-preview__meta">
+                    <p className="admin-stock-product-preview__label">
+                      Selected product
+                    </p>
+                    <h3>{selectedProduct.name}</h3>
+                    <p>
+                      SKU: <strong>{selectedProduct.sku}</strong>
+                      {selectedVariant
+                        ? ` · Variant: ${selectedVariant.variantName}`
+                        : ""}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </section>
           <section className="admin-product-section-card">
