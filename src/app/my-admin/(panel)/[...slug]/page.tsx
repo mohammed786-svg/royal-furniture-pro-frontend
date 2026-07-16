@@ -163,6 +163,8 @@ function isPaymentsFormRoute(slug: string[]) {
     return null;
   }
 
+  if (slug[1] === "checkout") return null;
+
   if (slug[1] === "new" && slug.length === 2)
     return { type: "payment-create" as const };
   if (slug.length === 2 && slug[1] !== "new")

@@ -22,6 +22,7 @@ import {
   MessageSquare,
   Package,
   Plus,
+  QrCode,
   RotateCcw,
   Route,
   ScrollText,
@@ -71,6 +72,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   HelpCircle,
   CreditCard,
   ShieldCheck,
+  QrCode,
   Truck,
   Route,
   TrendingUp,
@@ -84,6 +86,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   History,
   IndianRupee,
   Plus,
+  QrCode,
   BarChart3,
 };
 

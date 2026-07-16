@@ -3951,6 +3951,17 @@
   grid-column: 1 / -1;
 }
 
+.admin-checkout-qr-preview {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  background: #fff;
+}
+
 .admin-stock-product-preview {
   display: flex;
   align-items: center;

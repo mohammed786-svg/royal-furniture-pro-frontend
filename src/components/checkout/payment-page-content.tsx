@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { CheckoutStepper } from "@/components/cart/checkout-stepper";
 import { CategoryBreadcrumbs } from "@/components/category/category-breadcrumbs";
 import { CheckoutOrderSummary } from "@/components/checkout/checkout-order-summary";
+import { MediaImage } from "@/components/ui/media-image";
 import { getApiErrorMessage } from "@/lib/api/api-error";
 import { cartOrderTotal } from "@/lib/constants/cart-data";
 import {
@@ -16,10 +16,23 @@ import {
   PAYMENT_QR_SRC,
   type PaymentMethod,
 } from "@/lib/constants/payment-config";
+import { resolveMediaUrl } from "@/lib/media/resolve-url";
 import { useAddressStore } from "@/lib/store/address-store";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
+import { fetchCheckoutPaymentInstructions } from "@/services/checkout-payment-api";
 import { placeStorefrontOrder } from "@/services/storefront-commerce";
+import type { CheckoutPaymentInstructions } from "@/types/checkout-payment";
+
+const FALLBACK_INSTRUCTIONS: CheckoutPaymentInstructions = {
+  qrImageUrl: PAYMENT_QR_SRC,
+  accountName: BANK_DETAILS.accountName,
+  bankName: BANK_DETAILS.bankName,
+  accountNumber: BANK_DETAILS.accountNumber,
+  ifsc: BANK_DETAILS.ifsc,
+  branch: BANK_DETAILS.branch,
+  upiId: BANK_DETAILS.upiId,
+};
 
 export function PaymentPageContent() {
   const router = useRouter();
@@ -35,6 +48,22 @@ export function PaymentPageContent() {
   const [screenshotData, setScreenshotData] = useState<string | undefined>();
   const [screenshotName, setScreenshotName] = useState<string | undefined>();
   const [submitting, setSubmitting] = useState(false);
+  const [instructions, setInstructions] =
+    useState<CheckoutPaymentInstructions>(FALLBACK_INSTRUCTIONS);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchCheckoutPaymentInstructions()
+      .then((data) => {
+        if (!cancelled) setInstructions({ ...FALLBACK_INSTRUCTIONS, ...data });
+      })
+      .catch(() => {
+        /* keep fallbacks */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const address = getSelectedAddress();
   const hint = useMemo(
@@ -42,6 +71,11 @@ export function PaymentPageContent() {
     [method],
   );
   const total = cartOrderTotal(cartItems);
+  const canPlaceOrder = Boolean(screenshotData) && reference.trim().length >= 4;
+  const qrSrc =
+    resolveMediaUrl(instructions.qrImageUrl) ||
+    instructions.qrImageUrl ||
+    PAYMENT_QR_SRC;
 
   if (!isLoggedIn()) {
     return (
@@ -91,9 +125,14 @@ export function PaymentPageContent() {
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setScreenshotData(undefined);
+      setScreenshotName(undefined);
+      return;
+    }
     if (file.size > 4 * 1024 * 1024) {
       toast.error("Image must be under 4 MB");
+      e.target.value = "";
       return;
     }
     const reader = new FileReader();
@@ -116,7 +155,7 @@ export function PaymentPageContent() {
       return;
     }
     if (!screenshotData) {
-      toast.error("Upload payment screenshot");
+      toast.error("Upload payment screenshot to place the order");
       return;
     }
 
@@ -166,13 +205,16 @@ export function PaymentPageContent() {
 
             <div className="payment-qr-block">
               <div className="payment-qr-block__qr">
-                <Image
-                  src={PAYMENT_QR_SRC}
+                <MediaImage
+                  src={qrSrc}
                   alt="Scan to pay Royal Furniture Pro"
                   width={200}
                   height={200}
-                  className="payment-qr-block__img"
-                  priority
+                  fit="contain"
+                  placeholderSize="md"
+                  showLabel
+                  resolveUrl={false}
+                  imgClassName="payment-qr-block__img"
                 />
               </div>
               <div className="payment-qr-block__bank">
@@ -180,24 +222,30 @@ export function PaymentPageContent() {
                 <dl className="payment-bank-dl">
                   <div>
                     <dt>Account name</dt>
-                    <dd>{BANK_DETAILS.accountName}</dd>
+                    <dd>{instructions.accountName}</dd>
                   </div>
                   <div>
                     <dt>Bank</dt>
-                    <dd>{BANK_DETAILS.bankName}</dd>
+                    <dd>{instructions.bankName}</dd>
                   </div>
                   <div>
                     <dt>Account no.</dt>
-                    <dd>{BANK_DETAILS.accountNumber}</dd>
+                    <dd>{instructions.accountNumber}</dd>
                   </div>
                   <div>
                     <dt>IFSC</dt>
-                    <dd>{BANK_DETAILS.ifsc}</dd>
+                    <dd>{instructions.ifsc}</dd>
                   </div>
                   <div>
                     <dt>UPI ID</dt>
-                    <dd>{BANK_DETAILS.upiId}</dd>
+                    <dd>{instructions.upiId}</dd>
                   </div>
+                  {instructions.branch ? (
+                    <div>
+                      <dt>Branch</dt>
+                      <dd>{instructions.branch}</dd>
+                    </div>
+                  ) : null}
                 </dl>
                 <p className="payment-qr-block__amount">
                   Pay <strong>₹{total.toLocaleString("en-IN")}</strong> and submit proof
@@ -231,31 +279,54 @@ export function PaymentPageContent() {
                   onChange={(e) => setReference(e.target.value)}
                   placeholder="Transaction ID, UTR, or bank reference"
                   className="payment-form__input"
+                  required
                 />
                 <p className="payment-form__hint">{hint}</p>
               </div>
 
-              <div className="payment-form__field">
-                <label htmlFor="payment-screenshot">Payment screenshot</label>
+              <div
+                className={`payment-form__field payment-form__field--screenshot${
+                  screenshotData ? " is-uploaded" : " is-required"
+                }`}
+              >
+                <label htmlFor="payment-screenshot">
+                  Payment screenshot <span className="payment-form__required">*</span>
+                </label>
+                <p className="payment-form__screenshot-note">
+                  Required — upload a clear screenshot of your payment success screen
+                  before placing the order.
+                </p>
                 <input
                   id="payment-screenshot"
                   type="file"
                   accept="image/*,.pdf"
                   onChange={handleFile}
                   className="payment-form__file"
+                  required
                 />
-                {screenshotName && (
+                {screenshotName ? (
                   <p className="payment-form__file-name">Attached: {screenshotName}</p>
+                ) : (
+                  <p className="payment-form__file-empty">No file chosen yet</p>
                 )}
               </div>
 
               <button
                 type="submit"
                 className="payment-form__submit"
-                disabled={submitting}
+                disabled={submitting || !canPlaceOrder}
               >
-                {submitting ? "Submitting…" : "Confirm payment & place order"}
+                {submitting
+                  ? "Submitting…"
+                  : !screenshotData
+                    ? "Upload screenshot to place order"
+                    : "Confirm payment & place order"}
               </button>
+              {!screenshotData ? (
+                <p className="payment-form__blocked-hint">
+                  Place order stays disabled until a payment screenshot is uploaded.
+                </p>
+              ) : null}
             </form>
 
             <Link href="/checkout/address" className="checkout-panel__back">

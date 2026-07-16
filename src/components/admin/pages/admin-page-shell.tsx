@@ -31,6 +31,7 @@ import { OrderStatusManager } from "@/components/admin/orders/order-status-manag
 import { OrderTrackingManager } from "@/components/admin/orders/order-tracking-manager";
 import { OrdersManager } from "@/components/admin/orders/orders-manager";
 import { ReturnsManager } from "@/components/admin/orders/returns-manager";
+import { CheckoutPaymentSettingsPage } from "@/components/admin/payments/checkout-payment-settings-page";
 import { PaymentVerificationsManager } from "@/components/admin/payments/payment-verifications-manager";
 import { PaymentsManager } from "@/components/admin/payments/payments-manager";
 import { SettingsManager } from "@/components/admin/settings/settings-manager";
@@ -115,6 +116,8 @@ export function AdminPageShell({ page }: AdminPageShellProps) {
         <PaymentsManager />
       ) : page.key === "payment-verification" ? (
         <PaymentVerificationsManager />
+      ) : page.key === "payment-checkout" ? (
+        <CheckoutPaymentSettingsPage />
       ) : page.key === "shipments" ? (
         <ShipmentsManager />
       ) : page.key === "shipment-tracking" ? (

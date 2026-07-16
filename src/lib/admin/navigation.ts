@@ -223,6 +223,13 @@ export const adminMenuGroups: AdminMenuGroup[] = [
         href: "/my-admin/payments/verification",
         icon: "ShieldCheck",
       },
+      {
+        key: "payment-checkout",
+        label: "Checkout Payment",
+        href: "/my-admin/payments/checkout",
+        icon: "QrCode",
+        superAdminOnly: true,
+      },
     ],
   },
   {
@@ -356,6 +363,7 @@ const pageDescriptions: Record<string, string> = {
   faqs: "Manage frequently asked questions.",
   payments: "View payment transactions and statuses.",
   "payment-verification": "Verify and reconcile payments.",
+  "payment-checkout": "Manage checkout QR code and bank details for customers.",
   shipments: "Manage shipments and dispatch.",
   "shipment-tracking": "Track shipment status and updates.",
   "sales-analytics": "Sales trends, revenue, and conversion metrics.",
