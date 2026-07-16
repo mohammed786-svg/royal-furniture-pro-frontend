@@ -86,7 +86,6 @@ const ICON_MAP: Record<string, LucideIcon> = {
   History,
   IndianRupee,
   Plus,
-  QrCode,
   BarChart3,
 };
 
