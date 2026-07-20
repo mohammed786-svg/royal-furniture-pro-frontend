@@ -13,7 +13,7 @@ type OnlineExclusiveSectionProps = {
 
 export function OnlineExclusiveSection({
   products,
-  viewAllHref = "#",
+  viewAllHref,
 }: OnlineExclusiveSectionProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -96,14 +96,16 @@ export function OnlineExclusiveSection({
           </div>
         </div>
 
-        <div className="mt-7 flex justify-center md:mt-8">
-          <Link
-            href={viewAllHref}
-            className="royal-section-btn royal-section-btn--primary min-w-[140px] px-14"
-          >
-            View All
-          </Link>
-        </div>
+        {viewAllHref ? (
+          <div className="mt-7 flex justify-center md:mt-8">
+            <Link
+              href={viewAllHref}
+              className="royal-section-btn royal-section-btn--primary min-w-[140px] px-14"
+            >
+              View All
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

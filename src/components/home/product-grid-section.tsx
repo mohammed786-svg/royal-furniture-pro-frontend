@@ -12,7 +12,7 @@ type ProductGridSectionProps = {
 export function ProductGridSection({
   title,
   products,
-  viewAllHref = "#",
+  viewAllHref,
   bgClassName = "bg-white",
 }: ProductGridSectionProps) {
   return (

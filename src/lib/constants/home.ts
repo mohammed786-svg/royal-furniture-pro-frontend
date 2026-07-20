@@ -96,7 +96,7 @@ export const navCategoryIcons: Record<(typeof navCategories)[number], string> = 
 export const features = [
   {
     image: homeImages.features.customers,
-    label: "10M+ customer",
+    label: "2000+ Customers",
   },
   {
     image: homeImages.features.international,
