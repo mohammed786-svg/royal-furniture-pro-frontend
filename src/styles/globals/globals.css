@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "../themes/luxury.css";
 @import "../themes/royal-home.css";
+@import "../themes/royal-blog.css";
 @import "../themes/royal-loader.css";
 @import "../themes/royal-toast.css";
 @import "../themes/royal-static-pages.css";

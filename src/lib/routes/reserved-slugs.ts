@@ -15,6 +15,7 @@ export const RESERVED_TOP_LEVEL_SLUGS = new Set([
   "coming-soon",
   "my-admin",
   "admin",
+  "blog",
   "_next",
   "favicon.ico",
 ]);

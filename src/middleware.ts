@@ -18,6 +18,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/site-map", request.url));
   }
 
+  if (pathname === "/sitemaps.xml" || pathname === "/sitemaps.xml/") {
+    return NextResponse.redirect(new URL("/sitemap.xml", request.url));
+  }
+
   if (pathname === "/contactus" || pathname === "/contactus/") {
     return NextResponse.redirect(new URL("/contact", request.url));
   }

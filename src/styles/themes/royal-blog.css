@@ -1,0 +1,251 @@
+/* Blog listing + article — SEO content pages */
+
+.blog-page__hero {
+  padding: clamp(36px, 6vw, 64px) 0 clamp(28px, 4vw, 40px);
+  background: linear-gradient(135deg, #0f1729 0%, #1a2744 55%, #243552 100%);
+  color: #fff;
+}
+
+.blog-page__eyebrow {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e8d5a8;
+}
+
+.blog-page__title {
+  margin: 0 0 12px;
+  max-width: 18ch;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.blog-page__subtitle {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.blog-page__list {
+  display: grid;
+  gap: 1.25rem;
+  padding-top: 2rem;
+  padding-bottom: 3.5rem;
+}
+
+@media (min-width: 768px) {
+  .blog-page__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1.35rem 1.4rem;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.blog-card__meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.blog-card__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1a2744;
+}
+
+.blog-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-card__title a:hover {
+  color: #c5a059;
+}
+
+.blog-card__excerpt {
+  margin: 0;
+  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #555;
+}
+
+.blog-card__link {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1a2744;
+  text-decoration: none;
+}
+
+.blog-card__link:hover {
+  color: #c5a059;
+}
+
+.blog-article {
+  padding: 1.5rem 0 3.5rem;
+  background: #faf9f7;
+}
+
+.blog-article__inner {
+  max-width: 760px;
+}
+
+.blog-article__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+  color: #888;
+}
+
+.blog-article__crumbs a {
+  color: #1a2744;
+  text-decoration: none;
+}
+
+.blog-article__header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e2dc;
+}
+
+.blog-article__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #c5a059;
+}
+
+.blog-article__title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: #0f1729;
+}
+
+.blog-article__desc {
+  margin: 0 0 0.85rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: #444;
+}
+
+.blog-article__meta {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #888;
+}
+
+.blog-article__body section {
+  margin-bottom: 1.5rem;
+}
+
+.blog-article__body h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a2744;
+}
+
+.blog-article__body p {
+  margin: 0 0 0.85rem;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+.blog-article__faqs {
+  margin-top: 2rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+}
+
+.blog-article__faqs h2 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+}
+
+.blog-article__faq + .blog-article__faq {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.blog-article__faq h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: #1a2744;
+}
+
+.blog-article__faq p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #444;
+}
+
+.blog-article__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.blog-article__back {
+  margin-right: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a2744;
+  text-decoration: none;
+}
+
+.blog-article__cta {
+  display: inline-flex;
+  padding: 0.65rem 1.1rem;
+  border-radius: 6px;
+  background: #1a2744;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.blog-article__cta--ghost {
+  background: #fff;
+  color: #1a2744;
+  border: 1px solid #d0d0d0;
+}
