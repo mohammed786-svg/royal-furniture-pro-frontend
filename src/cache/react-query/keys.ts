@@ -19,6 +19,7 @@ export const queryKeys = {
       categorySlug: string,
       subCategorySlug: string,
       underSubCategorySlug?: string,
+      sort?: string,
     ) =>
       [
         ...queryKeys.categories.all(),
@@ -26,6 +27,7 @@ export const queryKeys = {
         categorySlug,
         subCategorySlug,
         underSubCategorySlug ?? "",
+        sort ?? "Recommended",
       ] as const,
   },
   products: {

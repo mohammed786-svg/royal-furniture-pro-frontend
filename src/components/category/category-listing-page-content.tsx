@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { notFound } from "next/navigation";
 import { CategoryListingPage } from "@/components/category/category-listing-page";
 import { useCategoryListing } from "@/hooks/api/use-category-listing";
@@ -15,10 +16,12 @@ export function CategoryListingPageContent({
   subCategorySlug,
   underSubCategorySlug,
 }: CategoryListingPageContentProps) {
+  const [sort, setSort] = useState("Recommended");
   const { data, isLoading, isError } = useCategoryListing(
     categorySlug,
     subCategorySlug,
     underSubCategorySlug,
+    sort,
   );
 
   if (isLoading && !data?.products.length) {
@@ -40,5 +43,7 @@ export function CategoryListingPageContent({
     notFound();
   }
 
-  return <CategoryListingPage data={data} />;
+  return (
+    <CategoryListingPage data={data} sort={sort} onSortChange={setSort} />
+  );
 }

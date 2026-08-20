@@ -23,6 +23,8 @@ import type {
 
 type CacheMode = "checking" | "cache" | "nocache";
 
+const DEFAULT_SORT = "Recommended";
+
 function pickListing(
   apiData: StorefrontCategoryListingResponse | undefined,
   local: StorefrontCategoryListingResponse | null,
@@ -75,6 +77,7 @@ export function useCategoryListing(
   categorySlug: string,
   subCategorySlug: string,
   underSubCategorySlug?: string,
+  sort: string = DEFAULT_SORT,
 ): CategoryListingState {
   const [localCache, setLocalCache] =
     useState<StorefrontCategoryListingResponse | null>(null);
@@ -85,24 +88,37 @@ export function useCategoryListing(
   useEffect(() => {
     const isReload = detectPageReload();
     if (isReload) {
-      clearCategoryListingCache(categorySlug, subCategorySlug, underSubCategorySlug);
+      clearCategoryListingCache(
+        categorySlug,
+        subCategorySlug,
+        underSubCategorySlug,
+        sort,
+      );
     }
+    setLocalCache(null);
+    setStaleLocal(null);
     setCacheMode(isReload ? "nocache" : "cache");
-  }, [categorySlug, subCategorySlug, underSubCategorySlug]);
+  }, [categorySlug, subCategorySlug, underSubCategorySlug, sort]);
 
   useEffect(() => {
     if (cacheMode !== "cache") return;
     setLocalCache(
-      readCategoryListingCache(categorySlug, subCategorySlug, underSubCategorySlug),
+      readCategoryListingCache(
+        categorySlug,
+        subCategorySlug,
+        underSubCategorySlug,
+        sort,
+      ),
     );
     setStaleLocal(
       readCategoryListingCacheStale(
         categorySlug,
         subCategorySlug,
         underSubCategorySlug,
+        sort,
       ),
     );
-  }, [cacheMode, categorySlug, subCategorySlug, underSubCategorySlug]);
+  }, [cacheMode, categorySlug, subCategorySlug, underSubCategorySlug, sort]);
 
   const query = useQuery({
     queryKey:
@@ -112,6 +128,7 @@ export function useCategoryListing(
               categorySlug,
               subCategorySlug,
               underSubCategorySlug,
+              sort,
             ),
             "nocache",
           ]
@@ -119,10 +136,12 @@ export function useCategoryListing(
             categorySlug,
             subCategorySlug,
             underSubCategorySlug,
+            sort,
           ),
     queryFn: () =>
       fetchCategoryListing(categorySlug, subCategorySlug, {
         underSubCategorySlug,
+        sort,
         // Always resolve by slug so parent PLP is not served from a stale id-cache entry.
         nocache: cacheMode === "nocache",
       }),
@@ -141,6 +160,7 @@ export function useCategoryListing(
         subCategorySlug,
         query.data,
         underSubCategorySlug,
+        sort,
       );
       setLocalCache(query.data);
       setStaleLocal(null);
@@ -150,6 +170,7 @@ export function useCategoryListing(
       categorySlug,
       subCategorySlug,
       underSubCategorySlug,
+      sort,
     );
     if (!cached || cached.version !== query.data.version) {
       writeCategoryListingCache(
@@ -157,10 +178,18 @@ export function useCategoryListing(
         subCategorySlug,
         query.data,
         underSubCategorySlug,
+        sort,
       );
       setLocalCache(query.data);
     }
-  }, [query.data, categorySlug, subCategorySlug, underSubCategorySlug, cacheMode]);
+  }, [
+    query.data,
+    categorySlug,
+    subCategorySlug,
+    underSubCategorySlug,
+    cacheMode,
+    sort,
+  ]);
 
   const { data, source } = useMemo(
     () =>

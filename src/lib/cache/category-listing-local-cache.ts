@@ -9,9 +9,11 @@ function storageKey(
   categorySlug: string,
   subCategorySlug: string,
   underSubCategorySlug?: string,
+  sort?: string,
 ): string {
   const under = underSubCategorySlug ? `/${underSubCategorySlug}` : "";
-  return `${browserCacheConfig.prefix}:plp:${categorySlug}/${subCategorySlug}${under}`;
+  const sortKey = sort && sort !== "Recommended" ? `:sort:${sort}` : "";
+  return `${browserCacheConfig.prefix}:plp:${categorySlug}/${subCategorySlug}${under}${sortKey}`;
 }
 
 function isFresh(entry: StoredListing): boolean {
@@ -22,11 +24,12 @@ export function readCategoryListingCache(
   categorySlug: string,
   subCategorySlug: string,
   underSubCategorySlug?: string,
+  sort?: string,
 ): StorefrontCategoryListingResponse | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(
-      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug, sort),
     );
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredListing;
@@ -43,11 +46,12 @@ export function readCategoryListingCacheStale(
   categorySlug: string,
   subCategorySlug: string,
   underSubCategorySlug?: string,
+  sort?: string,
 ): StorefrontCategoryListingResponse | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(
-      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug, sort),
     );
     if (!raw) return null;
     const parsed = JSON.parse(raw) as StoredListing;
@@ -63,12 +67,13 @@ export function writeCategoryListingCache(
   subCategorySlug: string,
   data: StorefrontCategoryListingResponse,
   underSubCategorySlug?: string,
+  sort?: string,
 ): void {
   if (typeof window === "undefined") return;
   try {
     const payload: StoredListing = { ...data, storedAt: Date.now() };
     window.localStorage.setItem(
-      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug, sort),
       JSON.stringify(payload),
     );
   } catch {
@@ -80,11 +85,12 @@ export function clearCategoryListingCache(
   categorySlug: string,
   subCategorySlug: string,
   underSubCategorySlug?: string,
+  sort?: string,
 ): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(
-      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug, sort),
     );
   } catch {
     // Ignore storage errors.

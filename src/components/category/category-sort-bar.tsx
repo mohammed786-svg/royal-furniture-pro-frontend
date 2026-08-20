@@ -5,11 +5,13 @@ import { ChevronDown } from "lucide-react";
 type CategorySortBarProps = {
   options: string[];
   value?: string;
+  onChange?: (value: string) => void;
 };
 
 export function CategorySortBar({
   options,
   value = "Recommended",
+  onChange,
 }: CategorySortBarProps) {
   return (
     <div className="category-sort-bar">
@@ -18,7 +20,8 @@ export function CategorySortBar({
         <span className="category-sort-bar__select-wrap">
           <select
             className="category-sort-bar__select"
-            defaultValue={value}
+            value={value}
+            onChange={(event) => onChange?.(event.target.value)}
             aria-label="Sort products"
           >
             {options.map((opt) => (

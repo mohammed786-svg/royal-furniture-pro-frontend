@@ -7,9 +7,15 @@ import { categoryListingHref, categoryPageHref } from "@/lib/routes/category";
 
 type CategoryListingPageProps = {
   data: CategoryPageData;
+  sort?: string;
+  onSortChange?: (sort: string) => void;
 };
 
-export function CategoryListingPage({ data }: CategoryListingPageProps) {
+export function CategoryListingPage({
+  data,
+  sort = "Recommended",
+  onSortChange,
+}: CategoryListingPageProps) {
   const subHref =
     data.categorySlug && data.subCategorySlug
       ? categoryListingHref(data.categorySlug, data.subCategorySlug)
@@ -52,7 +58,11 @@ export function CategoryListingPage({ data }: CategoryListingPageProps) {
 
         <CategorySubcategoryGrid items={data.subcategories} />
 
-        <CategorySortBar options={data.sortOptions} />
+        <CategorySortBar
+          options={data.sortOptions}
+          value={sort}
+          onChange={onSortChange}
+        />
 
         <ul className="category-listing-grid">
           {data.products.map((product) => (
