@@ -26,7 +26,7 @@ const emptyForm: StockFormValues = {
   soldStock: 0,
   damagedStock: 0,
   returnedStock: 0,
-  reorderLevel: 10,
+  reorderLevel: 0,
   isActive: true,
 };
 
@@ -259,10 +259,12 @@ export function StockFormPage({ mode, stockId }: Props) {
                   <input
                     type="number"
                     min={0}
-                    value={form[field]}
-                    onChange={(e) =>
-                      setForm((p) => ({ ...p, [field]: Number(e.target.value) }))
-                    }
+                    value={form[field] === 0 ? "" : form[field]}
+                    onChange={(e) => {
+                      const next =
+                        e.target.value === "" ? 0 : Number(e.target.value);
+                      setForm((p) => ({ ...p, [field]: next }));
+                    }}
                   />
                 </ProductFormField>
               ))}

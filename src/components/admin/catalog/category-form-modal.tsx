@@ -178,10 +178,12 @@ export function CategoryFormModal({
               <label>Display Order</label>
               <input
                 type="number"
-                value={form.displayOrder}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, displayOrder: Number(e.target.value) }))
-                }
+                value={form.displayOrder === 0 ? "" : form.displayOrder}
+                onChange={(e) => {
+                  const next =
+                    e.target.value === "" ? 0 : Number(e.target.value);
+                  setForm((p) => ({ ...p, displayOrder: next }));
+                }}
               />
             </div>
             <div className="admin-form-group admin-form-checks">
