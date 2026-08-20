@@ -120,19 +120,12 @@ export function useCategoryListing(
             subCategorySlug,
             underSubCategorySlug,
           ),
-    queryFn: () => {
-      const cachedIds = cacheMode === "cache" ? (localCache ?? staleLocal) : null;
-      return fetchCategoryListing(categorySlug, subCategorySlug, {
+    queryFn: () =>
+      fetchCategoryListing(categorySlug, subCategorySlug, {
         underSubCategorySlug,
-        // Only pass IDs when not forcing a fresh load; never pass under ID on parent PLP.
-        categoryId: cachedIds?.categoryId,
-        subCategoryId: cachedIds?.subCategoryId,
-        underSubCategoryId: underSubCategorySlug
-          ? (cachedIds?.underSubCategoryId ?? undefined)
-          : undefined,
+        // Always resolve by slug so parent PLP is not served from a stale id-cache entry.
         nocache: cacheMode === "nocache",
-      });
-    },
+      }),
     staleTime: cacheMode === "nocache" ? 0 : queryCacheConfig.staleTime.catalog,
     gcTime: cacheMode === "nocache" ? 0 : queryCacheConfig.gcTime.catalog,
     placeholderData:
