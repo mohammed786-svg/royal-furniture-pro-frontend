@@ -89,7 +89,15 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
     }
   }
 
-  const title = mode === "edit" ? "Edit Product" : "Add Product";
+  const productName = initial?.name?.trim() || "";
+  const title =
+    mode === "edit"
+      ? productName
+        ? `Edit Product — ${productName}`
+        : "Edit Product"
+      : "Add Product";
+  const breadcrumbLabel =
+    mode === "edit" ? productName || "Edit Product" : "Add Product";
 
   if (loading) {
     return (
@@ -120,7 +128,7 @@ export function ProductFormPage({ mode, productId }: ProductFormPageProps) {
             <span>/</span>
             <Link href={PRODUCTS_LIST_PATH}>Products</Link>
             <span>/</span>
-            <span>{title}</span>
+            <span>{breadcrumbLabel}</span>
           </div>
         </div>
       </div>
