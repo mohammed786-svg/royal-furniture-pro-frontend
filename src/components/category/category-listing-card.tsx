@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 import { ProductWishlistButton } from "@/components/shop/product-wishlist-button";
 import { MediaImage } from "@/components/ui/media-image";
-import type { ProductItem } from "@/lib/constants/home-data";
+import { formatPrice, type ProductItem } from "@/lib/constants/home-data";
 import { getProductHref } from "@/lib/constants/product-details";
 
 type CategoryListingCardProps = {
@@ -55,11 +55,31 @@ export function CategoryListingCard({ product }: CategoryListingCardProps) {
         )}
       </div>
 
-      <Link href={href} className="category-listing-card__title">
-        {product.name}
-      </Link>
+      <div className="category-listing-card__body">
+        <Link href={href} className="category-listing-card__title">
+          {product.name}
+        </Link>
 
-      <AddToCartButton product={product} className="category-listing-card__add-cart" />
+        {product.price > 0 && (
+          <div className="category-listing-card__price-row">
+            <span className="category-listing-card__price">
+              {formatPrice(product.price)}
+            </span>
+            {product.mrp > product.price && (
+              <span className="category-listing-card__mrp">
+                {formatPrice(product.mrp)}
+              </span>
+            )}
+            {product.discount ? (
+              <span className="category-listing-card__price-badge">
+                {product.discount}
+              </span>
+            ) : null}
+          </div>
+        )}
+
+        <AddToCartButton product={product} className="category-listing-card__add-cart" />
+      </div>
     </article>
   );
 }
