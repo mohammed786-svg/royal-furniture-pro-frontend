@@ -11,7 +11,7 @@ const CDN = "https://www.royaloakindia.com";
 
 export type CategorySubcategory = {
   label: string;
-  image: string;
+  image?: string;
   href: string;
 };
 

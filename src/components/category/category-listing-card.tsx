@@ -26,7 +26,9 @@ export function CategoryListingCard({ product }: CategoryListingCardProps) {
             src={product.image}
             alt={product.name}
             fill
-            className="category-listing-card__image"
+            fit="contain"
+            wrapperClassName="category-listing-card__image-wrap"
+            imgClassName="category-listing-card__image"
           />
         </Link>
 
