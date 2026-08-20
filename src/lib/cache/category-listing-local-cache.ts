@@ -75,3 +75,18 @@ export function writeCategoryListingCache(
     // Ignore storage errors.
   }
 }
+
+export function clearCategoryListingCache(
+  categorySlug: string,
+  subCategorySlug: string,
+  underSubCategorySlug?: string,
+): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(
+      storageKey(categorySlug, subCategorySlug, underSubCategorySlug),
+    );
+  } catch {
+    // Ignore storage errors.
+  }
+}

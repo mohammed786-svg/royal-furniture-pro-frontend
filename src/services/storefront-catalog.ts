@@ -17,6 +17,7 @@ export async function fetchCategoryListing(
     categoryId?: string;
     subCategoryId?: string;
     underSubCategoryId?: string;
+    nocache?: boolean;
   },
 ): Promise<StorefrontCategoryListingResponse> {
   const under = params?.underSubCategorySlug;
@@ -31,6 +32,7 @@ export async function fetchCategoryListing(
     categoryId: params?.categoryId,
     subCategoryId: params?.subCategoryId,
     underSubCategoryId: params?.underSubCategoryId,
+    nocache: params?.nocache ? 1 : undefined,
   };
 
   const { data } = await apiClient.get<ApiEnvelope<StorefrontCategoryListingResponse>>(

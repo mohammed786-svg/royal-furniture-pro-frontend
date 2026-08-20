@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/cache/react-query/keys";
 import { queryCacheConfig } from "@/config/cache/react-query.config";
 import {
+  clearCategoryListingCache,
   readCategoryListingCache,
   readCategoryListingCacheStale,
   writeCategoryListingCache,
@@ -20,16 +21,25 @@ import type {
   StorefrontCategoryListingResponse,
 } from "@/types/storefront-catalog";
 
+type CacheMode = "checking" | "cache" | "nocache";
+
 function pickListing(
   apiData: StorefrontCategoryListingResponse | undefined,
   local: StorefrontCategoryListingResponse | null,
   stale: StorefrontCategoryListingResponse | null,
   categorySlug: string,
   subCategorySlug: string,
-  underSubCategorySlug?: string,
+  underSubCategorySlug: string | undefined,
+  preferApiOnly: boolean,
 ): { data: CategoryListingState["data"]; source: CatalogListingDataSource } {
   if (apiData) {
     return { data: mapCategoryListingResponse(apiData), source: "api" };
+  }
+  if (preferApiOnly) {
+    return {
+      data: emptyCategoryListing(categorySlug, subCategorySlug, underSubCategorySlug),
+      source: "empty",
+    };
   }
   if (local?.products) {
     return { data: mapCategoryListingResponse(local), source: "cache" };
@@ -43,6 +53,24 @@ function pickListing(
   };
 }
 
+function detectPageReload(): boolean {
+  try {
+    const nav = performance.getEntriesByType("navigation")?.[0] as
+      | PerformanceNavigationTiming
+      | undefined;
+    if (nav?.type === "reload") return true;
+    if (
+      (performance as Performance & { navigation?: { type?: number } }).navigation
+        ?.type === 1
+    ) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
 export function useCategoryListing(
   categorySlug: string,
   subCategorySlug: string,
@@ -52,8 +80,18 @@ export function useCategoryListing(
     useState<StorefrontCategoryListingResponse | null>(null);
   const [staleLocal, setStaleLocal] =
     useState<StorefrontCategoryListingResponse | null>(null);
+  const [cacheMode, setCacheMode] = useState<CacheMode>("checking");
 
   useEffect(() => {
+    const isReload = detectPageReload();
+    if (isReload) {
+      clearCategoryListingCache(categorySlug, subCategorySlug, underSubCategorySlug);
+    }
+    setCacheMode(isReload ? "nocache" : "cache");
+  }, [categorySlug, subCategorySlug, underSubCategorySlug]);
+
+  useEffect(() => {
+    if (cacheMode !== "cache") return;
     setLocalCache(
       readCategoryListingCache(categorySlug, subCategorySlug, underSubCategorySlug),
     );
@@ -64,30 +102,57 @@ export function useCategoryListing(
         underSubCategorySlug,
       ),
     );
-  }, [categorySlug, subCategorySlug, underSubCategorySlug]);
+  }, [cacheMode, categorySlug, subCategorySlug, underSubCategorySlug]);
 
   const query = useQuery({
-    queryKey: queryKeys.categories.listing(
-      categorySlug,
-      subCategorySlug,
-      underSubCategorySlug,
-    ),
+    queryKey:
+      cacheMode === "nocache"
+        ? [
+            ...queryKeys.categories.listing(
+              categorySlug,
+              subCategorySlug,
+              underSubCategorySlug,
+            ),
+            "nocache",
+          ]
+        : queryKeys.categories.listing(
+            categorySlug,
+            subCategorySlug,
+            underSubCategorySlug,
+          ),
     queryFn: () => {
-      const cachedIds = localCache ?? staleLocal;
+      const cachedIds = cacheMode === "cache" ? (localCache ?? staleLocal) : null;
       return fetchCategoryListing(categorySlug, subCategorySlug, {
         underSubCategorySlug,
+        // Only pass IDs when not forcing a fresh load; never pass under ID on parent PLP.
         categoryId: cachedIds?.categoryId,
         subCategoryId: cachedIds?.subCategoryId,
-        underSubCategoryId: cachedIds?.underSubCategoryId ?? undefined,
+        underSubCategoryId: underSubCategorySlug
+          ? (cachedIds?.underSubCategoryId ?? undefined)
+          : undefined,
+        nocache: cacheMode === "nocache",
       });
     },
-    staleTime: queryCacheConfig.staleTime.catalog,
-    gcTime: queryCacheConfig.gcTime.catalog,
-    placeholderData: () => localCache ?? staleLocal ?? undefined,
+    staleTime: cacheMode === "nocache" ? 0 : queryCacheConfig.staleTime.catalog,
+    gcTime: cacheMode === "nocache" ? 0 : queryCacheConfig.gcTime.catalog,
+    placeholderData:
+      cacheMode === "nocache" ? undefined : () => localCache ?? staleLocal ?? undefined,
+    enabled: Boolean(categorySlug && subCategorySlug) && cacheMode !== "checking",
   });
 
   useEffect(() => {
-    if (!query.data?.version) return;
+    if (!query.data?.version || cacheMode === "checking") return;
+    if (cacheMode === "nocache") {
+      writeCategoryListingCache(
+        categorySlug,
+        subCategorySlug,
+        query.data,
+        underSubCategorySlug,
+      );
+      setLocalCache(query.data);
+      setStaleLocal(null);
+      return;
+    }
     const cached = readCategoryListingCacheStale(
       categorySlug,
       subCategorySlug,
@@ -102,7 +167,7 @@ export function useCategoryListing(
       );
       setLocalCache(query.data);
     }
-  }, [query.data, categorySlug, subCategorySlug, underSubCategorySlug]);
+  }, [query.data, categorySlug, subCategorySlug, underSubCategorySlug, cacheMode]);
 
   const { data, source } = useMemo(
     () =>
@@ -113,6 +178,7 @@ export function useCategoryListing(
         categorySlug,
         subCategorySlug,
         underSubCategorySlug,
+        cacheMode === "nocache",
       ),
     [
       query.data,
@@ -121,6 +187,7 @@ export function useCategoryListing(
       categorySlug,
       subCategorySlug,
       underSubCategorySlug,
+      cacheMode,
     ],
   );
 
@@ -130,7 +197,9 @@ export function useCategoryListing(
   return {
     data: resolvedData,
     source: query.isFetching && source === "cache" ? "cache" : source,
-    isLoading: query.isLoading && !localCache && !staleLocal,
+    isLoading:
+      cacheMode === "checking" ||
+      (query.isLoading && (cacheMode === "nocache" || (!localCache && !staleLocal))),
     isFetching: query.isFetching,
     isError: query.isError && !data,
   };
