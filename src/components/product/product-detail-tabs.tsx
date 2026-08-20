@@ -42,11 +42,22 @@ export function ProductDetailTabs({ product }: ProductDetailTabsProps) {
         )}
 
         {active === "features" && (
-          <ul className="product-detail-tabs__list">
-            {product.features.map((feature) => (
-              <li key={feature}>{feature}</li>
-            ))}
-          </ul>
+          product.features.length > 0 ? (
+            <table className="product-detail-tabs__table">
+              <tbody>
+                {product.features.map((feature) => (
+                  <tr key={`${feature.label}-${feature.value}`}>
+                    <th>{feature.label}</th>
+                    <td>{feature.value || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="product-detail-tabs__text product-detail-tabs__text--muted">
+              No product features listed yet.
+            </p>
+          )
         )}
 
         {active === "more" && (

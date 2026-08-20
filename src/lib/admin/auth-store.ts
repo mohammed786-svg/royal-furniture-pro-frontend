@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AdminUser } from "@/lib/admin/types";
 import { getApiErrorMessage } from "@/lib/api/api-error";
-import { setAdminAuthToken } from "@/lib/axios/admin-auth-token";
+import { setAdminAuthToken, setAdminRefreshToken, clearAdminAuthTokens } from "@/lib/axios/admin-auth-token";
 import {
   adminChangePassword,
   adminLogin,
@@ -17,6 +17,7 @@ import {
 type PersistedAuthState = {
   user: AdminUser | null;
   accessToken: string | null;
+  refreshToken: string | null;
   rememberMe: boolean;
 };
 
@@ -44,15 +45,18 @@ export const useAdminAuthStore = create<AdminAuthStore>()(
     (set, get) => ({
       user: null,
       accessToken: null,
+      refreshToken: null,
       rememberMe: false,
       isHydrated: false,
       login: async (email, password, remember = false) => {
         try {
           const result = await adminLogin(email, password, remember);
           setAdminAuthToken(result.accessToken);
+          setAdminRefreshToken(result.refreshToken ?? null);
           set({
             user: result.user,
             accessToken: result.accessToken,
+            refreshToken: result.refreshToken ?? null,
             rememberMe: remember,
           });
           return { ok: true };
@@ -65,12 +69,13 @@ export const useAdminAuthStore = create<AdminAuthStore>()(
       },
       logout: async () => {
         try {
-          await adminLogout();
+          await adminLogout(get().refreshToken);
         } catch {
           // Clear local state even if API fails
         }
         setAdminAuthToken(null);
-        set({ user: null, accessToken: null, rememberMe: false });
+        setAdminRefreshToken(null);
+        set({ user: null, accessToken: null, refreshToken: null, rememberMe: false });
       },
       restoreSession: async () => {
         const { accessToken } = get();
@@ -81,17 +86,23 @@ export const useAdminAuthStore = create<AdminAuthStore>()(
             set({ user: freshUser });
             return true;
           } catch {
-            // fall through to refresh
+            // Access token expired — try refresh cookie within session window.
           }
         }
         try {
-          const result = await adminRefresh();
+          const result = await adminRefresh(get().refreshToken);
           setAdminAuthToken(result.accessToken);
-          set({ user: result.user, accessToken: result.accessToken });
+          setAdminRefreshToken(result.refreshToken ?? get().refreshToken);
+          set({
+            user: result.user,
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken ?? get().refreshToken,
+          });
           return true;
         } catch {
           setAdminAuthToken(null);
-          set({ user: null, accessToken: null });
+          setAdminRefreshToken(null);
+          set({ user: null, accessToken: null, refreshToken: null, rememberMe: false });
           return false;
         }
       },
@@ -122,6 +133,7 @@ export const useAdminAuthStore = create<AdminAuthStore>()(
       partialize: (state) => ({
         user: state.user,
         accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         rememberMe: state.rememberMe,
       }),
       merge: (persisted, current) => {
@@ -131,6 +143,7 @@ export const useAdminAuthStore = create<AdminAuthStore>()(
           ...saved,
           user: current.user ?? saved.user ?? null,
           accessToken: current.accessToken ?? saved.accessToken ?? null,
+          refreshToken: current.refreshToken ?? saved.refreshToken ?? null,
           rememberMe: current.rememberMe ?? saved.rememberMe ?? false,
           isHydrated: current.isHydrated,
         };

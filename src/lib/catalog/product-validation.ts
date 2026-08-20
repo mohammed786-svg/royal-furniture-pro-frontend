@@ -147,10 +147,11 @@ export function validateProductForm(
 
   check("features", () => {
     values.features.forEach((feature, idx) => {
-      const hasContent =
-        feature.featureTitle.trim() || (feature.featureDescription ?? "").trim();
-      if (hasContent && !feature.featureTitle.trim()) {
-        setError(errors, `features.${idx}.featureTitle`, "Feature title is required");
+      const key = (feature.featureTitle ?? "").trim();
+      const value = (feature.featureDescription ?? "").trim();
+      const hasContent = key || value;
+      if (hasContent && !key) {
+        setError(errors, `features.${idx}.featureTitle`, "Feature key is required");
       }
     });
   });

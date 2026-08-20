@@ -1,5 +1,21 @@
 import { fromCm, toCm, type DimensionUnit } from "@/lib/admin/dimension-units";
-import type { ProductDetail, ProductFormValues } from "@/types/product";
+import type { ProductDetail, ProductFeature, ProductFormValues } from "@/types/product";
+
+export function normalizeFeatureForForm(feature: ProductFeature): ProductFeature {
+  return {
+    ...feature,
+    featureTitle: (feature.featureTitle ?? "").trim(),
+    featureDescription: feature.featureDescription ?? "",
+  };
+}
+
+export function serializeFeatureForApi(feature: ProductFeature): ProductFeature {
+  return {
+    ...feature,
+    featureTitle: (feature.featureTitle ?? "").trim(),
+    featureDescription: feature.featureDescription ?? "",
+  };
+}
 
 export function detailToForm(item: ProductDetail): ProductFormValues {
   const unit: DimensionUnit = "cm";
@@ -45,7 +61,7 @@ export function detailToForm(item: ProductDetail): ProductFormValues {
     })),
     variants: item.variants,
     specifications: item.specifications,
-    features: item.features,
+    features: item.features.map(normalizeFeatureForForm),
   };
 }
 
@@ -56,5 +72,6 @@ export function formToPayload(values: ProductFormValues) {
     lengthCm: toCm(values.packageLength, unit),
     breadthCm: toCm(values.packageBreadth, unit),
     heightCm: toCm(values.packageHeight, unit),
+    features: values.features.map(serializeFeatureForApi),
   };
 }

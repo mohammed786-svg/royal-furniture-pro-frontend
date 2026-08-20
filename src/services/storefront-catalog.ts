@@ -44,9 +44,14 @@ export async function fetchCategoryListing(
 
 export async function fetchStorefrontProduct(
   slug: string,
+  options?: { nocache?: boolean },
 ): Promise<StorefrontProductDetailResponse> {
+  const nocache = Boolean(options?.nocache);
   const { data } = await apiClient.get<ApiEnvelope<StorefrontProductDetailResponse>>(
     `/storefront/products/${slug}/`,
+    {
+      params: nocache ? { nocache: 1 } : undefined,
+    },
   );
   return assertApiSuccess(data);
 }

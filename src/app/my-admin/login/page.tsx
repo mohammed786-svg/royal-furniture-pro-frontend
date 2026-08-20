@@ -6,18 +6,26 @@ import { AdminLoginForm } from "@/components/admin/auth/admin-login-form";
 import { useAdminAuthStore } from "@/lib/admin/auth-store";
 
 export default function AdminLoginPage() {
-  const { isLoggedIn, restoreSession, isHydrated } = useAdminAuthStore();
+  const { isLoggedIn, restoreSession, isHydrated, rememberMe } = useAdminAuthStore();
   const router = useRouter();
 
   useEffect(() => {
     if (!isHydrated) return;
+
     async function check() {
-      if (isLoggedIn() || (await restoreSession())) {
+      // Auto-restore only when Remember me credentials/session were saved.
+      if (isLoggedIn()) {
+        router.replace("/my-admin/dashboard");
+        return;
+      }
+      if (!rememberMe) return;
+      if (await restoreSession()) {
         router.replace("/my-admin/dashboard");
       }
     }
-    check();
-  }, [isHydrated, isLoggedIn, restoreSession, router]);
+
+    void check();
+  }, [isHydrated, isLoggedIn, rememberMe, restoreSession, router]);
 
   return <AdminLoginForm />;
 }

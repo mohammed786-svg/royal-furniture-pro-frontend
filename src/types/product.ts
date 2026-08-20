@@ -41,6 +41,8 @@ export type ProductFeature = {
   id?: string;
   featureTitle: string;
   featureDescription?: string;
+  featureGroup?: string;
+  featureKey?: string;
   iconUrl?: string;
   displayOrder?: number;
 };

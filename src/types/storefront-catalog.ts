@@ -62,7 +62,7 @@ export type StorefrontProductDetailResponse = {
   subCategorySlug: string;
   emiMonthly: number;
   description: string;
-  features: string[];
+  features: { label: string; value: string }[];
   moreInfo: { label: string; value: string }[];
   specifications?: { group: string; key: string; value: string }[];
   version: string;

@@ -57,3 +57,12 @@ export function writeProductDetailCache(
     // Ignore storage errors.
   }
 }
+
+export function clearProductDetailCache(slug: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(storageKey(slug));
+  } catch {
+    // Ignore storage errors.
+  }
+}

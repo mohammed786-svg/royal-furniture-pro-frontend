@@ -1,29 +1,12 @@
 import toast from "react-hot-toast";
 
-const base = {
-  className: "royal-toast",
-};
-
 export const royalToast = {
-  success: (message: string) =>
-    toast.success(message, {
-      ...base,
-      icon: "✓",
-    }),
-  error: (message: string) =>
-    toast.error(message, {
-      ...base,
-      icon: "!",
-    }),
-  info: (message: string) =>
-    toast(message, {
-      ...base,
-      icon: "ℹ",
-    }),
+  // Keep the API stable, but use react-hot-toast defaults (no custom classes/icons).
+  success: (message: string) => toast.success(message),
+  error: (message: string) => toast.error(message),
+  info: (message: string) => toast(message),
   unauthorized: (message: string) =>
     toast.error(message, {
-      ...base,
-      icon: "!",
       id: "unauthorized-access",
     }),
 };

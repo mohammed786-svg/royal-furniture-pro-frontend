@@ -14,6 +14,11 @@ export type ProductMoreInfoRow = {
   value: string;
 };
 
+export type ProductFeatureRow = {
+  label: string;
+  value: string;
+};
+
 export type ProductDetail = {
   slug: string;
   id: string;
@@ -30,7 +35,7 @@ export type ProductDetail = {
   category: string;
   emiMonthly: number;
   description: string;
-  features: string[];
+  features: ProductFeatureRow[];
   moreInfo: ProductMoreInfoRow[];
 };
 
@@ -63,13 +68,13 @@ const NOVA_DETAIL: ProductDetail = {
   description:
     "Buy Leatherette single seater recliner from Royal Furniture Pro today and enjoy the benefits of owning international furniture from India's leading brand. Bring home comfort and timeless style with the Royal Furniture Pro Nova Leatherette Single Seater Recliner in Brown. Crafted with premium leatherette upholstery, this manual recliner offers a rich, warm look while being easy to maintain and highly durable. The high backrest with elegant tufting design ensures excellent support for your back, while the padded armrests provide added relaxation. Filled with super soft cushions, it delivers exceptional seating comfort for extended lounging. The sturdy footrest allows you to recline effortlessly and unwind after a long day. Supported by a heavy-duty metal mechanism, this recliner promises strength, stability, and long-lasting performance.",
   features: [
-    "Leatherette Upholstery",
-    "High Backrest",
-    "Tufting Design",
-    "Padded Armrest",
-    "Super Soft Cushions for Extra Comfort",
-    "Sturdy Footrest",
-    "Heavy Duty Metal Support",
+    { label: "Leatherette Upholstery", value: "" },
+    { label: "High Backrest", value: "" },
+    { label: "Tufting Design", value: "" },
+    { label: "Padded Armrest", value: "" },
+    { label: "Super Soft Cushions for Extra Comfort", value: "" },
+    { label: "Sturdy Footrest", value: "" },
+    { label: "Heavy Duty Metal Support", value: "" },
   ],
   moreInfo: [
     { label: "Available Quantity", value: "9" },
@@ -142,10 +147,10 @@ function buildFromItem(
     emiMonthly: Math.round(item.price / 9),
     description: defaultDescription(item.name, category),
     features: [
-      "Premium build quality",
-      "Designed for everyday comfort",
-      "Easy maintenance",
-      "Backed by Royal Furniture Pro warranty support",
+      { label: "Premium build quality", value: "" },
+      { label: "Designed for everyday comfort", value: "" },
+      { label: "Easy maintenance", value: "" },
+      { label: "Backed by Royal Furniture Pro warranty support", value: "" },
     ],
     moreInfo: [
       { label: "SKU", value: item.id.toUpperCase() },

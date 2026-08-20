@@ -1,6 +1,6 @@
 import type { CategoryPageData } from "@/lib/constants/category-pages";
 import type { ProductItem } from "@/lib/constants/home-data";
-import type { ProductDetail } from "@/lib/constants/product-details";
+import type { ProductDetail, ProductFeatureRow } from "@/lib/constants/product-details";
 import { resolveMediaUrl } from "@/lib/media/resolve-url";
 import type {
   StorefrontCategoryListingResponse,
@@ -8,6 +8,21 @@ import type {
 } from "@/types/storefront-catalog";
 
 const PLACEHOLDER_IMAGE = "";
+
+function normalizeProductFeatures(
+  features: StorefrontProductDetailResponse["features"] | string[] | undefined,
+): ProductFeatureRow[] {
+  if (!features?.length) return [];
+  return features.map((feature) => {
+    if (typeof feature === "string") {
+      return { label: feature, value: "" };
+    }
+    return {
+      label: feature.label ?? "",
+      value: feature.value ?? "",
+    };
+  });
+}
 
 export function mapPlpProductToCard(
   product: StorefrontCategoryListingResponse["products"][0],
@@ -73,7 +88,7 @@ export function mapProductDetailResponse(
     category: response.category,
     emiMonthly: response.emiMonthly,
     description: response.description,
-    features: response.features,
+    features: normalizeProductFeatures(response.features),
     moreInfo: response.moreInfo,
   };
 }

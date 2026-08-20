@@ -19,6 +19,8 @@ import type {
 
 const HomepageContext = createContext<HomepageState | null>(null);
 
+type CacheMode = "checking" | "cache" | "nocache";
+
 function pickSource(
   apiData: StorefrontHomeResponse | undefined,
   localCache: StorefrontHomeResponse | null,
@@ -33,28 +35,57 @@ function pickSource(
 export function HomepageProvider({ children }: { children: React.ReactNode }) {
   const [localCache, setLocalCache] = useState<StorefrontHomeResponse | null>(null);
   const [staleLocal, setStaleLocal] = useState<StorefrontHomeResponse | null>(null);
+  const [cacheMode, setCacheMode] = useState<CacheMode>("checking");
 
   useEffect(() => {
-    setLocalCache(readHomepageLocalCache());
-    setStaleLocal(readHomepageLocalCacheStale());
+    // Detect full page reload (Ctrl+R / browser refresh / hard refresh).
+    // Best-effort: browsers set PerformanceNavigationTiming.type === 'reload'.
+    // If we can't detect reliably, we fall back to allowing cache usage.
+    let isReload = false;
+    try {
+      const nav = performance.getEntriesByType("navigation")?.[0] as
+        | PerformanceNavigationTiming
+        | undefined;
+      isReload = nav?.type === "reload";
+
+      // Fallback for older browsers
+      if (!isReload && (performance as any).navigation?.type !== undefined) {
+        isReload = (performance as any).navigation.type === 1; // 1 == reload
+      }
+    } catch {
+      isReload = false;
+    }
+
+    setCacheMode(isReload ? "nocache" : "cache");
   }, []);
 
+  useEffect(() => {
+    if (cacheMode !== "cache") return;
+    setLocalCache(readHomepageLocalCache());
+    setStaleLocal(readHomepageLocalCacheStale());
+  }, [cacheMode]);
+
   const query = useQuery({
-    queryKey: queryKeys.storefrontHome(),
-    queryFn: fetchStorefrontHome,
-    staleTime: queryCacheConfig.staleTime.catalog,
-    gcTime: queryCacheConfig.gcTime.catalog,
-    placeholderData: () => localCache ?? staleLocal ?? undefined,
+    queryKey:
+      cacheMode === "nocache"
+        ? [...queryKeys.storefrontHome(), "nocache"]
+        : queryKeys.storefrontHome(),
+    queryFn: () => fetchStorefrontHome({ nocache: cacheMode === "nocache" }),
+    staleTime: cacheMode === "nocache" ? 0 : queryCacheConfig.staleTime.catalog,
+    gcTime: cacheMode === "nocache" ? 0 : queryCacheConfig.gcTime.catalog,
+    placeholderData: cacheMode === "nocache" ? undefined : () => localCache ?? staleLocal ?? undefined,
+    enabled: cacheMode !== "checking",
   });
 
   useEffect(() => {
     if (!query.data) return;
+    if (cacheMode !== "cache") return; // Do not write local cache during hard reload.
     const cached = readHomepageLocalCacheStale();
     if (!cached || cached.version !== query.data.version) {
       writeHomepageLocalCache(query.data);
       setLocalCache(query.data);
     }
-  }, [query.data]);
+  }, [query.data, cacheMode]);
 
   const source = pickSource(query.data, localCache, staleLocal);
   const useErrorFallback = query.isError && !query.data && !localCache && !staleLocal;
@@ -71,7 +102,8 @@ export function HomepageProvider({ children }: { children: React.ReactNode }) {
   const value: HomepageState = {
     data,
     source,
-    isLoading: query.isLoading && !localCache && !staleLocal,
+    isLoading:
+      query.isLoading && cacheMode !== "nocache" && !localCache && !staleLocal,
     isFetching: query.isFetching,
     isError: query.isError,
   };

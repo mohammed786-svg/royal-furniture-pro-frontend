@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 import { getApiErrorMessage, isApiEnvelope } from "@/lib/api/api-error";
 import type { EncryptedApiEnvelope } from "@/lib/api/types";
-import { getAdminAuthToken } from "@/lib/axios/admin-auth-token";
+import { getAdminAuthToken, hydrateAdminAuthTokens } from "@/lib/axios/admin-auth-token";
 import { refreshCustomerAuthSession } from "@/lib/axios/customer-auth-refresh";
 import {
   getCustomerAuthToken,
@@ -91,6 +91,48 @@ function notifyUnauthorized(error: AxiosError): void {
   );
 }
 
+type LoginAudience = "customer" | "admin";
+
+function redirectToLogin(audience: LoginAudience = "customer", nextPath?: string) {
+  if (typeof window === "undefined") return;
+  const loginPath = audience === "admin" ? "/my-admin/login" : "/login";
+  // Avoid redirect loops when already on the login page.
+  if (window.location.pathname.startsWith(loginPath)) return;
+
+  const current =
+    (nextPath ?? `${window.location.pathname}${window.location.search}`).trim() ||
+    "/";
+  const redirectTarget =
+    audience === "admin"
+      ? current.startsWith("/my-admin")
+        ? current
+        : "/my-admin/dashboard"
+      : current;
+
+  window.location.replace(
+    `${loginPath}?redirect=${encodeURIComponent(redirectTarget)}`,
+  );
+}
+
+async function forceCustomerLogoutAndRedirect() {
+  const { useAuthStore } = await import("@/lib/store/auth-store");
+  useAuthStore.getState().logout();
+  redirectToLogin("customer");
+}
+
+async function forceAdminLogoutAndRedirect() {
+  const { clearAdminAuthTokens } = await import("@/lib/axios/admin-auth-token");
+  const { useAdminAuthStore } = await import("@/lib/admin/auth-store");
+  clearAdminAuthTokens();
+  useAdminAuthStore.setState({
+    user: null,
+    accessToken: null,
+    refreshToken: null,
+    rememberMe: false,
+  });
+  redirectToLogin("admin");
+}
+
 export function setTokenRefreshHandler(handler: TokenRefreshHandler) {
   refreshHandler = handler;
 }
@@ -122,7 +164,9 @@ async function handleCustomerTokenRefresh(
 ) {
   const refreshToken = getCustomerRefreshToken();
   if (!refreshToken) {
-    return Promise.reject(new Error("Customer session expired"));
+    // If refresh token is missing, send customer to /login.
+    await forceCustomerLogoutAndRedirect();
+    return Promise.reject(new Error("Refresh token missing"));
   }
 
   if (isRefreshing) {
@@ -157,8 +201,7 @@ async function handleCustomerTokenRefresh(
     return client(originalRequest);
   } catch (error) {
     processRefreshQueue(null);
-    const { useAuthStore } = await import("@/lib/store/auth-store");
-    useAuthStore.getState().logout();
+    await forceCustomerLogoutAndRedirect();
     return Promise.reject(error);
   } finally {
     isRefreshing = false;
@@ -174,7 +217,9 @@ async function handleTokenRefresh(
   }
 
   if (!refreshHandler) {
-    return Promise.reject(new Error("Token refresh handler not configured"));
+    // Admin refresh cookie/token unavailable → send to admin login.
+    await forceAdminLogoutAndRedirect();
+    return Promise.reject(new Error("Refresh token missing"));
   }
 
   if (isRefreshing) {
@@ -197,12 +242,14 @@ async function handleTokenRefresh(
     const newToken = await refreshHandler();
     processRefreshQueue(newToken);
     if (!newToken) {
-      return Promise.reject(new Error("Token refresh returned empty"));
+      await forceAdminLogoutAndRedirect();
+      return Promise.reject(new Error("Refresh token missing"));
     }
     originalRequest.headers.Authorization = `Bearer ${newToken}`;
     return client(originalRequest);
   } catch (error) {
     processRefreshQueue(null);
+    await forceAdminLogoutAndRedirect();
     return Promise.reject(error);
   } finally {
     isRefreshing = false;
@@ -223,6 +270,7 @@ export function createAxiosInstance(): AxiosInstance {
   instance.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
       hydrateCustomerAuthToken();
+      hydrateAdminAuthTokens();
       const url = config.url;
       const customerToken = getCustomerAuthToken();
       const adminToken = getAdminAuthToken();
@@ -287,6 +335,19 @@ export function createAxiosInstance(): AxiosInstance {
       }
 
       if (error.response?.status === 401 && !isAuthLoginRequest(requestUrl)) {
+        const message = getApiErrorMessage(error, "").toLowerCase();
+        const refreshMissing = message.includes("refresh token missing");
+
+        // Refresh cookie/token missing → send to the correct login page immediately.
+        if (isAuthRefreshRequest(requestUrl) || refreshMissing) {
+          if (isStorefrontCommerceRequest(requestUrl)) {
+            await forceCustomerLogoutAndRedirect();
+          } else {
+            await forceAdminLogoutAndRedirect();
+          }
+          return Promise.reject(error);
+        }
+
         hydrateCustomerAuthToken();
         const optionalGuestEndpoint = !isStorefrontProtectedRequest(requestUrl);
         const hasCustomerToken = Boolean(getCustomerAuthToken());

@@ -131,7 +131,7 @@ const SECTIONS: {
     id: "features",
     label: "Features",
     icon: <Sparkles size={16} />,
-    description: "Selling points & highlights",
+    description: "Feature key-value pairs",
   },
   {
     id: "seo",
@@ -992,9 +992,7 @@ export function ProductForm({
           <section className="admin-product-section-card">
             <header>
               <h2>Product Features</h2>
-              <p>
-                product_featuretbl — highlight titles, descriptions and optional icons.
-              </p>
+              <p>product_featuretbl — key-value feature rows for the product page.</p>
             </header>
             <button
               type="button"
@@ -1018,7 +1016,7 @@ export function ProductForm({
               {form.features.map((feature, idx) => (
                 <div key={idx} className="admin-repeat-row admin-feature-row">
                   <ProductFormField
-                    label="Title"
+                    label="Key"
                     error={fieldError(`features.${idx}.featureTitle`)}
                   >
                     <input
@@ -1026,16 +1024,16 @@ export function ProductForm({
                       onChange={(e) =>
                         updateFeature(idx, { featureTitle: e.target.value })
                       }
-                      placeholder="e.g. Premium cushioning"
+                      placeholder="e.g. Display Type"
                     />
                   </ProductFormField>
-                  <ProductFormField label="Description">
+                  <ProductFormField label="Value">
                     <input
                       value={feature.featureDescription ?? ""}
                       onChange={(e) =>
                         updateFeature(idx, { featureDescription: e.target.value })
                       }
-                      placeholder="Short feature description"
+                      placeholder="e.g. 4K UHD LED"
                     />
                   </ProductFormField>
                   <button

@@ -23,21 +23,6 @@ export function AppProviders({ children }: AppProvidersProps) {
             {children}
             <Toaster
               position="top-center"
-              containerClassName="royal-toast-container"
-              containerStyle={{
-                top: 20,
-                zIndex: 10000,
-              }}
-              gutter={12}
-              toastOptions={{
-                duration: 4000,
-                className: "royal-toast",
-                style: {
-                  background: "transparent",
-                  boxShadow: "none",
-                  padding: 0,
-                },
-              }}
             />
           </SocketProvider>
         </ThemeProvider>
