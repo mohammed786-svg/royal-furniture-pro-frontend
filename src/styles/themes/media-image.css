@@ -174,15 +174,8 @@
 @media (min-width: 768px) {
   .product-gallery__thumb .media-image,
   .product-gallery__thumb .media-image-placeholder {
-    height: 88px;
+    height: auto;
   }
-}
-
-.product-gallery__stage .media-image__img.product-gallery__main-image {
-  position: relative;
-  width: 100%;
-  height: auto;
-  max-height: 100%;
 }
 
 .mobile-nav-row__icon .media-image,

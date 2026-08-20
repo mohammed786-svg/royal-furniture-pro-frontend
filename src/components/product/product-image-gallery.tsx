@@ -6,6 +6,7 @@ import { ProductWishlistButton } from "@/components/shop/product-wishlist-button
 import { MediaImage } from "@/components/ui/media-image";
 import type { ProductItem } from "@/lib/constants/home-data";
 import type { ProductDetail } from "@/lib/constants/product-details";
+import { resolveMediaUrl } from "@/lib/media/resolve-url";
 
 type ProductImageGalleryProps = {
   images: string[];
@@ -29,43 +30,40 @@ export function ProductImageGallery({
 }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [zooming, setZooming] = useState(false);
-  const [mainImageLoaded, setMainImageLoaded] = useState(true);
   const [lensPos, setLensPos] = useState({ x: 0, y: 0 });
   const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
   const stageRef = useRef<HTMLDivElement>(null);
 
   const activeImage = images[activeIndex] ?? images[0];
+  const zoomImageUrl = resolveMediaUrl(activeImage) ?? activeImage ?? "";
 
   const selectImage = (index: number) => {
     setActiveIndex(index);
     setZooming(false);
-    setMainImageLoaded(true);
   };
 
   const goPrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1));
     setZooming(false);
-    setMainImageLoaded(true);
   };
 
   const goNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1));
     setZooming(false);
-    setMainImageLoaded(true);
   };
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const updateLens = useCallback((clientX: number, clientY: number) => {
     const stage = stageRef.current;
     if (!stage) return;
 
     const rect = stage.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
-    const maxX = rect.width - LENS_SIZE;
-    const maxY = rect.height - LENS_SIZE;
+    const maxX = Math.max(0, rect.width - LENS_SIZE);
+    const maxY = Math.max(0, rect.height - LENS_SIZE);
 
     const lensX = Math.max(0, Math.min(x - LENS_SIZE / 2, maxX));
     const lensY = Math.max(0, Math.min(y - LENS_SIZE / 2, maxY));
@@ -76,6 +74,16 @@ export function ProductImageGallery({
     setLensPos({ x: lensX, y: lensY });
     setBgPos({ x: percentX, y: percentY });
   }, []);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    setZooming(true);
+    updateLens(e.clientX, e.clientY);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!zooming) setZooming(true);
+    updateLens(e.clientX, e.clientY);
+  };
 
   return (
     <div className="product-gallery">
@@ -93,7 +101,7 @@ export function ProductImageGallery({
                 src={src}
                 alt=""
                 fill
-                fit="cover"
+                fit="contain"
                 placeholderSize="sm"
                 resolveUrl
               />
@@ -106,7 +114,7 @@ export function ProductImageGallery({
         <div
           ref={stageRef}
           className="product-gallery__stage"
-          onMouseEnter={() => setZooming(true)}
+          onMouseEnter={handleMouseEnter}
           onMouseLeave={() => setZooming(false)}
           onMouseMove={handleMouseMove}
         >
@@ -115,12 +123,12 @@ export function ProductImageGallery({
             src={activeImage}
             alt={alt}
             fill
-            fit="cover"
+            fit="contain"
             loading="eager"
             placeholderSize="lg"
             resolveUrl
+            wrapperClassName="product-gallery__main-wrap"
             imgClassName="product-gallery__main-image"
-            onStatusChange={(status) => setMainImageLoaded(status === "loaded")}
           />
 
           {discount && <span className="product-gallery__discount">{discount}</span>}
@@ -156,7 +164,7 @@ export function ProductImageGallery({
             </div>
           )}
 
-          {zooming && mainImageLoaded && (
+          {zooming && zoomImageUrl ? (
             <span
               className="product-gallery__lens"
               style={{
@@ -166,7 +174,7 @@ export function ProductImageGallery({
               }}
               aria-hidden
             />
-          )}
+          ) : null}
 
           <button
             type="button"
@@ -186,17 +194,17 @@ export function ProductImageGallery({
           </button>
         </div>
 
-        {zooming && mainImageLoaded && activeImage && (
+        {zooming && zoomImageUrl ? (
           <div
             className="product-gallery__zoom-panel"
             style={{
-              backgroundImage: `url(${activeImage})`,
+              backgroundImage: `url(${zoomImageUrl})`,
               backgroundSize: `${ZOOM_SCALE * 100}%`,
               backgroundPosition: `${bgPos.x}% ${bgPos.y}%`,
             }}
             aria-hidden
           />
-        )}
+        ) : null}
       </div>
     </div>
   );
